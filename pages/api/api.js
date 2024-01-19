@@ -14,6 +14,7 @@ async function handler(req, res) {
     }
     // POST
     case "POST": {
+      console.log(req.body)
       res.status(200)
       .json(db.addUser(req.body));
       break;

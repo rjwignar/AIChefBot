@@ -8,26 +8,25 @@ const { MongoClient } = require("mongodb");
 require("dotenv").config();
 
 // create a client object, pass the connection string
-const client = new MongoClient(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bcearzi.mongodb.net/`);
+const client = new MongoClient(
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bcearzi.mongodb.net/`
+);
 
 // get one user
 module.exports.getUser = async () => {
     // get users collection
     const collection = client.db("aichefbot").collection("users");
 
-    const findResult = await collection
-      .find({ full_name: "exemplary example" })
-      .toArray();
-    //
+    // find the user
+    const result = await collection.findOne({ email: 'example@example.com' });
 
-    // debug log the returned value from collection
-    console.debug(findResult);
-    return 1;
+    // return to api
+    return result;
 };
 
 // add one user
-module.exports.addUser = () => {
-  console.log("hello from addUser()");
+module.exports.addUser = (params) => {
+    
 };
 
 // connect to mongodb
