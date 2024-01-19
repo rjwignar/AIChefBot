@@ -1,20 +1,11 @@
 // api for db connection
 
-// we need to parse the request body: better method of extracting post parameters
-import bodyParser from 'body-parser';
-
 // get our db methods
 const db = require ("./users");
 
 // handler for all relevant requests
 async function handler(req, res) {
-
-  console.log(req.body);
-
-  // get request method
-  const { method } = req;
-
-  switch (method) {
+  switch (req.method) {
     // GET
     case "GET": {
       res.status(200)
@@ -22,11 +13,11 @@ async function handler(req, res) {
       break;
     }
     // POST
-    case "POST": db.addUser(req.query); break;
-    //
-    // TODO
-    //
-    // DELETE
+    case "POST": {
+      res.status(200)
+      .json(db.addUser(req.body));
+      break;
+    }
     case "DELETE":
       // ./users.js
       // db.deleteUser();

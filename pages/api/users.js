@@ -27,7 +27,6 @@ module.exports.getUser = async () => {
 
 // add one user
 module.exports.addUser = () => {
-  connect();
   console.log("hello from addUser()");
 };
 
