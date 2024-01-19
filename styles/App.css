@@ -1,0 +1,129 @@
+/* Custom Font */
+@font-face {
+   font-family: 'Geist';
+   src: url('../assets/font/GeistVariableVF.ttf');
+   font-weight: 700;
+}
+
+@font-face {
+   font-family: 'Geist';
+   src: url('../assets/font/Geist-Medium.otf');
+   font-weight: 500;
+}
+
+@font-face {
+   font-family: 'Geist';
+   src: url('../assets/font/Geist-Regular.otf');
+   font-weight: 300;
+}
+/* Custom Font */
+
+/*Default Styles*/
+body {
+   background-image: url('../assets/img/background.png');
+   background-size: cover;
+   background-repeat: no-repeat;
+   min-height: 100vh;
+   margin: 0;
+}
+
+p {
+   font-family: 'Geist', sans-serif;
+   font-weight: 300;
+   font-size: 20px;
+}
+/*Default Styles*/
+
+/*Navbar/Landing page Styles*/
+.navbar-custom {
+   background: rgba(255, 255, 255, 0.08);
+   border-radius: 16px;
+   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+   backdrop-filter: blur(2.1px);
+   -webkit-backdrop-filter: blur(2.1px);
+   font-family: 'Geist', sans-serif;
+   font-weight: 300;
+   min-width: 80px;
+}
+
+.navbar-brand-custom {
+   font-family: 'Geist', sans-serif;
+   font-weight: 700;
+}
+
+/*https://getcssscan.com/css-buttons-examples*/
+.landing-page-btn {
+   font-family: 'Geist', sans-serif;
+   font-weight: 300;
+   font-size: 16px;
+   align-items: center;
+   appearance: none;
+   background-color: #3EB2FD;
+   background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%);
+   background-size: calc(100% + 20px) calc(100% + 20px);
+   border-radius: 30px;
+   border-width: 0;
+   box-shadow: none;
+   box-sizing: border-box;
+   color: #FFFFFF;
+   cursor: pointer;
+   display: inline-flex;
+   height: auto;
+   justify-content: center;
+   line-height: 1.5;
+   padding: 10px 30px;
+   position: relative;
+   text-align: center;
+   text-decoration: none;
+   transition: background-color .2s, background-position .2s;
+   user-select: none;
+   -webkit-user-select: none;
+   touch-action: manipulation;
+   vertical-align: top;
+   white-space: nowrap;
+}
+
+.landing-page-btn:active,
+.landing-page-btn:focus {
+   outline: none;
+}
+
+.landing-page-btn:hover {
+   background-position: -20px -20px;
+}
+
+.landing-page-btn:focus:not(:active) {
+   box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
+}
+/*Navbar/Landing page Styles*/
+
+/*Hero Section*/
+.hero-title {
+   font-family: 'Geist', sans-serif;
+   font-weight: bold;
+   font-size: 50px;
+   padding: 10px 0;
+}
+
+.hero-section {
+   margin: 25px;
+}
+
+.hero-img {
+   border-radius: 16px;
+   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+   animation: updown 3s linear infinite;
+}
+
+@keyframes updown {
+   0% {
+      transform: translateY(-5px);
+   }
+   50% {
+      transform: translateY(5px);
+   }
+   100% {
+      transform: translateY(-5px);
+   }
+}
+/*Hero Section*/
