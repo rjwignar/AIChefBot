@@ -1,7 +1,7 @@
 // api for db connection
 
 // get our db methods
-const db = require ("users");
+const db = require ("./users");
 
 // handler for all relevant requests
 async function handler(req, res) {
@@ -9,14 +9,14 @@ async function handler(req, res) {
     // GET
     case "GET": {
       res.status(200)
-      .json(db.getUser()); 
+      .json(await db.getUser());
       break;
     }
     // POST
     case "POST": {
       console.log(req.body)
       res.status(200)
-      .json(db.addUser(req.body));
+      .json(await db.addUser(req.body));
       break;
     }
     case "DELETE":

@@ -25,7 +25,7 @@ module.exports.getUser = async () => {
 };
 
 // add one user
-module.exports.addUser = (params) => {
+module.exports.addUser = async (params) => {
     
 };
 
