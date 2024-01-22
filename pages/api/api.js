@@ -1,7 +1,7 @@
 // api for db connection
 
 // get our db methods
-const db = require ("./users");
+const db = require ("users");
 
 // handler for all relevant requests
 async function handler(req, res) {
