@@ -9,23 +9,34 @@ const db = require ("./db");
 async function handler(req, res) {
   switch (req.method) {
     // GET
+    // this route accepts a query string that contains username
     case "GET": {
-      // pass the searched username to getUser(username)
+      
+      // await the found user
       const user = await db.getUser(req.query.username);
-      res.json(user);
+
+      // everything ok, return user as json
+      res.status(200).json(user);
       break;
     }
     // POST
+    // this route accepts HTTP body containing json for a user to be added to DB
     case "POST": {
-      console.log(req.body)
-      res.status(200)
-      .json(await db.addUser(req.body));
+      // await the user to be added, and returned
+      const user = await db.addUser(req.body);
+
+      // everything ok, return user as json
+      res.status(200).json(user);
       break;
     }
+    // DELETE
+    // TODO: this route will delete a user from the database
     case "DELETE":
       // ./users.js
       // db.deleteUser();
     default:
+
+    // any other route that is attempted should be denied.
       res.json(401).json({error: "Request denied."});
       break;
   }

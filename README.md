@@ -35,11 +35,28 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+---
 
-## Packages
+### Testing the database
+ #### Add a user
+URL: ```localhost:3000/addUser```
 
-- [dotenv](https://www.npmjs.com/package/dotenv)
-    - store local environment variables to keep secrets
-- [mongodb](https://www.npmjs.com/package/mongodb)
-    - mongodb driver for node.js
-    - easy connection interface
+- Enter a username and email to add a new user.
+
+- **TODO:** regex for email, character checks for invalid characters, and similar validation.
+
+** the back-end has very little protection at this point in time.
+
+#### Find a user
+URL: ```localhost:3000/getUser```
+
+Search a user by username.
+
+- In the database there is an example user that contains data for testing purposes. this user's username is ```exemplary example```.
+
+- Try **adding a user** prior to searching for one.
+
+
+
+
+

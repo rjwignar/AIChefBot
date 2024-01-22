@@ -2,20 +2,30 @@
 
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { Card } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home() {
+  // handles text input for searching a user
   const [textInput, setTextInput] = useState("");
 
+  // handles the user returned from the api
   const [user, setUser] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     // get user from database
-    const res = await fetch(`./api/request?username=${textInput}`, { method: "GET" });
-    const user = await res.json();
-    setUser(user);
+    try {
+      const res = await fetch(`./api/request?username=${textInput}`, {
+        method: "GET",
+      });
+      // user found, set user as found user
+      const user = await res.json();
+      setUser(user);
+    }
+    catch (err) {
+      // user was not found
+      setUser({message: "No user found."})
+    }
   }
 
   // form for acquiring one user from the database, for demonstration purposes
@@ -31,13 +41,6 @@ export default function Home() {
             <p>
               Let's acquire one user from the database, along with their
               recipes.
-            </p>
-            <p>
-              {/*
-              {user.appliances.map(appliances => (
-                <li key={user.id}>{appliance}</li>
-              ))}
-              */}
             </p>
           </Col>
         </Row>
@@ -61,18 +64,21 @@ export default function Home() {
         {user == null ? (
           <></>
         ) : (
-          <Card body>
-            <p>Name: <span style={{color: "green"}}>{user.full_name}</span></p>
-            <p>Email: <span style={{color: "green"}}>{user.email}</span></p>
-            <p>Appliances:
-              <ul>
-                {user.appliances.map((item, i) => (
-                  <li key={i}><span style={{color: "green"}}>{item}</span></li>
-                ))}
-              </ul>
-            </p>
-            <p></p>
-            <p></p>
+          <Card body className="fs-4">
+            name: <span style={{ color: "green" }}>{user.username}</span><br/>
+            email: <span style={{ color: "green" }}>{user.email}</span><br/>
+            appliances:
+            <ul classame="fs-4">
+              {user.appliances.length ? (
+                user.appliances.map((item, i) => (
+                  <li key={i}>
+                    <span style={{ color: "green" }}>{item}</span>
+                  </li>
+                ))
+              ) : (
+                <></>
+              )}
+            </ul>
           </Card>
         )}
       </Container>
