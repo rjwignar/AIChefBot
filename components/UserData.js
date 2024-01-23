@@ -3,12 +3,16 @@
 
 import { Card, Container } from "react-bootstrap";
 
-const UserData = (props) => { 
+const UserData = (props) => {
+    // user must be fetched and supplied to this component 
     const { user } = props;
-    console.log(user);
-    return user == null ? (
-        <></>
-      ) : (
+
+    return user == null ? 
+    (
+    // if user is null, return nothing
+    <>No user found!</>
+    ) : (
+        // if user is not null, show details
         <Card body className="fs-4">
           <h3>User:</h3>
           name: <span style={{ color: "green" }}>{user.username}</span>
@@ -32,20 +36,26 @@ const UserData = (props) => {
             {user.requests.length ? (
               user.requests.map((request, i) => (
                 <>
-                  {i+ 1}: <span style={{ color: "green" }}>{request.query}</span>
+                  <span key={i} style={{ color: "green" }}>{request.query}</span>
                   <br/>
-                  {/*<br/>ingredients:&nbsp;<span style={{ color: "green" }}>{request.ingredients}</span>*/}
+                  <Container className="col-md-11">
+                  <br/>
+                  <h4>ingredients </h4>
+                  <ul>
+                  {request.ingredients.map((ingredient, i) => (
+                    <li><span style={{ color: "blue" }}>{ingredient}</span></li>
+                  ))}
+                  </ul>
+                  <br/>
                   
-                  <br/>
-                  <Container>
                   <h4>generated recipes:</h4>
                   <hr/>
                   {request.recipes.map((recipe, i) => (
-                    <p key={i}>
-                      <h4>{String.fromCharCode(97 + i)}: {recipe.name}</h4>
-                      <span style={{ color: "green" }}>{recipe.details}</span>
-                    </p>
-                    
+                    <>
+                      <h4 key={i}>{String.fromCharCode(97 + i)}: {recipe.name}</h4>
+                      <span style={{ color: "blue" }}>{recipe.details}</span>
+                      <br/><br/>
+                    </>
                   ))}
                   </Container>
                 </>

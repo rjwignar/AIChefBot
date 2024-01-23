@@ -18,10 +18,11 @@ export default function Home() {
       const res = await fetch(`./api/request?username=${textInput}`, {
         method: "GET",
       });
+
       // user found, set user as found user
       const result = await res.json();
-      console.log(result);
       setUser(result);
+      
     } catch (err) {
       // user was not found
       setUser({ message: "No user found." });
