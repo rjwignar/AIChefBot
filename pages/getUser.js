@@ -1,8 +1,8 @@
 // Demonstration page for retrieving user from the mongodb database
 
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
-import { Card } from "react-bootstrap";
 import { useState } from "react";
+import UserData from "../components/UserData";
 
 export default function Home() {
   // handles text input for searching a user
@@ -19,8 +19,9 @@ export default function Home() {
         method: "GET",
       });
       // user found, set user as found user
-      const user = await res.json();
-      setUser(user);
+      const result = await res.json();
+      console.log(result);
+      setUser(result);
     } catch (err) {
       // user was not found
       setUser({ message: "No user found." });
@@ -60,56 +61,7 @@ export default function Home() {
           </Col>
         </Row>
         <br />
-        {user == null ? (
-          <></>
-        ) : (
-          <Card body className="fs-4">
-            <h3>User:</h3>
-            name: <span style={{ color: "green" }}>{user.username}</span>
-            <br />
-            email: <span style={{ color: "green" }}>{user.email}</span><br/>
-            <br />
-            <h3>appliances:</h3>
-            <ul classame="fs-4">
-              {user.appliances.length ? (
-                user.appliances.map((item, i) => (
-                  <li key={i}>
-                    <span style={{ color: "green" }}>{item}</span>
-                  </li>
-                ))
-              ) : (
-                <></>
-              )}
-            </ul>
-            <h3>requests:</h3>
-            <ul classame="fs-4">
-              {user.requests.length ? (
-                user.requests.map((request, i) => (
-                  <>
-                    {i+ 1}: <span style={{ color: "green" }}>{request.query}</span>
-                    <br/>
-                    {/*<br/>ingredients:&nbsp;<span style={{ color: "green" }}>{request.ingredients}</span>*/}
-                    
-                    <br/>
-                    <Container>
-                    <h4>generated recipes:</h4>
-                    <hr/>
-                    {request.recipes.map((recipe, i) => (
-                      <p key={i}>
-                        <h4>{String.fromCharCode(97 + i)}: {recipe.name}</h4>
-                        <span style={{ color: "green" }}>{recipe.details}</span>
-                      </p>
-                      
-                    ))}
-                    </Container>
-                  </>
-                ))
-              ) : (
-                <>None</>
-              )}
-            </ul>
-          </Card>
-        )}
+        <UserData user={user}/>
       </Container>
     </>
   );

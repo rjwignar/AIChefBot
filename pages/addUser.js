@@ -2,8 +2,8 @@
 
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { Card } from "react-bootstrap";
 import { useState } from "react";
+import UserData from '../components/UserData';
 
 export default function Home() {
   // this function registers form fields
@@ -100,34 +100,7 @@ export default function Home() {
         <br />
 
         {/* Display user, if user was added successfully. */}
-        {user == null ? (
-          <></>
-        ) : (
-          <Card body>
-            <p>
-              Name: <span style={{ color: "green" }}>{user.username}</span>
-            </p>
-            <p>
-              Email: <span style={{ color: "green" }}>{user.email}</span>
-            </p>
-            <p>
-              Appliances:
-              <ul>
-                {user.appliances.length ? (
-                  user.appliances.map((item, i) => (
-                    <li key={i}>
-                      <span style={{ color: "green" }}>{item}</span>
-                    </li>
-                  ))
-                ) : (
-                  <></>
-                )}
-              </ul>
-            </p>
-            <p></p>
-            <p></p>
-          </Card>
-        )}
+        <UserData user={user}/>
       </Container>
     </>
   );
