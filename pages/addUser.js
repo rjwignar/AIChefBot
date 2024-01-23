@@ -51,15 +51,15 @@ export default function Home() {
         {/* Form */}
         <Form onSubmit={handleSubmit(submitForm)}>
           <Form.Group as={Row}>
-            <Form.Label
+            <Form.Label as={Col}
+              className="fw-bold col-md-2"
               htmlFor="username"
               column
               md={1}
-              style={{ fontWeight: "bold" }}
             >
               Username:
             </Form.Label>
-            <Col md={3} className={"mb-2"}>
+            <Col md={3} className="mb-2">
               <Form.Control
                 required
                 type="text"
@@ -72,15 +72,15 @@ export default function Home() {
           </Form.Group>
 
           <Form.Group as={Row}>
-            <Form.Label
+            <Form.Label as={Col}
+              className="fw-bold col-md-2"
               htmlFor="email"
               column
               sm={1}
-              style={{ fontWeight: "bold" }}
             >
               Email:
             </Form.Label>
-            <Col md={3} className={"mb-2"}>
+            <Col md={3} className="me-2 mb-2">
               <Form.Control
                 required
                 type="text"
@@ -98,9 +98,9 @@ export default function Home() {
           </Button>
         </Form>
         <br />
-
         {/* Display user, if user was added successfully. */}
         <UserData user={user}/>
+        
       </Container>
     </>
   );

@@ -37,7 +37,7 @@ export default function Home() {
           <Col md={7}>
             <br />
             <h1 className="hero-title">
-              Get User <span style={{ color: "green" }}>(Demonstration)</span>
+              Get User <span style={{ color: "rgb(255,100,100)" }}>(Demonstration)</span>
             </h1>
             <p>
               Let's acquire one user from the database, along with their
@@ -48,14 +48,14 @@ export default function Home() {
 
         {/* Form */}
         <Row>
-          <Col md={3} className="d-flex">
+          <Col md={8} className="d-flex">
             <Form onSubmit={handleSubmit} className="d-flex">
               <Form.Control
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Username"
               ></Form.Control>
               &nbsp;&nbsp;
-              <Button className="landing-page-btn ml-2" type="submit">
+              <Button className="landing-page-btn" type="submit">
                 Search
               </Button>
             </Form>
