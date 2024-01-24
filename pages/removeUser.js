@@ -1,32 +1,38 @@
-// Demonstration page for retrieving user from the database
+// Demonstration page for deleting a user from the database
 
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { useState } from "react";
-import UserData from "../components/UserData";
 
 export default function Home() {
   // handles text input for searching a user
   const [textInput, setTextInput] = useState("");
 
-  // handles the user returned from the api
-  const [user, setUser] = useState(null);
+  // handles the status of deletion
+  const [message, setMessage] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     // get user from database
+    // send POST request to api with form data
     try {
-      const response = await fetch(`./api/request?username=${textInput}`, {
-        method: "GET",
-      }).then(res => res.json());
+      // post user data to api using HTTP request body
+      const response = await fetch(`./api/request`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(textInput),
+      });
+      // extract json from response
       const result = await response.json();
-      // user found, set user as found user
-      setUser(result);
-      
+      // set message
+      setMessage(result.message);
     } catch (err) {
-      // user was not found
-      setUser({ message: "No user found." });
+      console.debug("Error adding user: ", err);
+      setMessage(null);
     } finally {
-      document.getElementById('usernameField').value = "";
+      document.getElementById("usernameField").value = "";
     }
   }
 
@@ -38,11 +44,11 @@ export default function Home() {
           <Col md={7}>
             <br />
             <h1 className="hero-title">
-              Get User <span style={{ color: "rgb(255,100,100)" }}>(Demonstration)</span>
+              Delete User{" "}
+              <span style={{ color: "rgb(255,100,100)" }}>(Demonstration)</span>
             </h1>
             <p>
-              Let's acquire one user from the database, along with their
-              recipes.
+              Delete a user from the database.
             </p>
           </Col>
         </Row>
@@ -51,7 +57,8 @@ export default function Home() {
         <Row>
           <Col md={8} className="d-flex">
             <Form onSubmit={handleSubmit} className="d-flex">
-              <Form.Control id="usernameField"
+              <Form.Control
+                id="usernameField"
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Username"
               ></Form.Control>
@@ -63,7 +70,7 @@ export default function Home() {
           </Col>
         </Row>
         <br />
-        <UserData user={user}/>
+        <p>{message}</p>
       </Container>
     </>
   );

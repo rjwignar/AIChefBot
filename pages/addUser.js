@@ -1,4 +1,4 @@
-// Demonstration page for retrieving user from the mongodb database
+// Demonstration page for adding a user to the database
 
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -12,12 +12,11 @@ export default function Home() {
   // handles the user returned from the api
   const [user, setUser] = useState(null);
 
-  async function submitForm(data, e) {
-    console.log(data);
-
+  async function submitForm(data) {
+    // send POST request to api with form data
     try {
       // post user data to api using HTTP request body
-      const res = await fetch(`./api/request`, {
+      const response = await fetch(`./api/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,11 +24,11 @@ export default function Home() {
         body: JSON.stringify(data),
       });
       // user was added successfully, set user
-      const result = await res.json();
+      const result = await response.json();
       setUser(result);
-
     } catch (err) {
-      setUser({message: "An error occurred"});
+      console.debug("Error adding user: ", err);
+      setUser(setUser(null));
     }
   }
 
