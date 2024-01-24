@@ -3,7 +3,8 @@
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import UserData from '../components/UserData';
+import Link from "next/link";
+import UserData from "../components/UserData";
 
 export default function Home() {
   // this function registers form fields
@@ -14,21 +15,21 @@ export default function Home() {
 
   async function submitForm(data) {
     // send POST request to api with form data
-    try {
-      // post user data to api using HTTP request body
-      const response = await fetch(`./api/request`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      // user was added successfully, set user
-      const result = await response.json();
+
+    // post user data to api using HTTP request body
+    const res = await fetch(`./api/request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    // user found, set user as found user
+    if (res.ok) {
+      const result = await res.json();
       setUser(result);
-    } catch (err) {
-      console.debug("Error adding user: ", err);
-      setUser(setUser(null));
+    } else {
+      setUser("None");
     }
   }
 
@@ -42,15 +43,26 @@ export default function Home() {
             <h1 className="hero-title">
               Add User <span style={{ color: "green" }}>(Demonstration)</span>
             </h1>
+            <ul>
+              <li>
+                <Link href="./getUser">Get User &raquo;</Link>
+              </li>
+              <li>
+                <Link href="./addUser">Add User &raquo;</Link>
+              </li>
+              <li>
+                <Link href="./removeUser">Remove User &raquo;</Link>
+              </li>
+            </ul>
+            <br />
             <p>Let's register a user.</p>
           </Col>
         </Row>
-        <hr />
-        <br />
         {/* Form */}
         <Form onSubmit={handleSubmit(submitForm)}>
           <Form.Group as={Row}>
-            <Form.Label as={Col}
+            <Form.Label
+              as={Col}
               className="fw-bold col-md-2"
               htmlFor="username"
               column
@@ -71,7 +83,8 @@ export default function Home() {
           </Form.Group>
 
           <Form.Group as={Row}>
-            <Form.Label as={Col}
+            <Form.Label
+              as={Col}
               className="fw-bold col-md-2"
               htmlFor="email"
               column
@@ -98,8 +111,7 @@ export default function Home() {
         </Form>
         <br />
         {/* Display user, if user was added successfully. */}
-        <UserData user={user}/>
-        
+        <UserData user={user} />
       </Container>
     </>
   );

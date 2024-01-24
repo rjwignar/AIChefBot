@@ -56,6 +56,16 @@ Search a user by username.
 
 - Try **adding a user** prior to searching for one.
 
+#### Delete a user
+URL: ```localhost:3000/removeUser```
+
+Simply delete a user by their username.
+
+- Try:
+    - adding a user
+    - getting this user
+    - deleting this user
+
 
 
 

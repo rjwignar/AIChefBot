@@ -18,7 +18,7 @@ async function handler(req, res) {
           // everything ok, return user as json
           res.status(200).json(user);
         } else {
-          res.status(404).json({ message: "User was not found." });
+          res.status(404).json({message: "User was not found."});
         }
       } catch (err) {
         console.debug(err);
@@ -36,7 +36,7 @@ async function handler(req, res) {
           // everything ok, return user as json
           res.status(200).json(user);
         } else {
-          res.status(404).json({ message: "User was not found." });
+          res.status(404).json({message: "User was not found."});
         }
       } catch (err) {
         console.debug(err);
@@ -65,11 +65,15 @@ async function handler(req, res) {
     // DELETE
     case "DELETE":
       try {
+        // TEST
+        if (req.body == "TESTUSER") {
+          res.status(500).json({message: "This user cannot be accessed."});
+          break;
+        }
         // await user deletion, acquire boolean result
         const result = await db.removeUser(req.body);
         if (result) {
-          console.log("in request.js, returning true...");
-          // everything ok, return user as json
+          // everything ok, return success message
           res.status(200).json({ message: "User was deleted successfully." });
         } else {
           res.status(404).json({ message: "User was not found." });

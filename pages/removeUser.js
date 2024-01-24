@@ -1,6 +1,7 @@
 // Demonstration page for deleting a user from the database
 
-import { Row, Col, Container, Form, Button } from "react-bootstrap";
+import { Row, Col, Container, Card, Form, Button } from "react-bootstrap";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -47,6 +48,11 @@ export default function Home() {
               Delete User{" "}
               <span style={{ color: "rgb(255,100,100)" }}>(Demonstration)</span>
             </h1>
+            <ul>
+              <li><Link href="./getUser">Get User &raquo;</Link></li>
+              <li><Link href="./addUser">Add User &raquo;</Link></li>
+              <li><Link href="./removeUser">Remove User &raquo;</Link></li>
+            </ul>
             <p>
               Delete a user from the database.
             </p>
@@ -63,14 +69,19 @@ export default function Home() {
                 placeholder="Username"
               ></Form.Control>
               &nbsp;&nbsp;
-              <Button className="landing-page-btn" type="submit">
-                Search
+              <Button className="btn-danger" type="submit">
+                Delete
               </Button>
             </Form>
           </Col>
         </Row>
         <br />
-        <p>{message}</p>
+        {message && 
+        <Card body className="fs-4 p-2 bg-light bg-opacity-50">
+          <span>{message}</span>
+        </Card>
+        }
+        
       </Container>
     </>
   );

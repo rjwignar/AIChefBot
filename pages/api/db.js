@@ -49,7 +49,6 @@ module.exports.updateUser = async function (user) {
 module.exports.removeUser = async function(username) {
   const result = await collection.deleteOne({ username: username });
   if (result.deletedCount == 1) {
-    console.log("returning true...");
     return true;
   }
   else {

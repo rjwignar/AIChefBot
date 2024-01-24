@@ -8,10 +8,18 @@ const UserData = (props) => {
   // user must be fetched and supplied to this component
   const { user } = props;
 
-  return user == null ? (
+  if (user == null) 
+    return (
     // if user is null, return nothing
     <></>
-  ) : (
+  ) 
+  else if (user == "None") return (
+    // user was not found
+    <Card body className="fs-4 p-2 bg-light bg-opacity-50">
+      <span>No User Found!</span>
+    </Card>
+  )
+  else return (
     // if user is not null, show details
     <Card body className="fs-4 p-2 bg-light bg-opacity-50">
       <h3>User:</h3>
@@ -51,8 +59,8 @@ const UserData = (props) => {
                 <h4>ingredients </h4>
                 <ul>
                   {request.ingredients.map((ingredient, i) => (
-                    <li key={i}>
-                      <span style={{ color: "blue" }}>{ingredient}</span>
+                    <li>
+                      <span key={i} style={{ color: "blue" }}>{ingredient}</span>
                     </li>
                   ))}
                 </ul>
