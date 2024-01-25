@@ -38,7 +38,7 @@ export default function MainNav() {
                         <NavDropdown.Item>
                            Manage Account
                         </NavDropdown.Item>
-                        <NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => signOut()}>
                            Logout
                         </NavDropdown.Item>
                      </NavDropdown>
