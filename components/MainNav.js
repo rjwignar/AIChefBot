@@ -12,6 +12,13 @@ export default function MainNav() {
    }
    const { data: session, status } = useSession();
 
+   // don't render page until user session is determined authenticated/unauthenticated
+   // i.e until status returns "authenticated" or "unauthenticated"
+   // see https://next-auth.js.org/getting-started/client#example for more information
+   if (status === "loading"){
+      return null;
+   }
+
    return (
       <>
          <Navbar variant='light' expand='lg' className='fixed-top navbar-dark bg-dark'>
@@ -34,7 +41,7 @@ export default function MainNav() {
                         </Nav.Link>
                      </Link>
                      ):(
-                        <NavDropdown title="Welcome (NAME)" id="basic-nav-dropdown">
+                        <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
                         <NavDropdown.Item>
                            Manage Account
                         </NavDropdown.Item>
