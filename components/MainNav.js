@@ -37,7 +37,7 @@ export default function MainNav() {
                      {status === "unauthenticated" ? (
                         <Link href="#" passHref legacyBehavior>
                         <Nav.Link>
-                           <button className="landing-page-btn" role="button" onClick={() => signIn()}>Login</button>
+                           <button className="landing-page-btn" role="button" onClick={() => signIn("cognito")}>Login</button>
                         </Nav.Link>
                      </Link>
                      ):(
