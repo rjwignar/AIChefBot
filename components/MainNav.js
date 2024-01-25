@@ -1,6 +1,7 @@
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function MainNav() {
    const router = useRouter();
@@ -9,6 +10,7 @@ export default function MainNav() {
    const loginBtn = () => {
       
    }
+   const { data: session, status } = useSession();
 
    return (
       <>
@@ -23,12 +25,30 @@ export default function MainNav() {
                <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="me-auto">
                   </Nav>
+
                   <Nav>
-                     <Link href="#" passHref legacyBehavior>
+                     {status === "unauthenticated" ? (
+                        <Link href="#" passHref legacyBehavior>
                         <Nav.Link>
                            <button className="landing-page-btn" role="button" onClick={loginBtn}>Login</button>
                         </Nav.Link>
                      </Link>
+                     ):(
+                        <NavDropdown title="Welcome (NAME)" id="basic-nav-dropdown">
+                        <NavDropdown.Item>
+                           Manage Account
+                        </NavDropdown.Item>
+                        <NavDropdown.Item>
+                           Logout
+                        </NavDropdown.Item>
+                     </NavDropdown>
+                     )
+                     }
+                     {/* <Link href="#" passHref legacyBehavior>
+                        <Nav.Link>
+                           <button className="landing-page-btn" role="button" onClick={loginBtn}>Login</button>
+                        </Nav.Link>
+                     </Link> */}
                      {/*When User is logged in, display dropdown:*/}
                      {/* <NavDropdown title="Welcome (NAME)" id="basic-nav-dropdown">
                         <NavDropdown.Item>
@@ -38,6 +58,7 @@ export default function MainNav() {
                            Logout
                         </NavDropdown.Item>
                      </NavDropdown> */}
+
                   </Nav>
                </Navbar.Collapse>
             </Container>
