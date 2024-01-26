@@ -12,13 +12,6 @@ export default function MainNav() {
    }
    const { data: session, status } = useSession();
 
-   // don't render page until user session is determined authenticated/unauthenticated
-   // i.e until status returns "authenticated" or "unauthenticated"
-   // see https://next-auth.js.org/getting-started/client#example for more information
-   if (status === "loading"){
-      return null;
-   }
-
    return (
       <>
          <Navbar variant='light' expand='lg' className='fixed-top navbar-dark bg-dark'>
