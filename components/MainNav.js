@@ -1,14 +1,11 @@
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function MainNav() {
    const router = useRouter();
-
-   /*Implement AWS Cognito login function here:*/
-   const loginBtn = () => {
-      
-   }
+   const { data: session, status } = useSession();
 
    return (
       <>
@@ -23,21 +20,25 @@ export default function MainNav() {
                <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="me-auto">
                   </Nav>
+
                   <Nav>
-                     <Link href="#" passHref legacyBehavior>
+                     {status === "unauthenticated" ? (
+                        <Link href="#" passHref legacyBehavior>
                         <Nav.Link>
-                           <button className="landing-page-btn" role="button" onClick={loginBtn}>Login</button>
+                           <button className="landing-page-btn" role="button" onClick={() => signIn("cognito")}>Login</button>
                         </Nav.Link>
                      </Link>
-                     {/*When User is logged in, display dropdown:*/}
-                     {/* <NavDropdown title="Welcome (NAME)" id="basic-nav-dropdown">
+                     ):(
+                        <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
                         <NavDropdown.Item>
                            Manage Account
                         </NavDropdown.Item>
-                        <NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => signOut({callbackUrl: "/logout"})}>
                            Logout
                         </NavDropdown.Item>
-                     </NavDropdown> */}
+                     </NavDropdown>
+                     )
+                     }
                   </Nav>
                </Navbar.Collapse>
             </Container>
