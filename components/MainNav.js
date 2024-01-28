@@ -6,7 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 export default function MainNav() {
    const router = useRouter();
    const { data: session, status } = useSession();
-
+   // console.log(session);
    return (
       <>
          <Navbar variant='light' expand='lg' className='fixed-top navbar-dark bg-dark'>

@@ -14,6 +14,31 @@ export const authOptions = {
           }
         })
       ],
+    secret: process.env.NEXTAUTH_SECRET,
+    callbacks: {
+        async jwt({token, user, session}){
+          // console.log("jwt callback", {token, user, session});
+          // on sign-in, there is a user
+          if (user){
+            return {
+              ...token,
+              id: user.id,
+            }
+          }
+          return token;
+        },
+        async session({session, token, user}){
+          // console.log("session callback", {session, token, user});
+          // pass in user id to session
+          return{
+            ...session,
+            user: {
+              ...session.user,
+              id: token.id,
+            }
+          };
+        },
+    },
 }
 
 export default NextAuth(authOptions)
