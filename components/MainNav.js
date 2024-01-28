@@ -23,21 +23,23 @@ export default function MainNav() {
 
                   <Nav>
                      {status === "unauthenticated" ? (
-                        <Link href="#" passHref legacyBehavior>
-                        <Nav.Link>
-                           <button className="landing-page-btn" role="button" onClick={() => signIn("cognito")}>Login</button>
-                        </Nav.Link>
-                     </Link>
-                     ):(
-                        <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
-                        <NavDropdown.Item>
-                           Manage Account
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={() => signOut({callbackUrl: "/logout"})}>
-                           Logout
-                        </NavDropdown.Item>
-                     </NavDropdown>
-                     )
+                           <Link href="#" passHref legacyBehavior>
+                              <Nav.Link>
+                                 <button className="landing-page-btn" role="button" onClick={() => signIn("cognito")}>Login</button>
+                              </Nav.Link>
+                           </Link>
+                        ):(
+                           <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
+                              <NavDropdown.Item>
+                                 <Link href="/getUser" passHref legacyBehavior>
+                                    <Nav.Link className='text-dark p-0' active={router.pathname === "/getUser"}>Manage Account</Nav.Link>
+                                 </Link>
+                              </NavDropdown.Item>
+                              <NavDropdown.Item onClick={() => signOut({callbackUrl: "/logout"})}>
+                                 Logout
+                              </NavDropdown.Item>
+                           </NavDropdown>
+                        )
                      }
                   </Nav>
                </Navbar.Collapse>
