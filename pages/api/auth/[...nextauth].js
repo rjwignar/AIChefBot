@@ -14,18 +14,29 @@ export const authOptions = {
           }
         })
       ],
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
-        async jwt(token, user, account, profile, isNewUser) {
-            // Called whenever a JWT is created/refreshed.
-            if (account?.id) {
-                token.id = account.id;
+        async jwt({token, user, session}){
+          // console.log("jwt callback", {token, user, session});
+          // on sign-in, there is a user
+          if (user){
+            return {
+              ...token,
+              id: user.id,
             }
-            return token;
+          }
+          return token;
         },
-        async session(session, token) {
-            // Called whenever a session is created/retrieved.
-            session.id = token.id;
-            return session;
+        async session({session, token, user}){
+          // console.log("session callback", {session, token, user});
+          // pass in user id to session
+          return{
+            ...session,
+            user: {
+              ...session.user,
+              id: token.id,
+            }
+          };
         },
     },
 }
