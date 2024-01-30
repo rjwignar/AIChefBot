@@ -33,6 +33,9 @@ export default function Home() {
     }
   }
 
+  return <h1>No longer add user via form. Code can be used as reference.</h1>
+
+  /**
   // add a user to the database -- form
   return (
     <>
@@ -58,7 +61,7 @@ export default function Home() {
             <p>Let's register a user.</p>
           </Col>
         </Row>
-        {/* Form */}
+        
         <Form onSubmit={handleSubmit(submitForm)}>
           <Form.Group as={Row}>
             <Form.Label
@@ -110,9 +113,10 @@ export default function Home() {
           </Button>
         </Form>
         <br />
-        {/* Display user, if user was added successfully. */}
+       
         <UserData user={user} />
       </Container>
     </>
-  );
+  )
+  **/
 }
