@@ -30,10 +30,8 @@ export default function MainNav() {
                            </Link>
                         ):(
                            <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
-                              <NavDropdown.Item>
-                                 <Link href="/getUser" passHref legacyBehavior>
-                                    <Nav.Link className='text-dark p-0' active={router.pathname === "/getUser"}>Manage Account</Nav.Link>
-                                 </Link>
+                              <NavDropdown.Item onClick={() => router.push("/getUser")}>
+                                 Manage Account
                               </NavDropdown.Item>
                               <NavDropdown.Item onClick={() => signOut({callbackUrl: "/logout"})}>
                                  Logout
