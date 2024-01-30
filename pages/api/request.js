@@ -3,7 +3,7 @@
 // TODO: Delete a user.
 
 // get our db methods
-const db = require("./db");
+import { getUserByEmail, addUser, updateUser, removeUser } from "./mongodb";
 
 // handler for all relevant requests
 async function handler(req, res) {
@@ -13,7 +13,7 @@ async function handler(req, res) {
     case "GET": {
       try {
         // await the found user
-        const user = await db.getUser(req.query.username);
+        const user = await getUserByEmail(req.query.email);
         if (user) {
           // everything ok, return user as json
           res.status(200).json(user);
@@ -31,7 +31,7 @@ async function handler(req, res) {
     case "POST": {
       try {
         // await the user to be added, and returned
-        const user = await db.addUser(req.body);
+        const user = await addUser(req.body);
         if (user) {
           // everything ok, return user as json
           res.status(200).json(user);
@@ -49,7 +49,7 @@ async function handler(req, res) {
     case "PUT":
       try {
         // await the user to be updated, and returned
-        const user = await db.updateUser(req.body);
+        const user = await updateUser(req.body);
         if (user) {
           // everything ok, return user as json
           res.status(200).json(user);
@@ -71,7 +71,7 @@ async function handler(req, res) {
           break;
         }
         // await user deletion, acquire boolean result
-        const result = await db.removeUser(req.body);
+        const result = await removeUser(req.body);
         if (result) {
           // everything ok, return success message
           res.status(200).json({ message: "User was deleted successfully." });
