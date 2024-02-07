@@ -15,7 +15,7 @@ export default function Home() {
   async function handleSubmit(e) {
     e.preventDefault();
     // get user from database
-    const res = await fetch(`./api/request?username=${textInput}`, {
+    const res = await fetch(`./api/request?email=${textInput}`, {
       method: "GET",
     });
 
@@ -37,17 +37,12 @@ export default function Home() {
             <br />
             <h1 className="hero-title">
               Get User{" "}
-              <span style={{ color: "rgb(255,100,100)" }}>(Demonstration)</span>
+              <br/>
+              <span style={{ color: "rgb(255,100,100)" }}>(FOR TESTING)</span>
             </h1>
-            <ul>
-              <li><Link href="./getUser">Get User &raquo;</Link></li>
-              <li><Link href="./addUser">Add User &raquo;</Link></li>
-              <li><Link href="./removeUser">Remove User &raquo;</Link></li>
-            </ul>
             <br />
             <p>
-              Let's acquire one user from the database, along with their
-              recipes.
+              Search for user data by a user's email address.
             </p>
           </Col>
         </Row>
@@ -57,11 +52,11 @@ export default function Home() {
             <Form onSubmit={handleSubmit} className="d-flex">
               <Form.Control
                 onChange={(e) => setTextInput(e.target.value)}
-                placeholder="Username"
+                placeholder="Email"
               ></Form.Control>
               &nbsp;&nbsp;
               <Button className="landing-page-btn" type="submit">
-                Search
+                Search By Email
               </Button>
             </Form>
           </Col>
