@@ -7,30 +7,36 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 export default function MainNav() {
    const router = useRouter();
    const { data: session, status } = useSession();
-   const [ user, setUser ] = useState(null);
-   
+   const [user, setUser] = useState(null);
    // may need to fill the dependency array with [session], unless MainNav carries data between renders
    useEffect(() => {
       if (session != null) {
+         // get data
          const fetchData = async () => {
-            try {
-               // post session to api
-               const res = await fetch(`/api/request`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(session.user),
-                });
-               const result = await res.json();
-
-                // log result for testing
-               console.log(result);
-               setUser(result);
-            }
-            catch(err) {
-               // log errors for testing
-               console.log(err);
+            const res = await fetch(`/api/request?id=${session.user.id}`, {
+               method: "GET",
+            });
+            await res.json().then(user => console.log("User exists: \n", user));
+            if (!res.ok) {
+               try {
+                  // post session to api
+                  const res = await fetch(`/api/request`, {
+                     method: "POST",
+                     headers: {
+                       "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify(session.user),
+                   });
+                  const result = await res.json();
+   
+                   // log result for testing
+                  console.log("Added new user: \n", result);
+                  setUser(result);
+               }
+               catch(err) {
+                  // log errors for testing
+                  console.log(err);
+               }
             }
          }
          fetchData();
@@ -59,7 +65,7 @@ export default function MainNav() {
                               </Nav.Link>
                            </Link>
                         ):(
-                           <NavDropdown title={`Welcome ${user && user.username}`} id="basic-nav-dropdown">
+                           <NavDropdown title={`Welcome ${session.user && session.user.name}`} id="basic-nav-dropdown">
                               <NavDropdown.Item>
                                  <Link href="/getUser" passHref legacyBehavior>
                                     <Nav.Link className='text-dark p-0' active={router.pathname === "/getUser"}>Manage Account</Nav.Link>
