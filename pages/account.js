@@ -8,7 +8,7 @@ export default function account() {
 
    return (
       <>
-         <Container className="m-2">
+         <Container className="mt-5">
             <Card className="account-card mx-4">
                <Card.Header>
                   <Nav className="nav-tabs card-header-tabs mt-1 mx-1">
