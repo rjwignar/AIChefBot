@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -43,7 +43,15 @@ export default function MainNav() {
             <Container>
                <Navbar.Brand className='navbar-brand-custom'>
                   <Link href="/" passHref legacyBehavior>
-                     <Nav.Link active={router.pathname === "/"}>AIChefBot</Nav.Link>
+                     <Nav.Link active={router.pathname === "/"}>
+                        <Image 
+                           src='https://i.postimg.cc/k5J0qhsX/Test2.png'
+                           width={150}
+                           height={50}
+                           fluid
+                           alt='AIChefBot logo'
+                        />
+                     </Nav.Link>
                   </Link>
                </Navbar.Brand>
                <Navbar.Toggle aria-controls="basic-navbar-nav" />
