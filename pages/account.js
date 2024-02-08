@@ -9,7 +9,7 @@ export default function account() {
    return (
       <>
          <Container className="mt-5">
-            <Card className="account-card mx-4">
+            <Card className="account-card mx-4 animate__animated animate__fadeInUp animate__fast">
                <Card.Header>
                   <Nav className="nav-tabs card-header-tabs mt-1 mx-1">
                         <Nav.Item>
