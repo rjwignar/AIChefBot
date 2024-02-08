@@ -18,10 +18,10 @@ export default function MainNav() {
                const res = await fetch(`/api/request`, {
                   method: "POST",
                   headers: {
-                    "Content-Type": "application/json",
+                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify(session.user),
-                });
+               });
                const result = await res.json();
 
                 // log result for testing
@@ -39,7 +39,7 @@ export default function MainNav() {
 
    return (
       <>
-         <Navbar variant='light' expand='lg' className='fixed-top navbar-dark bg-dark'>
+         <Navbar variant='light' expand='lg' className='fixed-top navbar-custom'>
             <Container>
                <Navbar.Brand className='navbar-brand-custom'>
                   <Link href="/" passHref legacyBehavior>
@@ -60,11 +60,11 @@ export default function MainNav() {
                            </Link>
                         ):(
                            <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
-                              <NavDropdown.Item onClick={() => router.push("/getUser")}>
-                                 Manage Account
+                              <NavDropdown.Item onClick={() => router.push("/account")}>
+                                 <p className='navbar-dropdown-item-custom m-1'>Manage Account</p>
                               </NavDropdown.Item>
                               <NavDropdown.Item onClick={() => signOut({callbackUrl: "/logout"})}>
-                                 Logout
+                                 <p className='navbar-dropdown-item-custom m-1'>Logout</p>
                               </NavDropdown.Item>
                            </NavDropdown>
                         )
