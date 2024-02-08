@@ -26,9 +26,9 @@
 
 /*Default Styles*/
 body {
-   background-image: url('../assets/img/background.png');
+   /* background-image: url('../assets/img/background.png');
    background-size: cover;
-   background-repeat: no-repeat;
+   background-repeat: no-repeat; */
    min-height: 100vh;
    margin: 0;
 }
@@ -52,11 +52,11 @@ hr.accountLine {
 
 /*Navbar/Landing page Styles*/
 .navbar-custom {
-   /* background: rgba(255, 255, 255, 0.08); */
+   background: rgb(255, 255, 255);
    /* border-radius: 16px; */
    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
-   backdrop-filter: blur(2.1px);
-   -webkit-backdrop-filter: blur(2.1px);
+   /* backdrop-filter: blur(2.1px); */
+   /* -webkit-backdrop-filter: blur(2.1px); */
    font-family: 'Geist', sans-serif;
    font-weight: 300;
    /* min-width: 80px; */
@@ -121,7 +121,7 @@ hr.accountLine {
 /*Navbar/Landing page Styles*/
 
 .account-card {
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
    font-size: 16px;
 }
 
@@ -164,7 +164,7 @@ hr.accountLine {
 
 .hero-img {
    border-radius: 16px;
-   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
    animation: updown 3s linear infinite;
 }
 
