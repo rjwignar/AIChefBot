@@ -16,13 +16,19 @@
    src: url('../assets/font/Geist-Regular.otf');
    font-weight: 300;
 }
+
+@font-face {
+   font-family: 'Geist';
+   src: url('../assets/font/Geist-UltraLight.otf');
+   font-weight: 100;
+}
 /* Custom Font */
 
 /*Default Styles*/
 body {
-   background-image: url('../assets/img/background.png');
+   /* background-image: url('../assets/img/background.png');
    background-size: cover;
-   background-repeat: no-repeat;
+   background-repeat: no-repeat; */
    min-height: 100vh;
    margin: 0;
 }
@@ -32,24 +38,40 @@ p {
    font-weight: 300;
    font-size: 20px;
 }
+
+hr.accountLine {
+   border: 0;
+   height: 0;
+   border-top: 1px solid rgba(0, 0, 0, 0.1);
+   border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+   width: 98%;
+   margin-left: auto;
+   margin-right: auto;
+}
 /*Default Styles*/
 
 /*Navbar/Landing page Styles*/
 .navbar-custom {
-   background: rgba(255, 255, 255, 0.08);
-   border-radius: 16px;
-   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-   backdrop-filter: blur(2.1px);
-   -webkit-backdrop-filter: blur(2.1px);
+   background: rgb(255, 255, 255);
+   /* border-radius: 16px; */
+   /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+   /* backdrop-filter: blur(2.1px); */
+   /* -webkit-backdrop-filter: blur(2.1px); */
    font-family: 'Geist', sans-serif;
    font-weight: 300;
-   min-width: 80px;
+   /* min-width: 80px; */
 }
 
 .navbar-brand-custom {
    font-family: 'Geist', sans-serif;
    font-weight: 700;
    margin: 12px 0;
+}
+
+.navbar-dropdown-item-custom {
+   font-family: 'Geist', sans-serif;
+   font-weight: 100;
+   font-size: 15px;
 }
 
 /*https://getcssscan.com/css-buttons-examples*/
@@ -98,6 +120,36 @@ p {
 }
 /*Navbar/Landing page Styles*/
 
+.account-card {
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   font-size: 16px;
+}
+
+.account-update-btn {
+   font-family: 'Geist', sans-serif;
+   font-weight: 100;
+   font-size: 15px;
+   border-radius: 18px;
+   border-width: 1px;
+   padding: 5px 20px;
+   background-color: white;
+   border-color: rgba(60, 65, 71, 0.4);
+   color: rgba(60, 65, 71, 0.8);
+   border-style: solid;
+   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.02);
+}
+
+.account-update-btn:hover {
+   background-color: rgb(246, 246, 246);
+}
+
+.account-title {
+   font-family: 'Geist', sans-serif;
+   font-weight: bold;
+   font-size: 30px;
+   padding: 10px 0;
+}
+
 /*Hero Section*/
 .hero-title {
    font-family: 'Geist', sans-serif;
@@ -112,7 +164,7 @@ p {
 
 .hero-img {
    border-radius: 16px;
-   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
    animation: updown 3s linear infinite;
 }
 

@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -45,11 +45,19 @@ export default function MainNav() {
 
    return (
       <>
-         <Navbar variant='light' expand='lg' className='fixed-top navbar-dark bg-dark'>
+         <Navbar variant='light' expand='lg' className='fixed-top navbar-custom'>
             <Container>
                <Navbar.Brand className='navbar-brand-custom'>
                   <Link href="/" passHref legacyBehavior>
-                     <Nav.Link active={router.pathname === "/"}>AIChefBot</Nav.Link>
+                     <Nav.Link active={router.pathname === "/"}>
+                        <Image 
+                           src='https://i.postimg.cc/k5J0qhsX/Test2.png'
+                           width={150}
+                           height={50}
+                           fluid
+                           alt='AIChefBot logo'
+                        />
+                     </Nav.Link>
                   </Link>
                </Navbar.Brand>
                <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -65,14 +73,12 @@ export default function MainNav() {
                               </Nav.Link>
                            </Link>
                         ):(
-                           <NavDropdown title={`Welcome ${session.user && session.user.name}`} id="basic-nav-dropdown">
-                              <NavDropdown.Item>
-                                 <Link href="/getUser" passHref legacyBehavior>
-                                    <Nav.Link className='text-dark p-0' active={router.pathname === "/getUser"}>Manage Account</Nav.Link>
-                                 </Link>
+                           <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
+                              <NavDropdown.Item onClick={() => router.push("/account")}>
+                                 <p className='navbar-dropdown-item-custom m-1'>Manage Account</p>
                               </NavDropdown.Item>
                               <NavDropdown.Item onClick={() => signOut({callbackUrl: "/logout"})}>
-                                 Logout
+                                 <p className='navbar-dropdown-item-custom m-1'>Logout</p>
                               </NavDropdown.Item>
                            </NavDropdown>
                         )

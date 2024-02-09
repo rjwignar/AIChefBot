@@ -17,12 +17,12 @@ export default function Home() {
               <button className="landing-page-btn" role="button">Get Started</button>
             </Link>
           </Col>
-          <Col md={5}>
+          <Col md={5} className='text-end'>
             <br/>
             <Image 
               src='https://i.imgur.com/4mvbVW0.png' 
-              width={500} 
-              height={350} 
+              width={450} 
+              height={200} 
               fluid 
               alt='Robot cooking' 
               className='hero-img'/>
