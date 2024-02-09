@@ -12,50 +12,56 @@ const client = new MongoClient(
 const collection = client.db("aichefbot").collection("users");
 
 // get one user
-export async function getUserByEmail(email) {
+export async function getUserById(id) {
   // find the user
-  const result = await collection.findOne({ email: email });
-
-  // return to api
-  return result;
-}
-
-// add one user
-export async function addUser(user) {
-  // try and find user by email
-  const existingUser = getUserByEmail(user.email);
-
-  // does the user exist already?
-  if (existingUser.insertedId) {
-    return existingUser;
+  try {
+    const result = await collection.findOne({ _id: id });
+    // return to api
+    return result;
   }
-
-  // add the user
-  const result = await collection.insertOne({
-    username: user.name,
-    email: user.email,
-    requests: [],
-    appliances: [],
-    avoided_ingredients: [],
-  });
-
-
-  if (result.insertedId) {
-    // retrieve object by _id from the DB
-    const addedUser = getUserByEmail(user.email);
-
-    // return added user
-    return addedUser;
-  } else {
+  catch (err) {
+    console.log(err);
     return null;
   }
 }
 
+// add one user
+export async function addUser(user) {
+  try {
+    // add the user
+    const result = await collection.insertOne({
+      _id: user.id,
+      username: user.name,
+      email: user.email,
+      requests: [],
+      appliances: [],
+      avoided_ingredients: [],
+    });
+
+    if (result.insertedId) {
+      // retrieve object by _id from the DB
+      const addedUser = getUserById(user.id);
+      // return added user
+      return addedUser;
+    } else {
+      // no user added, was not found
+      console.debug("Could not find added user.");
+      return null
+    }
+  } catch (err) {
+    // tried to insert, failed, user exists
+    console.debug("User exists.");
+    return null;
+  }
+}
+
+// TODO
 export async function updateUser(user) {
   const result = await db.findOne({ username: user.username });
   console.log(result);
 }
 
+// TODO
 export async function removeUser(username) {
   const result = await collection.deleteOne({ username: username });
   if (result.deletedCount == 1) {
@@ -63,6 +69,10 @@ export async function removeUser(username) {
   } else {
     return false;
   }
+}
+
+export async function removeAll() {
+  await collection.deleteMany({});
 }
 
 // connect to mongodb
