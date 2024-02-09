@@ -9,6 +9,10 @@ export default function account() {
    // State to track the active tab
    const [activeTab, setActiveTab] = useState('details');
 
+   //
+   // This is eating away at DB connections. Commented because not needed right now.
+   //
+   /*
    const [user, setUser] = useState(null);
    // may need to fill the dependency array with [session], unless MainNav carries data between renders
    useEffect(() => {
@@ -47,6 +51,7 @@ export default function account() {
          fetchData();
       }
    }, []);
+   */
 
    return (
       <>
