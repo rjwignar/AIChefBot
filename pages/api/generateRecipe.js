@@ -5,8 +5,9 @@ import OpenAI from 'openai';
 export default async function handler(req, res) {
     const messageHistory = [
 
-    ]
-    if (req.method === 'POST') {
+    ];
+    
+    const generateRecipesByDiet = async (req, res) =>{
         try {
             const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
             console.log(req.body);
@@ -46,6 +47,10 @@ export default async function handler(req, res) {
             console.error('Error fetching recipes:', error);
             res.status(500).json({ error: 'Error fetching recipes' });
         }
+      };
+
+    if (req.method === 'POST') {
+        generateRecipesByDiet(req, res);
     } else {
         res.setHeader('Allow', ['POST']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
