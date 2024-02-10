@@ -75,15 +75,4 @@ export async function removeAll() {
   await collection.deleteMany({});
 }
 
-// connect to mongodb
-export async function connect() {
-  try {
-    // attempt to connect
-    await client.connect();
-    // everything ok
-    console.debug("Connection established.");
-  } catch (err) {
-    // failed to connect
-    console.error("Connection failed: ", err);
-  }
-}
+

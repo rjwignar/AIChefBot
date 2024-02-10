@@ -1,9 +1,8 @@
-// api for db connection
 
-// TODO: Delete a user.
+// define responses issued to fetch requests made for USERS
 
 // get our db methods
-import { removeAll, getUserById, addUser, updateUser } from "./mongodb";
+import { removeAll, getUserById, addUser, updateUser } from "./user";
 
 // handler for all relevant requests
 async function handler(req, res) {

@@ -1,10 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Card, Row, Col, Button, Nav, Badge } from "react-bootstrap";
+import { useSession } from 'next-auth/react';
 
 // account.js: Displays the account info
 export default function account() {
+   const { data: session, status } = useSession();
+
    // State to track the active tab
    const [activeTab, setActiveTab] = useState('details');
+
+   //
+   // This is eating away at DB connections. Commented because not needed right now.
+   //
+   /*
+   const [user, setUser] = useState(null);
+   // may need to fill the dependency array with [session], unless MainNav carries data between renders
+   useEffect(() => {
+      if (session != null) {
+         // get data
+         const fetchData = async () => {
+            const res = await fetch(`/api/user/request?id=${session.user.id}`, {
+               method: "GET",
+            });
+            await res.json().then(user => {
+               setUser(user);
+               console.log("User was found: \n", user)
+            });
+            if (!res.ok) {
+               try {
+                  // post session to api
+                  const res = await fetch(`/api/user/request`, {
+                     method: "POST",
+                     headers: {
+                       "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify(session.user),
+                   });
+                  const user = await res.json();
+   
+                   // log result for testing
+                  console.log("Added new user: \n", user);
+                  setUser(user);
+               }
+               catch(err) {
+                  // log errors for testing
+                  console.log(err);
+               }
+            }
+         }
+         fetchData();
+      }
+   }, []);
+   */
 
    return (
       <>
@@ -45,7 +92,7 @@ export default function account() {
                               <Card.Title>Username:</Card.Title>
                            </Col>
                            <Col md={7} className="text-end text-muted">
-                              Username
+                              {session ? session.user.name : "username"}
                            </Col>
                         </Row>
                      </Container>
@@ -57,7 +104,7 @@ export default function account() {
                               <Card.Subtitle className="md-2 text-muted">The email address associated with your account.</Card.Subtitle>
                            </Col>
                            <Col md={7} className=" text-end text-muted">
-                              thisIsAnEmailAddress@email.com
+                              {session ? session.user.email : "email"}
                            </Col>
                            <Col md={1} className="text-end">
                               <button className="account-update-btn">Edit</button>
