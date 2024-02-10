@@ -20,6 +20,7 @@ export default async function handler(req, res) {
                 model: "gpt-3.5-turbo-1106",
             });
             console.log('Server response:', completion); // Add this line to log the response
+            console.log('Message below', completion.choices[0].message);
             console.log(completion.choices[0]);
             res.status(200).json(completion.choices[0]);
         } catch (error) {
