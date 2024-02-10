@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Card, Row, Col, Button, Nav, Badge } from "react-bootstrap";
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
+import EmailModal from '@/components/EmailModal'
+import PasswordModal from '@/components/PasswordModal';
+import DeleteModal from '@/components/DeleteModal';
 
 // account.js: Displays the account info
 export default function account() {
@@ -8,6 +11,37 @@ export default function account() {
 
    // State to track the active tab
    const [activeTab, setActiveTab] = useState('details');
+   const [showEmailModal, setShowEmailModal] = useState(false);
+   const [showPasswordModal, setShowPasswordModal] = useState(false);
+   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+   const handleShowEmailModal = () => setShowEmailModal(true);
+   const handleCloseEmailModal = () => setShowEmailModal(false);
+
+   const handleShowPasswordModal = () => setShowPasswordModal(true);
+   const handleClosePasswordModal = () => setShowPasswordModal(false);
+
+   const handleShowDeleteModal = () => setShowDeleteModal(true);
+   const handleCloseDeleteModal = () => setShowDeleteModal(false);
+
+   /* 
+      Simple redirect to check if user is signed in
+      If there is a better way to do this then update this:
+   */
+   useEffect(() => {
+      const authenticate = async () => {
+         // Putting it in a try catch to handle errors gracefully.
+         try {
+            if (status === "unauthenticated") {
+            await signIn("cognito");
+            }
+         } catch (error) {
+            console.error(error);
+         }
+      };
+      
+      authenticate();
+   }, []);
 
    //
    // This is eating away at DB connections. Commented because not needed right now.
@@ -107,7 +141,7 @@ export default function account() {
                               {session ? session.user.email : "email"}
                            </Col>
                            <Col md={1} className="text-end">
-                              <button className="account-update-btn">Edit</button>
+                              <button className="account-update-btn" onClick={handleShowEmailModal}>Edit</button>
                            </Col>
                         </Row>
                      </Container>
@@ -119,13 +153,13 @@ export default function account() {
                               <Card.Subtitle className="md-2 text-muted">Set a unique password to protect your account.</Card.Subtitle>
                            </Col>
                            <Col md={6} className="text-end">
-                              <button className="account-update-btn">Change Password</button>
+                              <button className="account-update-btn" onClick={handleShowPasswordModal}>Change Password</button>
                            </Col>
                         </Row>
                      </Container>
                      <hr className="accountLine"/>
                      <Container className="p-1 pt-3">
-                        <Button className="btn btn-danger">Delete Account</Button>
+                        <Button className="btn btn-danger" onClick={handleShowDeleteModal}>Delete Account</Button>
                      </Container>
                   </Card.Body>
                )}
@@ -142,7 +176,7 @@ export default function account() {
                               <Card.Title>Number of Saved Recipes:</Card.Title>
                            </Col>
                            <Col md={6} className="text-end">
-                              <Badge className="px-3 pt-2 pb-2 bg-secondary">13</Badge>
+                              <Badge className="px-3 pt-2 pb-2 bg-secondary">0</Badge>
                            </Col>
                         </Row>
                      </Container>
@@ -168,7 +202,7 @@ export default function account() {
                               <Card.Title>Recipes Generated:</Card.Title>
                            </Col>
                            <Col md={6} className="text-end">
-                              <Badge className="px-3 pt-2 pb-2 bg-secondary">89</Badge>
+                              <Badge className="px-3 pt-2 pb-2 bg-secondary">0</Badge>
                            </Col>
                         </Row>
                      </Container>
@@ -180,6 +214,11 @@ export default function account() {
                )}
             </Card>
          </Container>
+
+         {/* Modals */}
+         <EmailModal show={showEmailModal} onHide={handleCloseEmailModal} currentEmail={session ? session.user.email : "email"}/>
+         <PasswordModal show={showPasswordModal} onHide={handleClosePasswordModal} />
+         <DeleteModal show={showDeleteModal} onHide={handleCloseDeleteModal} username={session ? session.user.name : "username"}/>
       </>
    )
 }
