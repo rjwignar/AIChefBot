@@ -11,7 +11,7 @@ const recipeJSONStructure =
         {},
     ]
 }
-Where each recipe object must be an element of the "recipes" array.`
+Where each recipe object must be an element of the "recipes" array.`;
 
 // These are the JSON object requirements. Do NOT change these unless consulting Roy first.
 // These have already been thoroughly tested
