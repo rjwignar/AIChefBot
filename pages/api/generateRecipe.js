@@ -3,9 +3,7 @@ import OpenAI from 'openai';
 
 // API calls to /api/generateRecipe
 export default async function handler(req, res) {
-    const messageHistory = [
 
-    ];
 
     const generateRecipesByDiet = async (selectedDiet, messageHistory) =>{
         try {
