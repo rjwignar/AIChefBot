@@ -10,7 +10,6 @@ export default async function handler(req, res) {
             // Initialize OpenAI object using OPENAI_API_KEY
             const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
 
-            console.log(req.body);
             // Create prompt
             const prompt =
                 `Generate three recipes based on the following diet: ${selectedDiet}.
@@ -36,21 +35,22 @@ export default async function handler(req, res) {
             // Append initial message prompt to messageHistory
             // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
             messageHistory.push({ role: "user", content: prompt});
+
             // Append initial LLM response to messageHistory
             // NOTE: response.message is already in  { role, content } format, so no need to wrap it in JSON
             const llmResponse = response.message;
-            console.log('llm response', llmResponse);
             messageHistory.push(llmResponse);
 
+            
             // Extract list of recipes from response
             const recipes = response.message.content;
-
+            
             // Console Logging
             console.log(recipes);
             console.log('Server response:', completion); // Add this line to log the response
             console.log('Message below', completion.choices[0].message);
             console.log(completion.choices[0]);
-
+            console.log('llm response', llmResponse);
             console.log("Message History", messageHistory);
 
             // Push recipes and messageHistory in response
@@ -65,9 +65,6 @@ export default async function handler(req, res) {
         try {
             // Initialize OpenAI object using OPENAI_API_KEY
             const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
-            // console.log(req.body);
-            // const { selectedDiet } = req.body;
-            console.log("generating more recipes based on diet", selectedDiet);
 
             // Create prompt
             const prompt =
@@ -76,7 +73,7 @@ export default async function handler(req, res) {
             Do not number the steps, and be descriptive while minimizing token usage.`;
 
             // Append initial message prompt to messageHistory
-                        // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
+            // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
             messageHistory.push({ role: "user", content: prompt });
 
             // Send request to OpenAI API with message history
@@ -96,19 +93,19 @@ export default async function handler(req, res) {
             // Append LLM response to messageHistory
             // NOTE: response.message is already in  { role, content } format, so no need to wrap it in JSON
             const llmResponse = response.message;
-            console.log('llm response', llmResponse);
             messageHistory.push(llmResponse);
-
+            
             // Extract list of recipes from response
             const recipes = response.message.content;
-
+            
             // Console Logging
+            console.log('llm response', llmResponse);
             console.log(recipes);
             console.log('Server response:', completion); // Add this line to log the response
             console.log('Message below', completion.choices[0].message);
             console.log(completion.choices[0]);
-
             console.log("Message History after generating more recipes", messageHistory);
+
             // Push recipes and messageHistory in response
             res.status(200).json({recipes, messageHistory});
         } catch (error) {
