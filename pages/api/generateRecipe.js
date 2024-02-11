@@ -46,22 +46,6 @@ export default async function handler(req, res) {
             console.error('Error fetching recipes:', error);
             res.status(500).json({ error: error.message });
         }
-        // console.log("request body message history length", req.body.messageHistory.length);
-        // console.log("request body", req.body);
-        // console.log("is there a selectedDiet property", req.body.hasOwnProperty('selectedDiet'));
-        // console.log("req body selectedDiet is null?", req.body.selectedDiet == null);
-        // const { selectedDiet, messageHistory } = req.body;
-        // console.log("type of messageHistory", typeof messageHistory);
-        // console.log("Message history length:", messageHistory.length);
-        // console.log("Message history", messageHistory);
-
-        // if 
-        // if (messageHistory.length === 0) {
-        //     generateRecipesByDiet(selectedDiet, messageHistory);
-        // }
-        // else {
-        //     generateMoreRecipesByDiet(selectedDiet, messageHistory);
-        // }
     } else {
         res.setHeader('Allow', ['POST']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
