@@ -7,12 +7,10 @@ export default async function handler(req, res) {
 
     ];
 
-    const generateRecipesByDiet = async (req, res) =>{
+    const generateRecipesByDiet = async (selectedDiet, messageHistory) =>{
         try {
             const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
             console.log(req.body);
-            const { selectedDiet } = req.body;
-
             const prompt =
                 `Generate three recipes based on the following diet: ${selectedDiet}.
             Recipes must be returned in a JSON object, where each recipe contains the following properties:
@@ -41,8 +39,8 @@ export default async function handler(req, res) {
             console.log(completion.choices[0]);
 
             console.log("Message History", messageHistory);
-            // push recipes
-            res.status(200).json(recipes);
+            // push recipes and messageHistory
+            res.status(200).json({recipes, messageHistory});
         } catch (error) {
             console.error('Error fetching recipes:', error);
             res.status(500).json({ error: 'Error fetching recipes' });
@@ -95,9 +93,10 @@ export default async function handler(req, res) {
         }
     };
     if (req.method === 'POST') {
+        const { selectedDiet, messageHistory } = req.body;
         console.log("Message history length:", messageHistory.length);
         if (messageHistory.length === 0) {
-            generateRecipesByDiet(req, res);
+            generateRecipesByDiet(selectedDiet, messageHistory);
         }
         else {
             generateMoreRecipesByDiet(req, res);
