@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-// This is how many recipes will be generated at a time
+// This is how many recipes will be generated at a time. This may change once the generated recipes view is finalized
 const recipeCount = 3;
 
 // These are the JSON object requirements. Do NOT change these unless consulting Roy first.
