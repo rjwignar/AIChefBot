@@ -1,8 +1,25 @@
 // pages/api/generateRecipe.js
 import { generateDietPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
 
+// Do not remove this function or more it to another file
+// If you don't want this to appear in your console just comment the function call at the beginning of the handler
+function inspectRequestBody(requestBody){
+    console.log("---------------------------------------------------");
+    console.log("Inspecting Request Body");
+    console.log("---------------------------------------------------");
+    console.log("Entire Request Body", requestBody);
+    console.log("List of Request Body properties", Object.getOwnPropertyNames(requestBody));
+    console.log("Message History within Request Body", requestBody.messageHistory);
+    console.log("Message History Length", requestBody.messageHistory.length);
+    console.log("---------------------------------------------------");
+    console.log("Inspection complete");
+    console.log("---------------------------------------------------");
+}
+
 // API calls to /api/generateRecipe
 export default async function handler(req, res) {
+    // Inspect Request Body Properties and print to server console
+    inspectRequestBody(req.body);
 
     if (req.method === 'POST') {
         try{
