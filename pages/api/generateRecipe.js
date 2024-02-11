@@ -29,6 +29,10 @@ export default async function handler(req, res) {
             const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
 
 
+            // Append initial message prompt to messageHistory
+            // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
+            messageHistory.push({ role: "user", content: prompt });
+
             // Send request to OpenAI API
             // response_format of `json_object` guarantees JSON response from OpenAI API.
             // However, you MUST instruct the model to produce JSON (specify JSON in initial prompt)
@@ -36,16 +40,16 @@ export default async function handler(req, res) {
             // See https://platform.openai.com/docs/api-reference/chat/create#chat-create-response_format for more information
             const completion = await openai.chat.completions.create({
                 response_format: { "type": "json_object" },
-                messages: [{ role: "user", content: prompt }],
+                messages: messageHistory,
                 model: "gpt-3.5-turbo-1106",
             });
 
             // Store OpenAI response
             const response = completion.choices[0];
 
-            // Append initial message prompt to messageHistory
-            // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
-            messageHistory.push({ role: "user", content: prompt });
+            // // Append initial message prompt to messageHistory
+            // // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
+            // messageHistory.push({ role: "user", content: prompt });
 
             // Append initial LLM response to messageHistory
             // NOTE: response.message is already in  { role, content } format, so no need to wrap it in JSON
@@ -181,17 +185,50 @@ export default async function handler(req, res) {
         }
     };
     if (req.method === 'POST') {
-        const { selectedDiet, messageHistory } = req.body;
-        console.log("type of messageHistory", typeof messageHistory);
-        console.log("Message history length:", messageHistory.length);
-        console.log("Message history", messageHistory);
+        let prompt="";
+        // if req.body.messageHistory.length > 0 then send a repeat prompt with messageHistory
+        if (req.body.messageHistory.length > 0){
+            const {messageHistory} = req.body;
+            console.log("here is message history",messageHistory);
+            prompt = generateRepeatPrompt();
+            generateRecipes(prompt, messageHistory);
+        }
+        else{
+            // User selected a diet and starts generating recipes
+            if (req.body.hasOwnProperty('selectedDiet')){
+                console.log("User has started generating recipes by diet!");
+                const { selectedDiet, messageHistory } = req.body;
+                prompt = generateDietPrompt(selectedDiet);
+                generateRecipes(prompt, messageHistory);
+            }
+            // User selected list of ingredients and starts generating recipes
+            else if (req.body.hasOwnProperty('selectedIngredients')){
+                console.log("User has started generating recipes by ingredients!");
+            }
+            // User selected list of recipes from recipe manager and is generating recipes
+            else if (req.body.hasOwnProperty('selectedRecipes')){
+                console.log("User is generating similar recipes from a selection in their recipe management page!");
+            }
+        }
+        // if this is the first message of a generation session () then req.body.messageHistory.length will be 0
+        // must then check forselectedDiet, selectedIngredients, or selectedRecipes property exists 
 
-        if (messageHistory.length === 0) {
-            generateRecipesByDiet(selectedDiet, messageHistory);
-        }
-        else {
-            generateMoreRecipesByDiet(selectedDiet, messageHistory);
-        }
+        // console.log("request body message history length", req.body.messageHistory.length);
+        // console.log("request body", req.body);
+        // console.log("is there a selectedDiet property", req.body.hasOwnProperty('selectedDiet'));
+        // console.log("req body selectedDiet is null?", req.body.selectedDiet == null);
+        // const { selectedDiet, messageHistory } = req.body;
+        // console.log("type of messageHistory", typeof messageHistory);
+        // console.log("Message history length:", messageHistory.length);
+        // console.log("Message history", messageHistory);
+
+        // if 
+        // if (messageHistory.length === 0) {
+        //     generateRecipesByDiet(selectedDiet, messageHistory);
+        // }
+        // else {
+        //     generateMoreRecipesByDiet(selectedDiet, messageHistory);
+        // }
     } else {
         res.setHeader('Allow', ['POST']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
