@@ -34,6 +34,7 @@ export default async function handler(req, res) {
             const response = completion.choices[0];
 
             // Append initial message prompt to messageHistory
+            // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
             messageHistory.push({ role: "user", content: prompt});
             // Append initial LLM response to messageHistory
             // NOTE: response.message is already in  { role, content } format, so no need to wrap it in JSON
@@ -75,6 +76,7 @@ export default async function handler(req, res) {
             Do not number the steps, and be descriptive while minimizing token usage.`;
 
             // Append initial message prompt to messageHistory
+                        // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
             messageHistory.push({ role: "user", content: prompt });
 
             // Send request to OpenAI API with message history
