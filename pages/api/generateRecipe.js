@@ -28,8 +28,10 @@ export default async function handler(req, res) {
             messageHistory.push({ role: "user", content: prompt});
             // append initial LLM response to messageHistory
 
+            // response.message already in form of { role, content }
             const llmResponse = response.message;
-            messageHistory.push({ role: "assistant", content: llmResponse });
+            console.log('llm response', llmResponse);
+            messageHistory.push(llmResponse);
 
             // take recipes only
             const recipes = response.message.content;
@@ -47,11 +49,11 @@ export default async function handler(req, res) {
         }
     };
 
-    const generateMoreRecipesByDiet = async (req, res) => {
+    const generateMoreRecipesByDiet = async (selectedDiet, messageHistory) => {
         try {
             const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
             // console.log(req.body);
-            const { selectedDiet } = req.body;
+            // const { selectedDiet } = req.body;
             console.log("generating more recipes based on diet", selectedDiet);
 
             const prompt =
@@ -75,7 +77,8 @@ export default async function handler(req, res) {
             // append initial LLM response to messageHistory
 
             const llmResponse = response.message;
-            messageHistory.push({ role: "assistant", content: llmResponse });
+            console.log('llm response', llmResponse);
+            messageHistory.push(llmResponse);
 
             // take recipes only
             const recipes = response.message.content;
@@ -85,8 +88,8 @@ export default async function handler(req, res) {
             console.log(completion.choices[0]);
 
             console.log("Message History after generating more recipes", messageHistory);
-            // push recipes
-            res.status(200).json(recipes);
+            // push recipes and messageHistory
+            res.status(200).json({recipes, messageHistory});
         } catch (error) {
             console.error('Error fetching recipes:', error);
             res.status(500).json({ error: 'Error fetching recipes' });
@@ -94,12 +97,15 @@ export default async function handler(req, res) {
     };
     if (req.method === 'POST') {
         const { selectedDiet, messageHistory } = req.body;
+        console.log("type of messageHistory", typeof messageHistory);
         console.log("Message history length:", messageHistory.length);
+        console.log("Message history", messageHistory);
+        
         if (messageHistory.length === 0) {
             generateRecipesByDiet(selectedDiet, messageHistory);
         }
         else {
-            generateMoreRecipesByDiet(req, res);
+            generateMoreRecipesByDiet(selectedDiet, messageHistory);
         }
     } else {
         res.setHeader('Allow', ['POST']);
