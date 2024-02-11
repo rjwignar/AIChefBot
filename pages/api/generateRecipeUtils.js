@@ -7,6 +7,14 @@ const recipeCount = 3;
 // These have already been thoroughly tested
 const recipeRequirements =
 `Recipes must be returned in a JSON object, where each recipe is comma-separated.
+The JSON object should match this format:
+{
+    "recipes": = [
+        {},
+        {},
+        {},
+    ]
+}
 Each recipe object must contain the following properties:
 name (string),
 ingredients (string array),
@@ -15,20 +23,16 @@ steps (string array).
 Each step must be comma-separated. Do not number the steps.
 When applicable, include durations in a step.`;
 
-// SPRINT 2 TODO: INTEGRATE WITH RECIPES BY DIET FRONTEND
 export function generateDietPrompt(selectedDiet) {
     return `Generate ${recipeCount} recipes based on the following diet: ${selectedDiet}.\n` +
         recipeRequirements;
 }
 
-// SPRINT 3 TODO: INTEGRATE WITH RECIPES BY INGREDIENTS FRONTEND
 export function generateIngredientsPrompt(selectedIngredients) {
     return `Generate ${recipeCount} recipes based on the following list of ingredients: ${selectedIngredients}.\n` +
         recipeRequirements;
 }
 
-// SPRINT 3
-// TODO: INTEGRATE WITH RECIPE MANAGEMENT FRONTEND
 // Because selectedRecipes can contain an assortment of random recipes, we're not exactly sure what recipes will be produced with this current prompt
 // In Sprint 3, we will have to experiment with this prompt.
 // As well, we may want to generate a different number of recipes than we would if we were generating from strictly ingredients or diet
