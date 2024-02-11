@@ -73,21 +73,24 @@ export default async function handler(req, res) {
     };
 
     if (req.method === 'POST') {
-        let prompt="";
-        // if req.body.messageHistory.length > 0 then send a repeat prompt with messageHistory
+        // User is generating more recipes based on their initial recipe/diet constraints
         if (req.body.messageHistory.length > 0){
+            // destructure messageHistory from req.body as it's the only property of req.body
             const {messageHistory} = req.body;
             console.log("here is message history",messageHistory);
-            prompt = generateRepeatPrompt();
-            generateRecipes(prompt, messageHistory);
+
+            // Send repeatPrompt so LLM reuses original initial instructions
+            generateRecipes(generateRepeatPrompt(), messageHistory);
         }
         else{
             // User selected a diet and starts generating recipes
             if (req.body.hasOwnProperty('selectedDiet')){
                 console.log("User has started generating recipes by diet!");
+
+                // destructure selectedDiet and messageHistory properties from req.body
                 const { selectedDiet, messageHistory } = req.body;
-                prompt = generateDietPrompt(selectedDiet);
-                generateRecipes(prompt, messageHistory);
+
+                generateRecipes(generateDietPrompt(selectedDiet), messageHistory);
             }
             // User selected list of ingredients and starts generating recipes
             else if (req.body.hasOwnProperty('selectedIngredients')){
@@ -98,8 +101,6 @@ export default async function handler(req, res) {
                 console.log("User is generating similar recipes from a selection in their recipe management page!");
             }
         }
-        // if this is the first message of a generation session () then req.body.messageHistory.length will be 0
-        // must then check forselectedDiet, selectedIngredients, or selectedRecipes property exists 
 
         // console.log("request body message history length", req.body.messageHistory.length);
         // console.log("request body", req.body);
