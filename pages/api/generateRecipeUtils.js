@@ -24,7 +24,7 @@ export async function generateRecipes(prompt, messageHistory) {
         // Initialize OpenAI object using OPENAI_API_KEY
         const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
 
-        // Append initial message prompt to messageHistory
+        // Append prompt to messageHistory
         // NOTE: The prompt is the message content from user, so we must wrap it in { role: "user", content: prompt}
         messageHistory.push({ role: "user", content: prompt });
 
@@ -51,12 +51,7 @@ export async function generateRecipes(prompt, messageHistory) {
         const recipes = response.message.content;
 
         // Console Logging
-        console.log(recipes);
-        console.log('Server response:', completion); // Add this line to log the response
-        console.log('Message below', completion.choices[0].message);
-        console.log(completion.choices[0]);
-        console.log('llm response', llmResponse);
-        console.log("Message History", messageHistory);
+        console.log("Generated Recipes Below", recipes);
 
         // Return recipes and messageHistory as JSON
         return {recipes, messageHistory};
