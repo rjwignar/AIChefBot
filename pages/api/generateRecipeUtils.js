@@ -14,6 +14,10 @@ export function generateIngredientsPrompt(selectedIngredients){
     return `Generate three recipes based on the following list of ingredients: ${selectedIngredients}.\n` + recipeRequirements;
 }
 
+export function generateSimilarRecipesPrompt(selectedRecipes){
+    return `Generate three recipes that are similar to this list of recipes: ${selectedRecipes}\n` + recipeRequirements;
+}
+
 export const repeatPrompt =
 `Generate three more unique recipes that satisfy the original requirements defined.
 Recipes must be returned in a JSON object with the same properties as before.
