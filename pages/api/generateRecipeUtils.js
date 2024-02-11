@@ -8,7 +8,10 @@ const recipeRequirements =
 
 export function generateDietPrompt(selectedDiet){
     return `Generate three recipes based on the following diet: ${selectedDiet}.\n` + recipeRequirements;
+}
 
+export function generateIngredientsPrompt(selectedIngredients){
+    return `Generate three recipes based on the following list of ingredients: ${selectedIngredients}.\n` + recipeRequirements;
 }
 
 export const repeatPrompt =
