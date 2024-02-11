@@ -3,7 +3,8 @@ import OpenAI from 'openai';
 // This is how many recipes will be generated at a time
 const recipeCount = 3;
 
-// These are the JSON object requirements. Do NOT change these unless consulting the group first
+// These are the JSON object requirements. Do NOT change these unless consulting Roy first.
+// These have already been thoroughly tested
 const recipeRequirements =
 `Recipes must be returned in a JSON object, where each recipe is comma-separated.
 Each recipe object must contain the following properties:
@@ -13,7 +14,8 @@ ingredients (string array),
 ingredientQuantity (string array),
 steps (string array).
 Each id must be a randomized, unique alphanumeric with exactly 10 characters.
-Each step must be comma-separated. Do not number the steps, but minimize token usage by giving concise steps.`;
+Each step must be comma-separated. Do not number the steps.
+When applicable, include durations in a step.`;
 
 // SPRINT 2 TODO: INTEGRATE WITH RECIPES BY DIET FRONTEND
 export function generateDietPrompt(selectedDiet) {
@@ -38,7 +40,7 @@ export function generateSimilarRecipesPrompt(selectedRecipes) {
 }
 
 export const repeatPrompt =
-`Generate three more unique recipes that satisfy the original requirements defined.
+`Generate ${recipeCount} more unique recipes that satisfy the original requirements defined.
 Recipes must be returned in a JSON object with the same properties as before.
 Do not number the steps, and be descriptive while minimizing token usage.`;
 
