@@ -14,8 +14,9 @@ export default async function handler(req, res) {
             const prompt =
                 `Generate three recipes based on the following diet: ${selectedDiet}.
             Recipes must be returned in a JSON object, where each recipe contains the following properties:
-            id (unique, random 20-character alphanumeric string), name (string), ingredients (string array), ingredientQuantity (string array), steps (string array)
-            Do not number the steps, and be descriptive while minimizing token usage.`;
+            id (string), name (string), ingredients (string array), ingredientQuantity (string array), steps (string array)
+            Each id is a unique, randomized alphanumeric with exactly 10 characters. 
+            Do not number the steps, but minimize token usage by giving concise steps.`;
             const completion = await openai.chat.completions.create({
                 response_format: { "type": "json_object" },
                 messages: [{ role: "user", content: prompt }],

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Container, Row, Col, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-
+import GeneratePageContent from '@/components/generatedRecipes';
+import RecipeCards from '@/components/recipeCard';
 // Define the list of diets with their respective icons
 const diets = [
   { name: 'Vegetarian', icon: '🥦' },
@@ -57,7 +58,14 @@ const DietPage = () => {
           </Button>
         </Col>
       </Row>
+
+    <div>
+      {/* Your other diet page content */}
+      <GeneratePageContent selectedDiet={selectedDiet} />
+    </div>
+
     </Container>
+    
   );
 };
 

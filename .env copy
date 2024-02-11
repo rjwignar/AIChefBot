@@ -1,0 +1,26 @@
+# .env
+
+# API URL
+API_URL=http://localhost:3000
+
+# AWS Amazon Cognito User Pool ID
+AWS_COGNITO_POOL_ID=us-east-1_5DUQeIpFj
+
+# AWS Amazon Cognito Client App ID
+AWS_COGNITO_CLIENT_ID=4v4j8l8b7g3ok8nc0iebjqm9im
+
+# AWS Amazon Cognito Host UI Domain
+AWS_COGNITO_HOSTED_UI_DOMAIN=https://ai-chefbot-test.auth.us-east-1.amazoncognito.com
+
+# OAuth Sign-In Redirect URL
+OAUTH_SIGN_IN_REDIRECT_URL=http://localhost:3000/api/auth/callback/cognito
+# OAuth Sign-Out Redirect URL
+OAUTH_SIGN_OUT_REDIRECT_URL=http://localhost:3000
+
+# AWS Amazon Cognito Logout Endpoint URL
+OAUTH_SIGN_OUT_ENDPOINT_URL=https://ai-chefbot-test.auth.us-east-1.amazoncognito.com/logout?
+# AWS Amazon Cognito Issuer
+AWS_COGNITO_ISSUER=https://cognito-idp.us-east-1.amazonaws.com/us-east-1_5DUQeIpFj
+
+# NextAuthJS secret (generated using openssl rand)
+NEXTAUTH_SECRET=7749d604ac4cb463aeb5336479cdaf9cd452f230df557c1746223a33f4591bb4
