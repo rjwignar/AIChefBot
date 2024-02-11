@@ -14,14 +14,11 @@ export default async function handler(req, res) {
         return dietPrompt;
     }
 
-    function generateRepeatPrompt(){
-        const repeatPrompt =
-        `Generate three more unique recipes that satisfy the original requirements defined.
-        Recipes must be returned in a JSON object with the same properties as before.
-        Do not number the steps, and be descriptive while minimizing token usage.`;
+    const repeatPrompt =
+    `Generate three more unique recipes that satisfy the original requirements defined.
+    Recipes must be returned in a JSON object with the same properties as before.
+    Do not number the steps, and be descriptive while minimizing token usage.`;
 
-        return repeatPrompt;
-    }
 
     const generateRecipes = async (prompt, messageHistory) => {
         try {
@@ -80,7 +77,7 @@ export default async function handler(req, res) {
             console.log("here is message history",messageHistory);
 
             // Send repeatPrompt so LLM reuses original initial instructions
-            generateRecipes(generateRepeatPrompt(), messageHistory);
+            generateRecipes(repeatPrompt, messageHistory);
         }
         else{
             // User selected a diet and starts generating recipes
