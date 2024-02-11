@@ -31,11 +31,7 @@ export default function MainNav() {
 
                   <Nav>
                      {status === "unauthenticated" ? (
-                           <Link href="#" passHref legacyBehavior>
-                              <Nav.Link>
-                                 <button className="landing-page-btn" role="button" onClick={() => signIn("cognito")}>Login</button>
-                              </Nav.Link>
-                           </Link>
+                           <button className="landing-page-btn" role="button" onClick={() => signIn("cognito")}>Login</button>
                         ):(
                            <NavDropdown title={`Welcome ${session.user.name}`} id="basic-nav-dropdown">
                               <NavDropdown.Item onClick={() => router.push("/account")}>
