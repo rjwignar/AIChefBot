@@ -56,7 +56,7 @@ export async function generateRecipes(prompt, messageHistory) {
         // Store OpenAI response
         const response = completion.choices[0];
 
-        // Append initial LLM response to messageHistory
+        // Append LLM response to messageHistory
         // NOTE: response.message is already in  { role, content } format, so no need to wrap it in JSON
         const llmResponse = response.message;
         messageHistory.push(llmResponse);
