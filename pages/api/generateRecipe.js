@@ -69,6 +69,16 @@ export default async function handler(req, res) {
                 // User selected list of recipes from recipe manager and is generating recipes
                 else if (req.body.hasOwnProperty('selectedRecipes')) {
                     console.log("User is generating similar recipes from a selection in their recipe management page!");
+
+                    // destructure selectedRecipes and messageHistory properties from req.body
+                    const {selectedRecipes, messageHistory} = req.body;
+
+                    // Generate Similar Recipes Prompt from selectedRecipes
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateSimilarRecipesPrompt(selectedRecipes), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
                 }
             }
 
