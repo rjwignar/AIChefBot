@@ -30,7 +30,8 @@ export default async function handler(req, res) {
                 const { messageHistory } = req.body;
                 console.log("here is message history", messageHistory);
 
-                // Send repeatPrompt so LLM reuses original initial instructions
+                // We use repeatPrompt to instruct LLM to reuse original instructions from initial request
+                // Pass this along with messageHistory to LLM
                 const response = await generateRecipes(repeatPrompt, messageHistory);
 
                 // Push recipes and messageHistory in response
@@ -44,6 +45,8 @@ export default async function handler(req, res) {
                     // destructure selectedDiet and messageHistory properties from req.body
                     const { selectedDiet, messageHistory } = req.body;
 
+                    // Generate Diet prompt from selectedDiet
+                    // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateDietPrompt(selectedDiet), messageHistory);
 
                     // Push recipes and messageHistory in response
@@ -52,6 +55,16 @@ export default async function handler(req, res) {
                 // User selected list of ingredients and starts generating recipes
                 else if (req.body.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients!");
+
+                    // destructure selectedIngredients and messageHistory properties from req.body
+                    const { selectedIngredients, messageHistory } = req.body;
+
+                    // Generate Ingredients Prompt from selectedIngredients
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
                 }
                 // User selected list of recipes from recipe manager and is generating recipes
                 else if (req.body.hasOwnProperty('selectedRecipes')) {
