@@ -5,7 +5,8 @@ const RecipeCards = ({ recipes }) => {
     console.log(recipes);
     console.log(recipes.recipes);
     console.log(recipes.recipes);
-    const parsedRecipes = JSON.parse(recipes);
+    // const parsedRecipes = JSON.parse(recipes);
+    const parsedRecipes = recipes;
     const recipeList = parsedRecipes && parsedRecipes.recipes; // Access the recipes array
     console.log(typeof recipeList);
     console.log("RecipeList in UI", recipeList);
