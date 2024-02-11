@@ -8,12 +8,10 @@ const recipeCount = 3;
 const recipeRequirements =
 `Recipes must be returned in a JSON object, where each recipe is comma-separated.
 Each recipe object must contain the following properties:
-id (string),
 name (string),
 ingredients (string array),
 ingredientQuantity (string array),
 steps (string array).
-Each id must be a randomized, unique alphanumeric with exactly 10 characters.
 Each step must be comma-separated. Do not number the steps.
 When applicable, include durations in a step.`;
 
@@ -73,7 +71,7 @@ export async function generateRecipes(prompt, messageHistory) {
         messageHistory.push(llmResponse);
 
         // Extract list of recipes from response
-        const recipes = response.message.content;
+        const recipes = JSON.parse(response.message.content);
 
         // Console Logging
         console.log("Generated Recipes Below", recipes);
