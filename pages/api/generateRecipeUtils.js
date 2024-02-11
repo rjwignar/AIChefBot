@@ -4,21 +4,28 @@ import OpenAI from 'openai';
 const recipeCount = 3;
 
 const recipeRequirements =
-    `Recipes must be returned in a JSON object, where each recipe contains the following properties:
-    id (string), name (string), ingredients (string array), ingredientQuantity (string array), steps (string array)
-    Each id is a unique, randomized alphanumeric with exactly 10 characters. 
-    Do not number the steps, but minimize token usage by giving concise steps.`;
+`Recipes must be returned in a JSON object, where each recipe contains the following properties:
+id (string),
+name (string),
+ingredients (string array),
+ingredientQuantity (string array),
+steps (string array).
+Each id is a unique, randomized alphanumeric with exactly 10 characters. 
+Do not number the steps, but minimize token usage by giving concise steps.`;
 
-export function generateDietPrompt(selectedDiet){
-    return `Generate ${recipeCount} recipes based on the following diet: ${selectedDiet}.\n` + recipeRequirements;
+export function generateDietPrompt(selectedDiet) {
+    return `Generate ${recipeCount} recipes based on the following diet: ${selectedDiet}.\n` +
+        recipeRequirements;
 }
 
-export function generateIngredientsPrompt(selectedIngredients){
-    return `Generate ${recipeCount} recipes based on the following list of ingredients: ${selectedIngredients}.\n` + recipeRequirements;
+export function generateIngredientsPrompt(selectedIngredients) {
+    return `Generate ${recipeCount} recipes based on the following list of ingredients: ${selectedIngredients}.\n` +
+        recipeRequirements;
 }
 
-export function generateSimilarRecipesPrompt(selectedRecipes){
-    return `Generate ${recipeCount} recipes that are similar to this list of recipes: ${selectedRecipes}\n` + recipeRequirements;
+export function generateSimilarRecipesPrompt(selectedRecipes) {
+    return `Generate ${recipeCount} recipes that are similar to this list of recipes: ${selectedRecipes}\n` +
+        recipeRequirements;
 }
 
 export const repeatPrompt =
@@ -61,7 +68,7 @@ export async function generateRecipes(prompt, messageHistory) {
         console.log("Generated Recipes Below", recipes);
 
         // Return recipes and messageHistory as JSON
-        return {recipes, messageHistory};
+        return { recipes, messageHistory };
     } catch (error) {
         throw new Error(error);
     }
