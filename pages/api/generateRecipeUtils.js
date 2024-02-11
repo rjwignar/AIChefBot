@@ -3,18 +3,22 @@ import OpenAI from 'openai';
 // This is how many recipes will be generated at a time. This may change once the generated recipes view is finalized
 const recipeCount = 3;
 
-// These are the JSON object requirements. Do NOT change these unless consulting Roy first.
-// These have already been thoroughly tested
-const recipeRequirements =
-`Recipes must be returned in a JSON object, where each recipe is comma-separated.
-The JSON object should match this format:
-{
+const recipeJSONStructure = 
+`{
     "recipes": = [
         {},
         {},
         {},
     ]
 }
+Where each recipe object must be an element of the "recipes" array.`
+
+// These are the JSON object requirements. Do NOT change these unless consulting Roy first.
+// These have already been thoroughly tested
+const recipeRequirements =
+`Recipes must be returned in a JSON object, where each recipe is comma-separated.
+The JSON object must always match this format:\n
+${recipeJSONStructure}
 Each recipe object must contain the following properties:
 name (string),
 ingredients (string array),
