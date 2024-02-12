@@ -79,14 +79,16 @@ export async function generateRecipes(prompt, messageHistory) {
         const llmResponse = response.message;
         messageHistory.push(llmResponse);
 
-        // Extract list of recipes from response
+        // Parse response message content into JSON
         const recipes = JSON.parse(response.message.content);
 
+        // Extract recipe list from JSON
+        const recipeList = recipes.recipes;
         // Console Logging
-        console.log("Generated Recipes Below", recipes);
+        console.log("Generated Recipes Below", recipeList);
 
-        // Return recipes and messageHistory as JSON
-        return { recipes, messageHistory };
+        // Return recipeList and messageHistory as JSON
+        return { recipeList, messageHistory };
     } catch (error) {
         throw new Error(error);
     }
