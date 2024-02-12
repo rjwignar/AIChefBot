@@ -22,11 +22,13 @@ The JSON object must always match this format:\n
 ${recipeJSONStructure}
 Each recipe object must contain the following properties:
 name (string),
+description (string),
 ingredients (string array),
-ingredientQuantity (string array),
 steps (string array).
+The description must be a short description of the recipe.
+Each ingredient must include the ingredient's name, quantity, and if applicable, how it should be prepared (e.g, chopped, diced)
 Each step must be comma-separated. Do not number the steps.
-When applicable, include durations in a step.`;
+When applicable, include durations in a step (e.g. boil for 10 minutes).`;
 
 export function generateDietPrompt(selectedDiet) {
     return `Generate ${recipeCount} recipes based on the following diet: ${selectedDiet}.\n` +
