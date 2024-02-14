@@ -1,7 +1,7 @@
 // performs interactions with the database
 
 // set up an instance of mongo client
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 // require dotenv, acquire environment variables
 require("dotenv").config();
 // create a client object, pass the connection string
@@ -9,7 +9,7 @@ const client = new MongoClient(
   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bcearzi.mongodb.net/`
 );
 // get users collection
-const collection = client.db("aichefbot").collection("users");
+export const collection = client.db("aichefbot").collection("users");
 
 // get one user
 export async function getUserById(id) {
@@ -20,7 +20,7 @@ export async function getUserById(id) {
     return result;
   }
   catch (err) {
-    console.log(err);
+    console.error(err);
     return null;
   }
 }
@@ -31,9 +31,7 @@ export async function addUser(user) {
     // add the user
     const result = await collection.insertOne({
       _id: user.id,
-      username: user.name,
-      email: user.email,
-      requests: [],
+      recipes: [],
       appliances: [],
       avoided_ingredients: [],
     });
@@ -45,30 +43,27 @@ export async function addUser(user) {
       return addedUser;
     } else {
       // no user added, was not found
-      console.debug("Could not find added user.");
+      console.error("Could not find added user.");
       return null
     }
   } catch (err) {
     // tried to insert, failed, user exists
-    console.debug("User exists.");
+    console.error("User exists.");
     return null;
   }
 }
 
 // TODO
-export async function updateUser(user) {
-  const result = await db.findOne({ username: user.username });
-  console.log(result);
-}
-
-// TODO
 export async function removeUser(username) {
-  const result = await collection.deleteOne({ username: username });
-  if (result.deletedCount == 1) {
+  try {
+    await collection.deleteOne({ username: username });
     return true;
-  } else {
+  }
+  catch (err) {
+    console.error(err);
     return false;
   }
+  
 }
 
 export async function removeAll() {
