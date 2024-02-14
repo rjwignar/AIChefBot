@@ -1,0 +1,15 @@
+{
+    "name": "Quinoa Salad with Roasted Vegetables",
+    "ingredients": ["quinoa", "bell peppers", "zucchini", "red onion", "olive oil", "salt", "pepper", "lemon juice", "fresh parsley"],
+    "ingredientQuantity": ["1 cup", "2", "1", "1", "2", "to taste", "to taste", "2 tbsp", "1/4 cup"],
+    "steps": [
+      "Preheat the oven to 400°F.",
+      "Chop the bell peppers, zucchini, and red onion into bite-sized pieces.",
+      "Toss the chopped vegetables with olive oil, salt, and pepper, then spread them on a baking sheet.",
+      "Roast the vegetables in the oven for 20-25 minutes, until tender and slightly browned.",
+      "In the meantime, cook the quinoa according to package instructions.",
+      "Once the quinoa and vegetables are done, let them cool slightly before combining in a large bowl.",
+      "Add lemon juice, fresh parsley, and additional salt and pepper to taste.",
+      "Serve the quinoa salad warm or cold."
+    ]
+  }
