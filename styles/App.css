@@ -29,6 +29,7 @@ body {
    /* background-image: url('../assets/img/background.png');
    background-size: cover;
    background-repeat: no-repeat; */
+   background: #fafcff !important;
    min-height: 100vh;
    margin: 0;
 }
@@ -52,7 +53,7 @@ hr.accountLine {
 
 /*Navbar/Landing page Styles*/
 .navbar-custom {
-   background: rgb(255, 255, 255);
+   background: #fafcff;
    /* border-radius: 16px; */
    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
    /* backdrop-filter: blur(2.1px); */
@@ -120,6 +121,7 @@ hr.accountLine {
 }
 /*Navbar/Landing page Styles*/
 
+/* Account Styles */
 .account-card {
    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
    font-size: 16px;
@@ -149,6 +151,8 @@ hr.accountLine {
    font-size: 30px;
    padding: 10px 0;
 }
+
+/* Account Styles */
 
 /*Hero Section*/
 .hero-title {
@@ -180,3 +184,273 @@ hr.accountLine {
    }
 }
 /*Hero Section*/
+
+/* Custom Select list */
+.react-dropdown-select-option {
+   padding: 7px 10px !important;
+   margin: 1px !important;
+   /* background-color: #198754 !important; */
+}
+
+.react-dropdown-select {
+   font-family: 'Geist', sans-serif;
+   font-weight: 300;
+}
+
+.react-dropdown-select-input {
+   font-family: 'Geist', sans-serif;
+   font-weight: 100;
+   font-size: 16px !important;
+   margin: 7px 0px;
+   
+}
+/* Custom Select list */
+
+/* Generate Recipes Style */
+.recipe-card {
+   box-shadow: 0 5px 12px rgba(0,0,0,0.11);
+   border-radius: 15px !important;
+   transition: all 0.3s ease-out !important;
+}
+
+.recipe-card:hover {
+   transform: translateY(-2px) scale(1.005) translateZ(0) !important;
+   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+.recipe-card-img {
+   border-radius: 15px 15px 00px 0px !important;
+}
+
+.recipe-card-title {
+   font-family: 'Geist', sans-serif;
+   font-weight: bold !important;
+   font-size: 30px;
+}
+
+hr.recipe-card-line {
+   border: 0;
+   height: 0;
+   border-top: 1px solid rgba(0, 0, 0, 0.1);
+   border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+   width: 95%;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.recipe-modal-title {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: bold !important;
+}
+
+.recipe-card-btn {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: 300 !important;
+}
+
+.recipe-card-subtitle {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: 100 !important;
+}
+
+.generate-recipe-btn {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: 300 !important;
+}
+
+.saved-diet-switch {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: 100 !important;
+}
+
+/* Generate Recipes Style */
+
+/* Loading Cards Style */
+@keyframes blink {
+   0%, 100% { opacity: 1; }
+   50% { opacity: 0; }
+}
+
+@keyframes float {
+   0%, 100% { transform: translateY(0); }
+   50% { transform: translateY(-20px); }
+}
+
+.loading-text {
+   animation: blink 1.7s infinite both;
+   font-family: 'Geist', sans-serif !important;
+   font-weight: bold !important;
+}
+
+.placeholder-card {
+   animation: float 1.4s infinite both;
+   border-radius: 25px;
+   /* From https://css.glass */
+   background: rgba(128, 128, 128, 0.2) !important;
+   border-radius: 16px;
+   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+   backdrop-filter: blur(5px);
+   -webkit-backdrop-filter: blur(5px);
+   border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.diet-select-label {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: bold !important;
+   color: rgba(0, 0, 0, 0.856);
+}
+/* Loading Cards Style */
+
+/* Custom Choosing Generate Page */
+@keyframes blink-sequence {
+   0%, 100% { opacity: 0.9; }
+   50% { opacity: 0; }
+}
+
+.dot-1, .dot-2, .dot-3 {
+   animation: blink-sequence 3s infinite both;
+}
+
+.dot-1 {
+   /* No delay needed for the last dot, it starts the animation immediately */
+}
+
+.dot-2 {
+   animation-delay: -2s; /* Adjust delay to create the sequential effect */
+}
+
+.dot-3 {
+   animation-delay: -4s; /* Starts the animation earlier to sync disappear/reappear */
+}
+
+.diet {
+   --bg-color: #DCE9FF;
+   --bg-color-light: #f1f7ff;
+   --text-color-hover: #4C5656;
+   --box-shadow-color: rgba(220, 233, 255, 0.48);
+   --icon-color: #3b6cb7;
+}
+
+.ingredients {
+   --bg-color: #B8F9D3;
+   --bg-color-light: #e2fced;
+   --text-color-hover: #4C5656;
+   --box-shadow-color: rgba(184, 249, 211, 0.48);
+   --icon-color: #59b08b;
+}
+
+
+.generate-card {
+   width: 220px;
+   height: 321px;
+   background: #fff;
+   border-top-right-radius: 10px;
+   overflow: hidden;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   box-shadow: 0 14px 26px rgba(0,0,0,0.15);
+   transition: all 0.3s ease-out;
+   text-decoration: none;
+}
+
+.generate-card:hover {
+transform: translateY(-5px) scale(1.005) translateZ(0);
+box-shadow: 0 24px 36px rgba(0,0,0,0.22),
+   0 24px 46px var(--box-shadow-color);
+}
+
+.generate-card:hover .overlay {
+transform: scale(4) translateZ(0);
+}
+
+.generate-card:hover .circle {
+border-color: var(--bg-color-light);
+background: var(--bg-color);
+}
+
+.generate-card:hover .circle:after {
+background: var(--bg-color-light);
+}
+
+.generate-card:hover p {
+color: var(--text-color-hover);
+}
+
+.generate-card:active {
+transform: scale(1) translateZ(0);
+box-shadow: 0 15px 24px rgba(0,0,0,0.22),
+   0 15px 24px var(--box-shadow-color);
+}
+
+.generate-card p {
+font-size: 17px;
+color: #4C5656;
+margin-top: 30px;
+z-index: 1000;
+transition: color 0.3s ease-out;
+}
+
+.circle {
+   width: 131px;
+   height: 131px;
+   border-radius: 50%;
+   background: #fff;
+   border: 2px solid var(--bg-color);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   z-index: 1;
+   transition: all 0.3s ease-out;
+}
+
+.circle:after {
+   content: "";
+   width: 118px;
+   height: 118px;
+   display: block;
+   position: absolute;
+   background: var(--bg-color);
+   border-radius: 50%;
+   top: 5px;
+   left: 5px;
+   transition: opacity 0.3s ease-out;
+}
+
+.circle .circle-icon {
+   z-index: 10000;
+   transform: translateZ(0);
+   color: var(--icon-color);
+}
+
+.overlay {
+   width: 118px;
+   position: absolute; 
+   height: 118px;
+   border-radius: 50%;
+   background: var(--bg-color);
+   top: 70px;
+   left: 50px;
+   z-index: 0;
+   transition: transform 0.3s ease-out;
+}
+
+.generate-card-body {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   flex-wrap: wrap;
+   font-family: "Open Sans";
+   animation: updown 3s linear infinite;
+   animation-delay: 10s;
+}
+
+.generate-card-paragraph {
+   font-family: 'Geist', sans-serif !important;
+   font-weight: bold !important;
+}
+
+/* Custom Choosing Generate Page */
