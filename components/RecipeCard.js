@@ -9,11 +9,20 @@ const RecipeCard = ({ recipe }) => {
    const handleClose = () => setShowModal(false);
    const handleShow = () => setShowModal(true);
 
-   const handleSavingRecipe = () => {
+   const handleSavingRecipe = async () => {
       console.log("Saving Recipe")
-      // Saving Recipe Logic Goes HERE:
-
-      // ------------------------------
+      console.log(recipe);
+      
+      const res = await fetch(`/api/recipes/request`, {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({userId: session.user.id, recipe: recipe}),
+       });
+      const savedRecipe = await res.json()
+      console.log(savedRecipe);
+      
    }
    
    return (

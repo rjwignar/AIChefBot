@@ -29,7 +29,8 @@ async function handler(req, res) {
     case "POST": {
       try {
         // await the user to be added, and returned
-        const recipe = await addRecipe(req.body/*, req.body.recipe*/);
+        const recipe = await addRecipe(req.body);
+        
         if (recipe) {
           // everything ok, return user as json
           res.status(200).json(recipe);

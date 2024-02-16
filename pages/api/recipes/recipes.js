@@ -15,9 +15,10 @@ const client = new MongoClient(
 // get users collection
 export const collection = client.db("aichefbot").collection("users");
 
-export async function getRecipeById(userId, recipeId) {
+export async function getRecipeById(data) {
+    console.log(data);
     try {
-        return await collection.find({
+        return await collection.findOne({
             _id: userId,
             "recipes._id": recipeId
         },
@@ -33,10 +34,9 @@ export async function getRecipeById(userId, recipeId) {
     
 }
 
-export async function addRecipe(userId /*, recipe*/) {
+export async function addRecipe(data) {
     try {
-        let recipe = require('./testRecipe.json');
-        return await collection.updateOne({_id: userId}, {$push: {recipes: recipe}})
+        return await collection.updateOne({_id: data.userId}, {$push: {recipes: data.recipe}})
     }
     catch (err) {
         console.err(err)
