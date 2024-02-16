@@ -1,7 +1,10 @@
 import { Row, Col, Container, Image  } from 'react-bootstrap';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <>
       <Container className='hero-section'>
@@ -13,9 +16,9 @@ export default function Home() {
               AIChefBot allows you to generate recipes based on simple input. Get started without an account, or register to save your favourite recipes.
             </p>
             {/*Pathway to generate recipes:*/}
-            <Link href="#" passHref legacyBehavior>
-              <button className="landing-page-btn" role="button">Get Started</button>
-            </Link>
+            <button className="landing-page-btn" role="button" onClick={() => router.push("/recipes/generate")}>
+              Get Started
+            </button>
           </Col>
           <Col md={5} className='text-end'>
             <br/>

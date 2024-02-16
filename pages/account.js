@@ -4,6 +4,7 @@ import { useSession, signIn } from 'next-auth/react';
 import EmailModal from '@/components/EmailModal'
 import PasswordModal from '@/components/PasswordModal';
 import DeleteModal from '@/components/DeleteModal';
+import UpdateDietModal from '@/components/UpdateDietModal';
 
 // account.js: Displays the account info
 export default function account() {
@@ -14,6 +15,7 @@ export default function account() {
    const [showEmailModal, setShowEmailModal] = useState(false);
    const [showPasswordModal, setShowPasswordModal] = useState(false);
    const [showDeleteModal, setShowDeleteModal] = useState(false);
+   const [showUpdateDietModal, setShowUpdateDietModal] = useState(false);
 
    const handleShowEmailModal = () => setShowEmailModal(true);
    const handleCloseEmailModal = () => setShowEmailModal(false);
@@ -23,6 +25,9 @@ export default function account() {
 
    const handleShowDeleteModal = () => setShowDeleteModal(true);
    const handleCloseDeleteModal = () => setShowDeleteModal(false);
+
+   const handleShowUpdateDietModal = () => setShowUpdateDietModal(true);
+   const handleCloseUpdateDietModal = () => setShowUpdateDietModal(false);
 
    /* 
       Simple redirect to check if user is signed in
@@ -41,6 +46,10 @@ export default function account() {
       };
       
       authenticate();
+
+      // Get users numOfSavedRecipes, numOfRecipesGenerated, dietaryRestrictions
+
+      // -----------------------------------------------------------------------
    }, []);
 
    //
@@ -176,6 +185,7 @@ export default function account() {
                               <Card.Title>Number of Saved Recipes:</Card.Title>
                            </Col>
                            <Col md={6} className="text-end">
+                              {/* Change this: */}
                               <Badge className="px-3 pt-2 pb-2 bg-secondary">0</Badge>
                            </Col>
                         </Row>
@@ -183,15 +193,12 @@ export default function account() {
                      <hr className="accountLine"/>
                      <Container className="p-2">
                         <Row className="align-items-center">
-                           <Col md={4}>
+                           <Col md={10}>
                               <Card.Title>Dietary Restrictions:</Card.Title>
                               <Card.Subtitle className="md-2 text-muted">Your dietary restrictions set in your account.</Card.Subtitle>
                            </Col>
-                           <Col md={6} className="text-muted">
-                              vegan, keto, etc...
-                           </Col>
                            <Col md={2} className="text-end">
-                              <button className="account-update-btn">Edit Diet List</button>
+                              <button className="account-update-btn" onClick={handleShowUpdateDietModal}>Edit Diet List</button>
                            </Col>
                         </Row>
                      </Container>
@@ -202,6 +209,7 @@ export default function account() {
                               <Card.Title>Recipes Generated:</Card.Title>
                            </Col>
                            <Col md={6} className="text-end">
+                              {/* Change this: */}
                               <Badge className="px-3 pt-2 pb-2 bg-secondary">0</Badge>
                            </Col>
                         </Row>
@@ -216,9 +224,11 @@ export default function account() {
          </Container>
 
          {/* Modals */}
+         {/* Modals has the functions that allow for users to change/delete accounts information */}
          <EmailModal show={showEmailModal} onHide={handleCloseEmailModal} currentEmail={session ? session.user.email : "email"}/>
          <PasswordModal show={showPasswordModal} onHide={handleClosePasswordModal} />
          <DeleteModal show={showDeleteModal} onHide={handleCloseDeleteModal} username={session ? session.user.name : "username"}/>
+         <UpdateDietModal show={showUpdateDietModal} onHide={handleCloseUpdateDietModal}/>
       </>
    )
 }
