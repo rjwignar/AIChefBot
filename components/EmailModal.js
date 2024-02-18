@@ -1,11 +1,18 @@
 // EmailModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import AWS from 'aws-sdk';
+import { useSession } from 'next-auth/react';
 
 export default function EmailModal({ show, onHide, currentEmail }) {
+   const {data: session} = useSession();
    const [currentEmailInput, setCurrentEmailInput] = useState('');
    const [newEmail, setNewEmail] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
+
+   AWS.config.update({
+      region: 'us-east-1'
+   })
 
    // Handle current email input change
    const handleCurrentEmailInputChange = (e) => setCurrentEmailInput(e.target.value);
@@ -27,7 +34,8 @@ export default function EmailModal({ show, onHide, currentEmail }) {
    };
 
    // Validate and save changes
-   const handleSaveChanges = () => {
+   const handleSaveChanges = async () => {
+
       if (currentEmailInput !== currentEmail) {
          setErrorMessage('The current email does not match!');
          return; // Stop the save operation
@@ -37,11 +45,34 @@ export default function EmailModal({ show, onHide, currentEmail }) {
          return;
       }
       // Add Change Email Logic Here:
-      console.log("New Email to save:", newEmail);
+      const params = {
+
+         UserAttributes: [
+            {
+               Name: "email",
+               Value: newEmail
+            },
+            {
+               Name: "email_verified",
+               Value: "false"
+            }
+         ],
+         Username: session.user.name,
+         UserPoolId: process.env.AWS_COGNITO_POOL_ID
+      };
+      console.log("params",params);
+      try{
+      const congnitoClient = new AWS.CognitoIdentityServiceProvider();
+      await congnitoClient.adminUpdateUserAttributes(params).promise();
 
       // --------------------------------------------------------
       // Reset states
       enhancedOnHide(); // Hide modal after save and reset states
+      console.log("New Email to save:", newEmail);
+      }catch(error){
+         console.log('Error updating Email:', error);
+      }
+      
    };
 
    return (
