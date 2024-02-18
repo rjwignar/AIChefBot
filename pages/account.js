@@ -44,58 +44,13 @@ export default function account() {
             console.error(error);
          }
       };
-      
       authenticate();
 
       // Get users numOfSavedRecipes, numOfRecipesGenerated, dietaryRestrictions
 
       // -----------------------------------------------------------------------
    }, []);
-
-   //
-   // This is eating away at DB connections. Commented because not needed right now.
-   //
-   /*
-   const [user, setUser] = useState(null);
-   // may need to fill the dependency array with [session], unless MainNav carries data between renders
-   useEffect(() => {
-      if (session != null) {
-         // get data
-         const fetchData = async () => {
-            const res = await fetch(`/api/user/request?id=${session.user.id}`, {
-               method: "GET",
-            });
-            await res.json().then(user => {
-               setUser(user);
-               console.log("User was found: \n", user)
-            });
-            if (!res.ok) {
-               try {
-                  // post session to api
-                  const res = await fetch(`/api/user/request`, {
-                     method: "POST",
-                     headers: {
-                       "Content-Type": "application/json",
-                     },
-                     body: JSON.stringify(session.user),
-                   });
-                  const user = await res.json();
    
-                   // log result for testing
-                  console.log("Added new user: \n", user);
-                  setUser(user);
-               }
-               catch(err) {
-                  // log errors for testing
-                  console.log(err);
-               }
-            }
-         }
-         fetchData();
-      }
-   }, []);
-   */
-
    return (
       <>
          <Container className="mt-5">
