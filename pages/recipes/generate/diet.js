@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import { useRouter } from 'next/router';
 import RecipeList from '@/components/RecipeList';
 import Select from 'react-dropdown-select';
 import { useSession } from 'next-auth/react';
@@ -93,12 +92,24 @@ const DietPage = () => {
       setUseSavedDiets(!useSavedDiets);
    };
 
-   const updateDatabase = () => {
-      /* Database Updating Goes Here: */
-      // Updating numOfRecipes based on the number generated
-      console.log('Updating num of recipes generated in database...');
-
-      /* ---------------------------- */
+   // Update generated recipe count MongoDB
+   const updateDatabase = async (recipeCount) => {
+      console.log(`Adding ${recipeCount} to recipe count in database...`);
+      try {
+         // Add number of generated recipes to user's recipeCount
+         const res = await fetch('/api/recipes/request', {
+            method: "PUT",
+            body: JSON.stringify({
+               userId: session.user.id,
+               recipeCount: recipeCount
+            }),
+         });
+         console.log("Successfully updated recipe count.");
+      }
+      catch (err) {
+         console.err("Unsuccessful update to database: ", err);
+      }
+      
    }
 
    // Generates the recipes:
@@ -134,10 +145,10 @@ const DietPage = () => {
          setMessageHistory(data.messageHistory);
          /* ------------------------------ */
          /* Updating database stuff: */
-         updateDatabase();
+         updateDatabase(data.recipes.length);
          /* ---------------------------- */
       } catch (err) {
-         console.error('Error fetching recipes: ', err);
+         console.error(err);
       }
    };
 
@@ -174,7 +185,7 @@ const DietPage = () => {
          console.log("recipes below in UI", recipes);
          /* ------------------------------- */
          /* Updating database */
-         updateDatabase();
+         updateDatabase(data.recipes.length);
          /* ----------------- */
       } catch (error) {
          console.error('Error fetching recipes:', error);
