@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, showDeleteRecipe }) => {
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
 
@@ -18,7 +18,7 @@ const RecipeCard = ({ recipe }) => {
    
    return (
       <>
-         <Card className="recipe-card mb-4 animate__animated animate__fadeInUp" onClick={handleShow}>
+         <Card className="recipe-card mb-4" onClick={handleShow}>
             <Card.Img className='recipe-card-img' variant="top" src='https://i.imgur.com/iTpOC92.jpeg'/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
@@ -62,10 +62,19 @@ const RecipeCard = ({ recipe }) => {
                </ol>
             </Modal.Body>
             <Modal.Footer>
-               {status !== "unauthenticated" && 
-                  <Button variant='primary' onClick={handleSavingRecipe}>
-                     Save Recipe
-                  </Button>
+               {/* If it's a saved recipes allow users to delete it. */}
+               {status !== "unauthenticated" &&
+                  <>
+                     {showDeleteRecipe ? (
+                        <Button variant='danger'>
+                           Delete Recipe
+                        </Button>
+                     ) : (
+                        <Button variant='primary' onClick={handleSavingRecipe}>
+                           Save Recipe
+                        </Button>
+                     )}
+                  </>
                }
                <Button variant="secondary" onClick={handleClose}>
                   Close

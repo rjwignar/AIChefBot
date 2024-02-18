@@ -5,10 +5,12 @@ import EmailModal from '@/components/EmailModal'
 import PasswordModal from '@/components/PasswordModal';
 import DeleteModal from '@/components/DeleteModal';
 import UpdateDietModal from '@/components/UpdateDietModal';
+import { useRouter } from 'next/router';
 
 // account.js: Displays the account info
 export default function account() {
    const { data: session, status } = useSession();
+   const router = useRouter();
 
    // State to track the active tab
    const [activeTab, setActiveTab] = useState('details');
@@ -216,7 +218,7 @@ export default function account() {
                      </Container>
                      <hr className="accountLine"/>
                      <Container className="p-1 pt-3">
-                        <Button className="btn btn-primary">Manage Saved Recipes</Button>
+                        <Button className="btn btn-primary" onClick={(() => {router.push('/account/recipes')})}>Manage Saved Recipes</Button>
                      </Container>
                   </Card.Body>
                )}
