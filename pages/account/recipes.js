@@ -162,7 +162,7 @@ export default function recipes() {
             <Container>
                {/* Render recipes if available*/}
                {recipes ? (
-                  <RecipeList recipes={recipes} showDeleteRecipe={true}/>
+                  <RecipeList recipes={recipes} isSavedRecipe={true}/>
                ) : (
                   <p className="text-muted">No recipes saved...</p>
                )}
