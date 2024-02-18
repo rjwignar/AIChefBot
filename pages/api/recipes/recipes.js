@@ -15,14 +15,31 @@ const client = new MongoClient(
 // get users collection
 export const collection = client.db("aichefbot").collection("users");
 
+export async function updateRecipeCount(data) {
+    // Parse incoming object
+    data = JSON.parse(data);
+    // Update the user by Id
+    try {
+        // Increment user's recipe count
+        const result = await collection.updateOne(
+            { _id: data.userId },
+            { $inc: { generatedRecipes: data.recipeCount}},
+        );
+        return result;
+    }
+    catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
 export async function getRecipeById(data) {
     console.log(data);
     try {
         return await collection.findOne({
-            _id: userId,
-            "recipes._id": recipeId
-        },
-        {
+            _id: data.userId,
+            "recipes._id": data.recipeId
+        },{
             _id: 0,
             "recipes.$": 1
         })
@@ -35,8 +52,12 @@ export async function getRecipeById(data) {
 }
 
 export async function addRecipe(data) {
+    // assign a unique identifier
+    data.recipe._id = new ObjectId();
+    // update database
     try {
-        return await collection.updateOne({_id: data.userId}, {$push: {recipes: data.recipe}})
+        const res = await collection.updateOne({_id: data.userId}, {$push: {recipes: data.recipe}})
+        return data.recipe._id;
     }
     catch (err) {
         console.err(err)
@@ -44,6 +65,17 @@ export async function addRecipe(data) {
     }
 }
 
-export async function deleteRecipe() {
-    // delete
+
+export async function deleteRecipe(data) {
+    // delete recipe
+    try {
+        return await collection.deleteOne({
+            _id: data.userId,
+            "recipes._id": data.recipeId
+        });
+    }
+    catch(err) {
+        console.err(err);
+        return null;
+    }
 }

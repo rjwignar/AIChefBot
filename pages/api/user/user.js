@@ -31,6 +31,7 @@ export async function addUser(user) {
     // add the user
     const result = await collection.insertOne({
       _id: user.id,
+      generatedRecipes: 0,
       recipes: [],
       appliances: [],
       avoided_ingredients: [],
