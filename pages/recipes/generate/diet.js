@@ -97,8 +97,11 @@ const DietPage = () => {
       console.log(`Adding ${recipeCount} to recipe count in database...`);
       try {
          // Add number of generated recipes to user's recipeCount
-         const res = await fetch('/api/recipes/request', {
+         await fetch('/api/recipes/request', {
             method: "PUT",
+            headers: {
+               "Content-Type": "application/json",
+             },
             body: JSON.stringify({
                userId: session.user.id,
                recipeCount: recipeCount

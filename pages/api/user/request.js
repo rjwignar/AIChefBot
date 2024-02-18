@@ -29,13 +29,9 @@ async function handler(req, res) {
     case "POST": {
       try {
         // await the user to be added, and returned
-        const user = await addUser(req.body);
-        if (user) {
-          // everything ok, return user as json
-          res.status(200).json(user);
-        } else {
-          res.status(404).json({ message: "User exists." });
-        }
+        const result = await addUser(req.body);
+        console.log(result);
+        res.status(200).json(result);
       } catch (err) {
         console.debug(err);
         res.status(500);

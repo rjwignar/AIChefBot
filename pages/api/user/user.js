@@ -1,7 +1,7 @@
 // performs interactions with the database
 
 // set up an instance of mongo client
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 // require dotenv, acquire environment variables
 require("dotenv").config();
 // create a client object, pass the connection string
@@ -15,49 +15,47 @@ export const collection = client.db("aichefbot").collection("users");
 export async function getUserById(id) {
   // find the user
   try {
-    const result = await collection.findOne({ _id: id });
-    // return to api
-    return result;
+    const res = await collection.findOne({ _id: id });
+    // exclusion of ID done explicitly
+    return {
+      generatedRecipes: res.generatedRecipes,
+      recipes: res.recipes,
+      appliances: res.appliances,
+      avoided_ingredients: res.avoided_ingredients,
+    }
   }
   catch (err) {
-    console.error(err);
     return null;
   }
 }
 
 // add one user
 export async function addUser(user) {
-  try {
-    // add the user
-    const result = await collection.insertOne({
-      _id: user.id,
-      generatedRecipes: 0,
-      recipes: [],
-      appliances: [],
-      avoided_ingredients: [],
-    });
-
-    if (result.insertedId) {
-      // retrieve object by _id from the DB
-      const addedUser = getUserById(user.id);
-      // return added user
-      return addedUser;
-    } else {
-      // no user added, was not found
-      console.error("Could not find added user.");
-      return null
+  // check if user exists
+  // return if found
+  let result = await getUserById(user.id);
+  // add the user
+  if (!result) {
+    try {
+      await collection.insertOne({
+        _id: user.id,
+        generatedRecipes: 0,
+        recipes: [],
+        appliances: [],
+        avoided_ingredients: [],
+      });
+      result = await getUserById(user.id);
+    } catch (err) {
+      // tried to insert, failed, user exists
+      return null;
     }
-  } catch (err) {
-    // tried to insert, failed, user exists
-    console.error("User exists.");
-    return null;
   }
+  return result;
 }
 
-// TODO
-export async function removeUser(username) {
+export async function removeUser(userId) {
   try {
-    await collection.deleteOne({ username: username });
+    await collection.deleteOne({ _id: userId });
     return true;
   }
   catch (err) {
