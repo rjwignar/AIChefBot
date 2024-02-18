@@ -161,8 +161,9 @@ export default function recipes() {
             <h1 className="hero-title">Saved Recipes</h1>
             <Container>
                {/* Render recipes if available*/}
+               {/* Needs to hide the save recipes button */}
                {recipes ? (
-                  <RecipeList recipes={recipes} isSavedRecipe={true}/>
+                  <RecipeList recipes={recipes}/>
                ) : (
                   <p className="text-muted">No recipes saved...</p>
                )}
