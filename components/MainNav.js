@@ -19,9 +19,6 @@ export default function MainNav() {
         },
         body: JSON.stringify(session.user),
       });
-      // Log result
-      const result = await res.json();
-      console.log(result);
     } catch (err) {
       console.error(err);
     }
