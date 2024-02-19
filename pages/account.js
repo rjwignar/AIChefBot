@@ -59,8 +59,8 @@ export default function account() {
         method: "GET",
       });
       const user = await res.json();
-      setUser(user);
       console.log(user);
+      setUser(user);
     };
     getUser();
   }, []);
@@ -243,6 +243,7 @@ export default function account() {
       <UpdateDietModal
         show={showUpdateDietModal}
         onHide={handleCloseUpdateDietModal}
+        userData={user}
       />
     </>
   );

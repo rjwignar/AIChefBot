@@ -18,32 +18,36 @@ const diets = [
    { value: 11, name: 'Whole30', displayName: '📆 Whole30' },
 ];
 
-// Simulated user saved diets (Using name to save a dietary restriction)
-// Delete Once Database is completed:
-const userSavedDiets = [
-   'Vegetarian', 'Pescatarian' // Using name but you can use value
-];
-// ********************************************************************
-
-const UpdateDietModal = ({ show, onHide }) => {
+const UpdateDietModal = ({ show, onHide, userData }) => {
    const [selectedDiets, setSelectedDiets] = useState([]);
-
-   // Load the user's saved diets when the modal opens
    useEffect(() => {
       // Find all saved user diets using name to hold users diet 
-      const savedDiets = diets.filter(diet => userSavedDiets.includes(diet.name));
+      const savedDiets = diets.filter(diet => userData?.dietaryRestrictions.includes(diet.name));
       // Set the selected saved diets (Auto fills the multi-select list)
       setSelectedDiets(savedDiets);
-   }, [show]);
+   }, [show, userData]);
 
-   const handleSaveChanges = () => {
+   const handleSaveChanges = async () => {
       console.log('Saving diets:', selectedDiets);
-      // Update Database Logic Goes Here:
-      // Save them by using a key value (i.e. name, value)
-      // We're simulating saving them by name, shown in the simulated user.
-
+      let savedDiets = [];
+      // Extract names from display-formatted strings
+      selectedDiets.forEach(diet => {
+         savedDiets.push(diet.name);
+      });
       
-      // --------------------------------
+      // Update the database with new string array of diets
+      await fetch('/api/user/request', {
+         method: "PUT",
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({
+            userId: userData._id,
+            dietaryRestrictions: savedDiets,
+         }),
+      })
+      // Persist changes in this modal
+      userData.dietaryRestrictions = savedDiets;
       onHide(); // Close modal after saving changes
    };
 

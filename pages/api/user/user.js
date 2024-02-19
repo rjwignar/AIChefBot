@@ -15,14 +15,7 @@ export const collection = client.db("aichefbot").collection("users");
 export async function getUserById(id) {
   // find the user
   try {
-    const res = await collection.findOne({ _id: id });
-    // exclusion of ID done explicitly
-    return {
-      generatedRecipes: res.generatedRecipes,
-      recipes: res.recipes,
-      appliances: res.appliances,
-      avoided_ingredients: res.avoided_ingredients,
-    }
+    return await collection.findOne({ _id: id });
   }
   catch (err) {
     return null;
@@ -42,7 +35,7 @@ export async function addUser(user) {
         generatedRecipes: 0,
         recipes: [],
         appliances: [],
-        avoided_ingredients: [],
+        dietaryRestrictions: [],
       });
       result = await getUserById(user.id);
     } catch (err) {
@@ -51,6 +44,20 @@ export async function addUser(user) {
     }
   }
   return result;
+}
+
+// Update user by ID with contained data
+export async function updateUser(data) {
+  try {
+    const res = await collection.updateOne(
+      {_id: data.userId}, 
+      { $set: { dietaryRestrictions: data.dietaryRestrictions }}
+    );
+    return data;
+  }
+  catch(err) {
+    return null;
+  }
 }
 
 export async function removeUser(userId) {
