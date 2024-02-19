@@ -11,8 +11,12 @@ export default function EmailModal({ show, onHide, currentEmail }) {
    const [errorMessage, setErrorMessage] = useState('');
 
    AWS.config.update({
-      region: 'us-east-1'
-   })
+      region: 'us-east-1',
+      credentials: {
+        accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
+        secretAccessKey: `${process.env.AWS_SECRET_KEY}`
+      }
+    });
 
    // Handle current email input change
    const handleCurrentEmailInputChange = (e) => setCurrentEmailInput(e.target.value);
@@ -46,7 +50,6 @@ export default function EmailModal({ show, onHide, currentEmail }) {
       }
       // Add Change Email Logic Here:
       const params = {
-
          UserAttributes: [
             {
                Name: "email",
@@ -58,9 +61,10 @@ export default function EmailModal({ show, onHide, currentEmail }) {
             }
          ],
          Username: session.user.name,
-         UserPoolId: process.env.AWS_COGNITO_POOL_ID
+         UserPoolId: `${process.env.AWS_COGNITO_POOL_ID}`
       };
-      console.log("params",params);
+      // console.log("Session", session);
+      // console.log("params", params);
       try{
       const congnitoClient = new AWS.CognitoIdentityServiceProvider();
       await congnitoClient.adminUpdateUserAttributes(params).promise();
