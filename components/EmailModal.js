@@ -60,7 +60,7 @@ export default function EmailModal({ show, onHide, currentEmail }) {
                Value: "false"
             }
          ],
-         Username: session.user.name,
+         Username: session.user.Username,
          UserPoolId: `${process.env.AWS_COGNITO_POOL_ID}`
       };
       // console.log("Session", session);

@@ -1,8 +1,11 @@
 // PasswordModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import AWS from 'aws-sdk';
+import { useSession } from 'next-auth/react';
 
 function PasswordModal({ show, onHide }) {
+   const {data: session} = useSession();
    const [currentPassword, setCurrentPassword] = useState('');
    const [newPassword, setNewPassword] = useState('');
    const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -23,7 +26,7 @@ function PasswordModal({ show, onHide }) {
    };
 
    // Validate and save changes
-   const handleSaveChanges = () => {
+   const handleSaveChanges = async () => {
          // Basic validation checks
          if (newPassword !== confirmNewPassword) {
             setError('New passwords do not match.');
@@ -38,8 +41,25 @@ function PasswordModal({ show, onHide }) {
          // Add Change Password Logic Here:
          console.log("Changing Password");
 
-         // -------------------------------
-         enhancedOnHide(); // Reset and close modal after successful operation
+         // Initialize CognitoIdentityServiceProvider
+         const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+
+         // Parameters for change password operation
+         const params = {
+            AccessToken: session.user.id, // Replace with actual access token
+            PreviousPassword: currentPassword,
+            ProposedPassword: newPassword
+         };
+         try{
+            await cognitoIdentityServiceProvider.changePassword(params).promise();
+            console.log('Password changed successfully');
+            // -------------------------------
+            enhancedOnHide(); // Reset and close modal after successful operation
+         }catch(error){
+            console.error('Error changing password:', error);
+            setError(error.message);
+         }
+         
    };
 
    return (
