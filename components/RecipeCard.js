@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const RecipeCard = ({ recipe }) => {
    const { data: session, status } = useSession();
@@ -9,6 +10,17 @@ const RecipeCard = ({ recipe }) => {
 
    const handleClose = () => setShowModal(false);
    const handleShow = () => setShowModal(true);
+
+   const router = useRouter();
+
+   // If the recipe has an _id property
+   // We are working with a saved recipe
+   // Initialize the card to suit the context. (Manage saved recipes)
+   useEffect(() => {
+      if (recipe._id) {
+         setSavedId(recipe._id);
+      }
+   }, []);
 
    const handleSavingRecipe = async () => {
       // Log action
@@ -22,7 +34,6 @@ const RecipeCard = ({ recipe }) => {
          body: JSON.stringify({userId: session.user.id, recipe: recipe}),
        });
        const savedRecipe = await res.json();
-       console.log(savedRecipe);
        setSavedId(savedRecipe._id);
        setShowModal(false);
    }
@@ -38,7 +49,6 @@ const RecipeCard = ({ recipe }) => {
          },
          body: JSON.stringify({userId: session.user.id, recipeId: savedId}),
       })
-      console.log(res);
       setSavedId(null);
       setShowModal(false);
    }
