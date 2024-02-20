@@ -58,7 +58,7 @@ export async function addRecipe(data) {
         return data.recipe._id;
     }
     catch (err) {
-        console.err(err)
+        console.error(err);
         return null;
     }
 }

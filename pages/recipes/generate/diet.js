@@ -62,26 +62,28 @@ const DietPage = () => {
   // Get user on page mount, store dietary restrictions into
   // 'savedDiets' array
   useEffect(() => {
-   // Get the user from database
-   const getUser = async () => {
-      try {
-        const res = await fetch(`/api/user/request?id=${session.user.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        // Get user object from response
-        const user = await res.json();
-        // Set 'savedDiets' array as user's dietary restrictions array
-        setSavedDiets(user.dietaryRestrictions);
-      } catch (err) {
-        // Set saved diets as empty array if something goes wrong
-        console.error(err);
-        setSavedDiets([]);
-      }
-    };
-    getUser();
+    if (session) {
+      // Get the user from database
+      const getUser = async () => {
+        try {
+          const res = await fetch(`/api/user/request?id=${session.user.id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          // Get user object from response
+          const user = await res.json();
+          // Set 'savedDiets' array as user's dietary restrictions array
+          setSavedDiets(user.dietaryRestrictions);
+        } catch (err) {
+          // Set saved diets as empty array if something goes wrong
+          console.error(err);
+          setSavedDiets([]);
+        }
+      };
+      getUser();
+    }
   }, []);
 
   // Watch the useSaveDiets toggle switch
@@ -131,7 +133,7 @@ const DietPage = () => {
       });
       console.log("Successfully updated recipe count.");
     } catch (err) {
-      console.err("Unsuccessful update to database: ", err);
+      console.error("Unsuccessful update to database: ", err);
     }
   };
 
@@ -167,7 +169,9 @@ const DietPage = () => {
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
       /* Updating database stuff: */
-      updateDatabase(data.recipes.length);
+      if (session) {
+        updateDatabase(data.recipes.length);
+      }
       /* ---------------------------- */
     } catch (err) {
       console.error(err);
@@ -207,7 +211,9 @@ const DietPage = () => {
       console.log("recipes below in UI", recipes);
       /* ------------------------------- */
       /* Updating database */
-      updateDatabase(data.recipes.length);
+      if (session) {
+        updateDatabase(data.recipes.length);
+      }
       /* ----------------- */
     } catch (error) {
       console.error("Error fetching recipes:", error);
