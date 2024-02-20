@@ -53,6 +53,7 @@ const RecipeCard = ({ recipe }) => {
       setSavedId(null);
       setShowModal(false);
 
+      // Refresh the recipe list
       if (router.pathname === '/account/recipes') {
          router.reload();
       }
