@@ -10,8 +10,8 @@ async function handler(req, res) {
     // GET
     case "GET": {
       try {
-        // Get recipe
-        const recipes = await getRecipesByUser(req.query.userId, req.query.recipeId);
+        // Get recipes
+        const recipes = await getRecipesByUser(req.query.id);
         res.status(200).json(recipes)
       } catch (err) {
         console.error(err);

@@ -30,7 +30,6 @@ async function handler(req, res) {
       try {
         // await the user to be added, and returned
         const result = await addUser(req.body);
-        console.log(result);
         res.status(200).json(result);
       } catch (err) {
         console.debug(err);
