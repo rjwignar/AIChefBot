@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 
 const RecipeCard = ({ recipe }) => {
    const { data: session, status } = useSession();
@@ -10,8 +9,6 @@ const RecipeCard = ({ recipe }) => {
 
    const handleClose = () => setShowModal(false);
    const handleShow = () => setShowModal(true);
-
-   const router = useRouter();
 
    // If the recipe has an _id property
    // We are working with a saved recipe
