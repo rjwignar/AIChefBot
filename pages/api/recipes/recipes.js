@@ -28,13 +28,10 @@ export async function updateGeneratedRecipes(data) {
 }
 
 // Get all recipes by userId
-export async function getRecipeById(data) {
+export async function getRecipesByUser(id) {
     try {
-        const user =  await collection.findOne({_id: data.userId});
-        //
-        // TODO: Return user's recipe array
-        //
-        return [];
+        const user =  await collection.findOne({_id: id});
+        return user.recipes;
     }
     catch (err) {
         console.error(err);
