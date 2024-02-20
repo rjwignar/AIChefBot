@@ -1,70 +1,30 @@
 # AIChefBot
 
-## Simple recipe generation assistant!
+AIChefBot is your recipe guide.
 
----
-
-- [Installation](#installation and launch)
-- [Packages](#packages)
+Use this tool to find recipes that accomodate your dietary restrictions. Revisit the recipes you plan to make in the future, and find new recipes based on the ones you've tried, and enjoyed.
 
 ## Installation
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#### Clone this repository, then:
 
-### Getting Started
+```bash
+cd AIChefBot/
+```
 
-First, run the development server:
+```bash
+npm install
+```
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<br>
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-### Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Navigate to `http://localhost:3000` in your chosen browser to experience the development version.
 
 ---
-
-### Testing the database
- #### Add a user
-URL: ```localhost:3000/addUser```
-
-- Enter a username and email to add a new user.
-
-- **TODO:** regex for email, character checks for invalid characters, and similar validation.
-
-** the back-end has very little protection at this point in time.
-
-#### Find a user
-URL: ```localhost:3000/getUser```
-
-Search a user by username.
-
-- In the database there is an example user that contains data for testing purposes. this user's username is ```exemplary example```.
-
-- Try **adding a user** prior to searching for one.
-
-#### Delete a user
-URL: ```localhost:3000/removeUser```
-
-Simply delete a user by their username.
-
-- Try:
-    - adding a user
-    - getting this user
-    - deleting this user
 
 
 
