@@ -5,15 +5,42 @@ import { useSession } from 'next-auth/react';
 const RecipeCard = ({ recipe }) => {
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
+   const [savedId, setSavedId] = useState(null);
 
    const handleClose = () => setShowModal(false);
    const handleShow = () => setShowModal(true);
 
-   const handleSavingRecipe = () => {
-      console.log("Saving Recipe")
-      // Saving Recipe Logic Goes HERE:
+   const handleSavingRecipe = async () => {
+      // Log action
+      console.log(`Saving recipe: ${recipe.name}`)
+      // Save recipe to user's recipe list
+      const res = await fetch(`/api/recipes/request`, {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({userId: session.user.id, recipe: recipe}),
+       });
+       const savedRecipe = await res.json();
+       console.log(savedRecipe);
+       setSavedId(savedRecipe._id);
+       setShowModal(false);
+   }
 
-      // ------------------------------
+   const handleRemoveRecipe = async() => {
+      // Log action
+      console.log(`Removing recipe: ${recipe.name}`);
+      // Delete recipe from user's recipe list
+      const res = await fetch(`/api/recipes/request`, {
+         method: "DELETE",
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({userId: session.user.id, recipeId: savedId}),
+      })
+      console.log(res);
+      setSavedId(null);
+      setShowModal(false);
    }
    
    return (
@@ -37,7 +64,7 @@ const RecipeCard = ({ recipe }) => {
                   {recipe.description}
                </Card.Subtitle>
                <Button variant='primary' onClick={handleShow} className='recipe-card-btn d-block mx-auto w-50 mb-2'>
-                  View Recipe
+                  View {savedId && <span>Saved</span>} Recipe
                </Button>
             </Card.Body>
          </Card>
@@ -62,11 +89,17 @@ const RecipeCard = ({ recipe }) => {
                </ol>
             </Modal.Body>
             <Modal.Footer>
-               {status !== "unauthenticated" &&
+               {status !== "unauthenticated" && (
+                  savedId === null ? (
                   <Button variant='primary' onClick={handleSavingRecipe}>
                      Save Recipe
-                  </Button>
-               }
+                  </Button> 
+                  ) : (
+                  <Button variant='primary' onClick={handleRemoveRecipe}>
+                     Remove Recipe
+                  </Button> 
+                  )
+               )}
                <Button variant="secondary" onClick={handleClose}>
                   Close
                </Button>
