@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { CognitoIdentityProviderClient, ChangePasswordCommand } from "@aws-sdk/client-cognito-identity-provider"
 import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 function PasswordModal({ show, onHide }) {
    const {data: session} = useSession();
@@ -57,6 +58,7 @@ function PasswordModal({ show, onHide }) {
             // console.log('Password changed successfully');
             // -------------------------------
             enhancedOnHide(); // Reset and close modal after successful operation
+            signOut({ callbackUrl: "/logout" })
          }catch(error){
             console.error('Error changing password:', error);
             setError(error.message);
