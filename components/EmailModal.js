@@ -1,7 +1,7 @@
 // EmailModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
-import AWS from 'aws-sdk';
+//import AWS from 'aws-sdk';
 import { useSession } from 'next-auth/react';
 
 export default function EmailModal({ show, onHide, currentEmail }) {
@@ -10,13 +10,13 @@ export default function EmailModal({ show, onHide, currentEmail }) {
    const [newEmail, setNewEmail] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
 
-   AWS.config.update({
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
-        secretAccessKey: `${process.env.AWS_SECRET_KEY}`
-      }
-    });
+   // AWS.config.update({
+   //    region: 'us-east-1',
+   //    credentials: {
+   //      accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
+   //      secretAccessKey: `${process.env.AWS_SECRET_KEY}`
+   //    }
+   //  });
 
    // Handle current email input change
    const handleCurrentEmailInputChange = (e) => setCurrentEmailInput(e.target.value);
