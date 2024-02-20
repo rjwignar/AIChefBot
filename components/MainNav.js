@@ -65,6 +65,11 @@ export default function MainNav() {
                   title={`Welcome ${session.user.name}`}
                   id="basic-nav-dropdown"
                 >
+                  <NavDropdown.Item onClick={() => router.push("/recipes/generate")}>
+                    <p className="navbar-dropdown-item-custom m-1">
+                      Generate Recipes
+                    </p>
+                  </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => router.push("/account")}>
                     <p className="navbar-dropdown-item-custom m-1">
                       Manage Account
