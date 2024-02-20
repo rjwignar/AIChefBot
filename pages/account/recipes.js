@@ -43,10 +43,14 @@ export default function recipes() {
             <Container>
                {/* Render recipes if available*/}
                {/* Needs to hide the save recipes button */}
-               {recipes ? (
-                  <RecipeList recipes={recipes}/>
+               {recipes ? ( 
+                  recipes.length ? (
+                     <RecipeList recipes={recipes}/>
+                     ) : (
+                     <p className="text-muted">No recipes saved...</p>
+                  )
                ) : (
-                  <p className="text-muted">No recipes saved...</p>
+                  <></>
                )}
             </Container>
          </Container>
