@@ -2,7 +2,7 @@
 // define responses issued to fetch requests made for RECIPES
 
 // get our db methods
-import { getRecipeById, addRecipe, updateGeneratedRecipes, deleteRecipe } from "./recipes";
+import { getRecipesByUser, addRecipe, updateGeneratedRecipes, deleteRecipe } from "./recipes";
 
 // handler for all relevant requests
 async function handler(req, res) {
@@ -11,7 +11,7 @@ async function handler(req, res) {
     case "GET": {
       try {
         // Get recipe
-        const recipes = await getRecipeByUser(req.query.userId, req.query.recipeId);
+        const recipes = await getRecipesByUser(req.query.userId, req.query.recipeId);
         res.status(200).json(recipes)
       } catch (err) {
         console.error(err);
