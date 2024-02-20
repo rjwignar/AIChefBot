@@ -11,15 +11,10 @@ async function handler(req, res) {
     case "GET": {
       try {
         // Get recipe
-        const recipe = await getRecipeById(req.query.userId, req.query.recipeId);
-        if (recipe) {
-          // Respond with recipe
-          res.status(200).json(recipe);
-        } else {
-          res.status(404).json({ message: "Recipe was not found." });
-        }
+        const recipes = await getRecipeByUser(req.query.userId, req.query.recipeId);
+        res.status(200).json(recipes)
       } catch (err) {
-        console.debug(err);
+        console.error(err);
         res.status(500);
       }
       break;
@@ -28,12 +23,11 @@ async function handler(req, res) {
     case "POST": {
       try {
         // Add recipe
-        const recipeId = await addRecipe(req.body);
-        if (recipeId) {
-          // Respond with recipe ID
+        try {
+          const recipeId = await addRecipe(req.body);
           res.status(200).json({_id: recipeId});
-        } else {
-          res.status(404).json({ message: "Recipe was not added." });
+        } catch (err) {
+          console.error(err);
         }
       } catch (err) {
         res.status(500).json({message: "Failed to add recipe.", "Error: ": err});

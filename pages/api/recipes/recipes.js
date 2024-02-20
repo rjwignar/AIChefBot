@@ -18,6 +18,7 @@ export async function updateGeneratedRecipes(data) {
             { _id: data.userId },
             { $inc: { generatedRecipes: data.recipeCount}},
         );
+        // Return database's acknowledgement response.
         return result;
     }
     catch (err) {
@@ -26,17 +27,14 @@ export async function updateGeneratedRecipes(data) {
     }
 }
 
-// Get one recipe by ID
+// Get all recipes by userId
 export async function getRecipeById(data) {
-    console.log(data);
     try {
-        return await collection.findOne({
-            _id: data.userId,
-            "recipes._id": data.recipeId
-        },{
-            _id: 0,
-            "recipes.$": 1
-        })
+        const user =  await collection.findOne({_id: data.userId});
+        //
+        // TODO: Return user's recipe array
+        //
+        return [];
     }
     catch (err) {
         console.error(err);
@@ -47,14 +45,17 @@ export async function getRecipeById(data) {
 
 // Add a recipe to user's recipe list
 export async function addRecipe(data) {
-    // assign a unique identifier
-    data.recipe._id = new ObjectId();
     // update database
     try {
+        // assign a unique identifier
+        data.recipe._id = new ObjectId();
+        // Push recipe to user's recipe list
         const res = await collection.updateOne(
             {_id: data.userId}, 
             { $push: { recipes: data.recipe }}
         );
+        // Return with _id of added recipe.
+        // Needed so this action can be undone in UI.
         return data.recipe._id;
     }
     catch (err) {
@@ -65,9 +66,8 @@ export async function addRecipe(data) {
 
 // Delete a recipe from user's recipe list
 export async function deleteRecipe(data) {
-    console.log(data);
-    // delete recipe
     try {
+        // Update user by userId, delete recipe by recipeId.
         return await collection.updateOne(
             { _id: data.userId },
             { $pull: { recipes: { _id: new ObjectId(data.recipeId) } } }
