@@ -1,28 +1,25 @@
 // EmailModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
-//import AWS from 'aws-sdk';
 import { useSession } from 'next-auth/react';
+import { CognitoIdentityProviderClient, UpdateUserAttributesCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 export default function EmailModal({ show, onHide, currentEmail }) {
    const {data: session} = useSession();
    const [currentEmailInput, setCurrentEmailInput] = useState('');
    const [newEmail, setNewEmail] = useState('');
+   // for the verifyCode when front end implemented
+   // const [newVerifyCode, setNewVerifyCode] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
-
-   // AWS.config.update({
-   //    region: 'us-east-1',
-   //    credentials: {
-   //      accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
-   //      secretAccessKey: `${process.env.AWS_SECRET_KEY}`
-   //    }
-   //  });
 
    // Handle current email input change
    const handleCurrentEmailInputChange = (e) => setCurrentEmailInput(e.target.value);
 
    // Handle new email change
    const handleNewEmailChange = (e) => setNewEmail(e.target.value);
+
+   // for the verifyCode when front end implemented
+   // const handleNewVerifyCodeChange = (e) => setNewVerifyCode(e.target.value);
 
    // Email validation regex
    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -32,6 +29,8 @@ export default function EmailModal({ show, onHide, currentEmail }) {
       // Reset the input states and error message
       setCurrentEmailInput('');
       setNewEmail('');
+      // for the verifyCode when front end implemented
+      // setNewVerifyCode('');
       setErrorMessage('');
       // Call the original onHide prop function
       onHide();
@@ -49,25 +48,22 @@ export default function EmailModal({ show, onHide, currentEmail }) {
          return;
       }
       // Add Change Email Logic Here:
-      const params = {
+
+      const client = new CognitoIdentityProviderClient({ region: 'us-east-1'});
+
+      const input = {
          UserAttributes: [
             {
                Name: "email",
                Value: newEmail
-            },
-            {
-               Name: "email_verified",
-               Value: "false"
             }
          ],
-         Username: session.user.Username,
-         UserPoolId: `${process.env.AWS_COGNITO_POOL_ID}`
+         AccessToken: session.user.accessToken,
       };
-      // console.log("Session", session);
-      // console.log("params", params);
+
       try{
-      const congnitoClient = new AWS.CognitoIdentityServiceProvider();
-      await congnitoClient.adminUpdateUserAttributes(params).promise();
+         const command = new UpdateUserAttributesCommand(input);
+         const response = await client.send(command);
 
       // --------------------------------------------------------
       // Reset states
@@ -106,6 +102,16 @@ export default function EmailModal({ show, onHide, currentEmail }) {
                            onChange={handleNewEmailChange}
                      />
                   </Form.Group>
+                  {/* for making verify code input later */}
+                  {/* <Form.Group controlId="formVerifyCode" className="mt-3">
+                     <Form.Label>Verify Code</Form.Label>
+                     <Form.Control
+                           type="text"
+                           placeholder="Enter Verify code"
+                           value={newVerifyCode}
+                           onChange={handleNewVerifyCodeChange}
+                     />
+                  </Form.Group> */}
                </Form>
          </Modal.Body>
          <Modal.Footer>
