@@ -4,7 +4,7 @@ import RecipeCard from '@/components/RecipeCard'; // assuming RecipeCard is in t
 
 const RecipeList = ({ recipes }) => {
    return (
-      <Container>
+      <Container className='animate__animated animate__fadeInUp'>
          <Row>
             {recipes && recipes.map((recipe, index) => (
                <Col key={index} sm={12} md={6} lg={4} className="mb-4">

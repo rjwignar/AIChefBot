@@ -311,10 +311,6 @@ hr.recipe-card-line {
    animation: blink-sequence 3s infinite both;
 }
 
-.dot-1 {
-   /* No delay needed for the last dot, it starts the animation immediately */
-}
-
 .dot-2 {
    animation-delay: -2s; /* Adjust delay to create the sequential effect */
 }
