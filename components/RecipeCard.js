@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const RecipeCard = ({ recipe }) => {
+
+   const router = useRouter();
+
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
    const [savedId, setSavedId] = useState(null);
@@ -48,6 +52,10 @@ const RecipeCard = ({ recipe }) => {
       })
       setSavedId(null);
       setShowModal(false);
+
+      if (router.pathname === '/account/recipes') {
+         router.reload();
+      }
    }
    
    return (

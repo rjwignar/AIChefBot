@@ -40,6 +40,7 @@ export default function recipes() {
       <>
          <Container>
             <h1 className="hero-title">Saved Recipes</h1>
+            <hr/><br/>
             <Container>
                {/* Render recipes if available*/}
                {/* Needs to hide the save recipes button */}
