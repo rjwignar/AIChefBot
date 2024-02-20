@@ -180,7 +180,7 @@ export default function account() {
                   </Col>
                   <Col md={6} className="text-end">
                     {/* Change this: */}
-                    <Badge className="px-3 pt-2 pb-2 bg-secondary">{user.recipes.length}</Badge>
+                    <Badge className="px-3 pt-2 pb-2 bg-secondary">{user ? user.recipes.length : 0}</Badge>
                   </Col>
                 </Row>
               </Container>
@@ -211,7 +211,7 @@ export default function account() {
                   </Col>
                   <Col md={6} className="text-end">
                     {/* Change this: */}
-                    <Badge className="px-3 pt-2 pb-2 bg-secondary">{user.generatedRecipes}</Badge>
+                    <Badge className="px-3 pt-2 pb-2 bg-secondary">{user ? user.generatedRecipes : 0}</Badge>
                   </Col>
                 </Row>
               </Container>
