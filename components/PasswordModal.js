@@ -1,8 +1,12 @@
 // PasswordModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import { CognitoIdentityProviderClient, ChangePasswordCommand } from "@aws-sdk/client-cognito-identity-provider"
+import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 function PasswordModal({ show, onHide }) {
+   const {data: session} = useSession();
    const [currentPassword, setCurrentPassword] = useState('');
    const [newPassword, setNewPassword] = useState('');
    const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -22,24 +26,44 @@ function PasswordModal({ show, onHide }) {
          onHide();
    };
 
+   //checking for users session
+   // console.log("session callback from passwordModal.js", session);
+   // console.log("access password token/session", session.user.accessToken);
+
    // Validate and save changes
-   const handleSaveChanges = () => {
+   const handleSaveChanges = async () => {
          // Basic validation checks
          if (newPassword !== confirmNewPassword) {
             setError('New passwords do not match.');
             return;
          }
+         // Check if account password is !== current password input:
          if (newPassword === currentPassword) {
             setError('New password must be different from the current password.');
             return;
          }
-         // Check if account password is !== current password input:
 
-         // Add Change Password Logic Here:
-         console.log("Changing Password");
+         // console.log("Changing Password");
+         // Initialize CognitoIdentityServiceProvider
+         const client = new CognitoIdentityProviderClient({ region: 'us-east-1'});
 
-         // -------------------------------
-         enhancedOnHide(); // Reset and close modal after successful operation
+         const input = {
+            PreviousPassword: currentPassword,
+            ProposedPassword: newPassword,
+            AccessToken: session.user.accessToken,   
+         };
+         try{
+            const command = new ChangePasswordCommand(input);
+            const response = await client.send(command);
+            // console.log('Password changed successfully');
+            // -------------------------------
+            enhancedOnHide(); // Reset and close modal after successful operation
+            signOut({ callbackUrl: "/logout" })
+         }catch(error){
+            console.error('Error changing password:', error);
+            setError(error.message);
+         }
+         
    };
 
    return (
