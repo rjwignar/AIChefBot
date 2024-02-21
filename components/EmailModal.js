@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { CognitoIdentityProviderClient, UpdateUserAttributesCommand } from "@aws-sdk/client-cognito-identity-provider";
+import VerificationCodeModal from '@/components/VerificationCodeModal';
 
 export default function EmailModal({ show, onHide, currentEmail }) {
    const {data: session} = useSession();
@@ -11,6 +12,8 @@ export default function EmailModal({ show, onHide, currentEmail }) {
    // for the verifyCode when front end implemented
    // const [newVerifyCode, setNewVerifyCode] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
+   const [showVerificationModal, setShowVerificationModal] = useState(false);
+   
 
    // Handle current email input change
    const handleCurrentEmailInputChange = (e) => setCurrentEmailInput(e.target.value);
