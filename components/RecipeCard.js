@@ -3,9 +3,7 @@ import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-const RecipeCard = ({ recipe }) => {
-
-   const router = useRouter();
+const RecipeCard = ({ recipe, onDelete }) => {
 
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
@@ -52,11 +50,7 @@ const RecipeCard = ({ recipe }) => {
       })
       setSavedId(null);
       setShowModal(false);
-
-      // Refresh the recipe list
-      if (router.pathname === '/account/recipes') {
-         router.reload();
-      }
+      onDelete(recipe._id);
    }
    
    return (
