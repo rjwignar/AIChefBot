@@ -1,22 +1,18 @@
 // EmailModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
-//import AWS from 'aws-sdk';
 import { useSession } from 'next-auth/react';
+import { CognitoIdentityProviderClient, UpdateUserAttributesCommand } from "@aws-sdk/client-cognito-identity-provider";
+import VerificationCodeModal from '@/components/VerificationCodeModal';
 
 export default function EmailModal({ show, onHide, currentEmail }) {
    const {data: session} = useSession();
    const [currentEmailInput, setCurrentEmailInput] = useState('');
    const [newEmail, setNewEmail] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
-
-   // AWS.config.update({
-   //    region: 'us-east-1',
-   //    credentials: {
-   //      accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
-   //      secretAccessKey: `${process.env.AWS_SECRET_KEY}`
-   //    }
-   //  });
+   const [showVerificationModal, setShowVerificationModal] = useState(false);
+   const [email, setEmail] = useState('');
+   
 
    // Handle current email input change
    const handleCurrentEmailInputChange = (e) => setCurrentEmailInput(e.target.value);
@@ -49,29 +45,29 @@ export default function EmailModal({ show, onHide, currentEmail }) {
          return;
       }
       // Add Change Email Logic Here:
-      const params = {
+
+      const client = new CognitoIdentityProviderClient({ region: 'us-east-1'});
+
+      console.log(session.user.accessToken)
+
+      const input = {
          UserAttributes: [
             {
                Name: "email",
                Value: newEmail
-            },
-            {
-               Name: "email_verified",
-               Value: "false"
             }
          ],
-         Username: session.user.Username,
-         UserPoolId: `${process.env.AWS_COGNITO_POOL_ID}`
+         AccessToken: session.user.accessToken,
       };
-      // console.log("Session", session);
-      // console.log("params", params);
-      try{
-      const congnitoClient = new AWS.CognitoIdentityServiceProvider();
-      await congnitoClient.adminUpdateUserAttributes(params).promise();
 
-      // --------------------------------------------------------
-      // Reset states
-      enhancedOnHide(); // Hide modal after save and reset states
+      try{
+         const command = new UpdateUserAttributesCommand(input);
+         const response = await client.send(command);
+
+      // Open verification modal instead of closing directly
+      setEmail(newEmail);
+      setShowVerificationModal(true);
+      enhancedOnHide();
       console.log("New Email to save:", newEmail);
       }catch(error){
          console.log('Error updating Email:', error);
@@ -79,43 +75,62 @@ export default function EmailModal({ show, onHide, currentEmail }) {
       
    };
 
+      // Function to handle verification logic
+      const verifyEmail = (code, email) => {
+         // Add Change Email Logic Here:
+         console.log("Verification code:", code);
+         console.log("New Email to save:", email);
+   
+         // --------------------------------------------------------
+         // Here you should include your verification logic
+         setShowVerificationModal(false); // Close verification modal
+      };
+
    return (
-      <Modal show={show} onHide={enhancedOnHide} centered>
+     <>
+       <Modal show={show} onHide={enhancedOnHide} centered>
          <Modal.Header closeButton>
-               <Modal.Title>Edit Email Address</Modal.Title>
+           <Modal.Title>Edit Email Address</Modal.Title>
          </Modal.Header>
          <Modal.Body>
-               <Form>
-                  {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-                  <Form.Group controlId="formCurrentEmail">
-                     <Form.Label>Current Email</Form.Label>
-                     <Form.Control
-                           type="email"
-                           placeholder="Enter current email"
-                           value={currentEmailInput}
-                           onChange={handleCurrentEmailInputChange}
-                           isInvalid={!!errorMessage}
-                     />
-                  </Form.Group>
-                  <Form.Group controlId="formNewEmail" className="mt-3">
-                     <Form.Label>New Email</Form.Label>
-                     <Form.Control
-                           type="email"
-                           placeholder="Enter new email"
-                           value={newEmail}
-                           onChange={handleNewEmailChange}
-                     />
-                  </Form.Group>
-               </Form>
+           <Form>
+             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+             <Form.Group controlId="formCurrentEmail">
+               <Form.Label>Current Email</Form.Label>
+               <Form.Control
+                 type="email"
+                 placeholder="Enter current email"
+                 value={currentEmailInput}
+                 onChange={handleCurrentEmailInputChange}
+                 isInvalid={!!errorMessage}
+               />
+             </Form.Group>
+             <Form.Group controlId="formNewEmail" className="mt-3">
+               <Form.Label>New Email</Form.Label>
+               <Form.Control
+                 type="email"
+                 placeholder="Enter new email"
+                 value={newEmail}
+                 onChange={handleNewEmailChange}
+               />
+             </Form.Group>
+           </Form>
          </Modal.Body>
          <Modal.Footer>
-               <Button variant="secondary" onClick={enhancedOnHide}>
-                  Close
-               </Button>
-               <Button variant="primary" onClick={handleSaveChanges}>
-                  Save Changes
-               </Button>
+           <Button variant="secondary" onClick={enhancedOnHide}>
+             Close
+           </Button>
+           <Button variant="primary" onClick={handleSaveChanges}>
+             Save Changes
+           </Button>
          </Modal.Footer>
-      </Modal>
+       </Modal>
+       <VerificationCodeModal
+         show={showVerificationModal}
+         onHide={() => setShowVerificationModal(false)}
+         verifyEmail={verifyEmail}
+         newEmail={email}
+       />
+     </>
    );
 }

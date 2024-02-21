@@ -1,10 +1,13 @@
 // DeleteModal.js
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import { CognitoIdentityProviderClient, DeleteUserCommand } from "@aws-sdk/client-cognito-identity-provider";
+import { useSession, signOut } from 'next-auth/react';
 
 function DeleteModal({ show, onHide, username }) {
    const [inputUsername, setInputUsername] = useState('');
    const [error, setError] = useState('');
+   const {data: session} = useSession();
 
    // Handle input change
    const handleUsernameChange = (e) => {
@@ -18,7 +21,7 @@ function DeleteModal({ show, onHide, username }) {
    }
 
    // Validate username and perform deletion
-   const handleDeleteAccount = () => {
+   const handleDeleteAccount = async () => {
       if (inputUsername !== username) {
          setError('Username does not match.');
          return;
@@ -26,8 +29,18 @@ function DeleteModal({ show, onHide, username }) {
       // Add Delete Account Logic Here:
       console.log("Deleting account with " + username);
 
-      // ------------------------------
-      enhancedOnHide(); // Close modal after deletion
+      const client = new CognitoIdentityProviderClient({ region: 'us-east-1'});
+
+      const input = { // DeleteUserRequest
+         AccessToken: session.user.accessToken, // required
+       };
+       try {
+         const command = new DeleteUserCommand(input);
+         const response = await client.send(command);
+         signOut({callbackUrl: "/logout"})
+       } catch (error) {
+         console.log("error deleting the account:", error);
+       }
    };
 
    return (
