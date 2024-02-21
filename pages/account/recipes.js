@@ -36,16 +36,10 @@ export default function recipes() {
     getRecipes();
   }, []);
 
+  // callback from RecipeCard, recipe is deleted from database, then:
+  // filter out the deleted recipe, rerender the recipes array
   const handleOnDelete = (recipe) => {
-      
-      console.log(typeof recipe._id);
-      for (let r in recipes) {
-         console.log(typeof recipes[r]._id);
-      }
-      console.log("before", recipes);
-      let filteredRecipes = filter((e) => e._id != recipe._id);
-      setRecipes(filteredRecipes);
-      console.log("after:", recipes);
+      setRecipes(recipes.filter((e) => e._id != recipe._id));
   }
 
   return (

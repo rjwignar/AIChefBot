@@ -3,6 +3,8 @@ import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
+// recipe   -> the current recipe
+// onDelete -> callback function to remove this recipe from caller's recipes array
 const RecipeCard = ({ recipe, onDelete }) => {
 
    const { data: session, status } = useSession();
@@ -50,7 +52,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
       })
       setSavedId(null);
       setShowModal(false);
-      onDelete(recipe._id);
+      onDelete(recipe);
    }
    
    return (

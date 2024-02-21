@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import RecipeList from "@/components/RecipeList";
+import RecipeCard from "@/components/RecipeCard";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -317,7 +317,18 @@ const DietPage = () => {
           </Container>
         )}
         {/* Render recipes if available */}
-        {recipes && <RecipeList recipes={recipes} />}
+        {recipes && (
+          <Container className="animate__animated animate__fadeInUp">
+            <Row>
+              {recipes &&
+                recipes.map((recipe, index) => (
+                  <Col key={index} sm={12} md={6} lg={4} className="mb-4">
+                    <RecipeCard recipe={recipe}/>
+                  </Col>
+                ))}
+            </Row>
+          </Container>
+        )}
       </Container>
     </>
   );
