@@ -1,8 +1,11 @@
 // VerificationCodeModal.js
 import { React, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { CognitoIdentityProviderClient, VerifyUserAttributeCommand } from "@aws-sdk/client-cognito-identity-provider";
+import { useSession, signOut } from 'next-auth/react';
 
 export default function VerificationCodeModal({ show, onHide, verifyEmail, newEmail }) {
+   const {data: session} = useSession();
    const [code, setCode] = useState('');
    const [error, setError] = useState('');
 
@@ -11,16 +14,31 @@ export default function VerificationCodeModal({ show, onHide, verifyEmail, newEm
       setError('');
    }
 
-   const handleVerify = () => {
+   const handleVerify = async () => {
       if (!code) {
          setError('Please enter the verification code');
          return;
       }
       // Verify the code with actual code?
 
-      // --------------------------------
-      enhancedOnHide();
-      verifyEmail(code, newEmail);
+      const client = new CognitoIdentityProviderClient({ region: 'us-east-1'});
+
+      const input = { // VerifyUserAttributeRequest
+         AccessToken: session.user.accessToken, // required
+         AttributeName: "email", // required
+         Code: code, // required
+       };
+       try{
+         const command = new VerifyUserAttributeCommand(input);
+         const response = await client.send(command);
+         // --------------------------------
+         enhancedOnHide();
+         verifyEmail(code, newEmail);
+         signOut({callbackUrl: "/logout"})
+       }catch(error){
+         console.log('Error with code:', error);
+       }
+
    };
 
    return (
