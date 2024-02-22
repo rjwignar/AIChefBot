@@ -222,6 +222,15 @@ const DietPage = () => {
 
   return (
     <>
+      <Button
+        onClick={handleStopGenerating}
+        className="generate-recipe-btn"
+        variant="secondary"
+        size="md"
+        disabled={!recipes ? true : false}
+      >
+        &laquo; Select Diet
+      </Button>
       <Container className="mt-5">
         <Row className="justify-content-md-center">
           <Col md={12} className="text-center">
@@ -236,28 +245,15 @@ const DietPage = () => {
         {generatePressed ? (
           <Container className="mb-4">
             <Row>
-              <Col md={6} className="text-end">
-                <Button
-                  onClick={handleGenerateMoreClick}
-                  className="generate-recipe-btn"
-                  variant="success"
-                  size="lg"
-                  disabled={!recipes ? true : false}
-                >
-                  Generate New Recipes
-                </Button>
-              </Col>
-              <Col md={6}>
-                <Button
-                  onClick={handleStopGenerating}
-                  className="generate-recipe-btn"
-                  variant="danger"
-                  size="lg"
-                  disabled={!recipes ? true : false}
-                >
-                  Stop Generating Recipes
-                </Button>
-              </Col>
+              <Button
+                onClick={handleGenerateMoreClick}
+                className="generate-recipe-btn"
+                variant="success"
+                size="lg"
+                disabled={!recipes ? true : false}
+              >
+                Generate New Recipes
+              </Button>
             </Row>
             {!recipes && <LoadingScreen />}
           </Container>
