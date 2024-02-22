@@ -3,9 +3,9 @@ import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-const RecipeCard = ({ recipe }) => {
-
-   const router = useRouter();
+// recipe   -> the current recipe
+// onDelete -> callback function to remove this recipe from caller's recipes array
+const RecipeCard = ({ recipe, onDelete }) => {
 
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
@@ -21,7 +21,7 @@ const RecipeCard = ({ recipe }) => {
       if (recipe._id) {
          setSavedId(recipe._id);
       }
-   }, []);
+   }, [recipe]);
 
    const handleSavingRecipe = async () => {
       // Log action
@@ -53,9 +53,11 @@ const RecipeCard = ({ recipe }) => {
       setSavedId(null);
       setShowModal(false);
 
-      // Refresh the recipe list
-      if (router.pathname === '/account/recipes') {
-         router.reload();
+      // If recipes have an _id property
+      // They have been loaded from the database
+      // We should delete these from the user's view
+      if (recipe._id) {
+         onDelete(recipe);
       }
    }
    

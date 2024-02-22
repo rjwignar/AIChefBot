@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import RecipeList from "@/components/RecipeList";
+import RecipeCardList from "@/components/RecipeCardList";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -317,7 +317,9 @@ const DietPage = () => {
           </Container>
         )}
         {/* Render recipes if available */}
-        {recipes && <RecipeList recipes={recipes} />}
+        {recipes && (
+          <RecipeCardList recipes={recipes}/>
+        )}
       </Container>
     </>
   );
