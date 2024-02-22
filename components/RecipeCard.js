@@ -21,7 +21,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
       if (recipe._id) {
          setSavedId(recipe._id);
       }
-   }, []);
+   }, [recipe]);
 
    const handleSavingRecipe = async () => {
       // Log action
