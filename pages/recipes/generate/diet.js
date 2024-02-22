@@ -222,15 +222,18 @@ const DietPage = () => {
 
   return (
     <>
+      {generatePressed && 
+      (
       <Button
         onClick={handleStopGenerating}
         className="generate-recipe-btn"
         variant="secondary"
         size="md"
         disabled={!recipes ? true : false}
-      >
+      >  
         &laquo; Select Diet
       </Button>
+      )}
       <Container className="mt-5">
         <Row className="justify-content-md-center">
           <Col md={12} className="text-center">
