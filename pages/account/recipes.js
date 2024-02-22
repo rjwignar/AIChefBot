@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import RecipeCard from '@/components/RecipeCard'; // assuming RecipeCard is in the same directory
 import { useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
+import RecipeCardList from '@/components/RecipeCardList';
 
 // Page of manage recipes:
 export default function recipes() {
@@ -36,12 +37,6 @@ export default function recipes() {
     getRecipes();
   }, []);
 
-  // callback from RecipeCard, recipe is deleted from database, then:
-  // filter out the deleted recipe, rerender the recipes array
-  const handleOnDelete = (recipe) => {
-      setRecipes(recipes.filter((e) => e._id != recipe._id));
-  }
-
   return (
     <>
       <Container>
@@ -53,16 +48,7 @@ export default function recipes() {
           {/* Needs to hide the save recipes button */}
           {recipes ? (
             recipes.length ? (
-              <Container className="animate__animated animate__fadeInUp">
-                <Row>
-                  {recipes &&
-                    recipes.map((recipe, index) => (
-                      <Col key={index} sm={12} md={6} lg={4} className="mb-4">
-                        <RecipeCard recipe={recipe} onDelete={handleOnDelete}/>
-                      </Col>
-                    ))}
-                </Row>
-              </Container>
+              <RecipeCardList recipes={recipes}/>
             ) : (
               <p className="text-muted">No recipes saved...</p>
             )

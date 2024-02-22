@@ -52,7 +52,13 @@ const RecipeCard = ({ recipe, onDelete }) => {
       })
       setSavedId(null);
       setShowModal(false);
-      onDelete(recipe);
+
+      // If recipes have an _id property
+      // They have been loaded from the database
+      // We should delete these from the user's view
+      if (recipe._id) {
+         onDelete(recipe);
+      }
    }
    
    return (
