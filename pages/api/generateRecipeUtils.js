@@ -30,9 +30,9 @@ Each ingredient must include the ingredient's name, quantity, and if applicable,
 Each step must be comma-separated. Do not number the steps.
 When applicable, include durations in a step (e.g. boil for 10 minutes).`;
 
-export function generateDietPrompt(selectedDiet) {
+export function generateDietPrompt(selectedDiet, keyword) {
     return `Generate ${recipeCount} recipes based on the following diet: ${selectedDiet}.\n` +
-        recipeRequirements;
+        recipeRequirements + (keyword === "" ? "" : `and the following keyword: ${keyword}`);
 }
 
 export function generateIngredientsPrompt(selectedIngredients) {
@@ -55,6 +55,8 @@ Do not number the steps, and be descriptive while minimizing token usage.`;
 
 export async function generateRecipes(prompt, messageHistory) {
     try {
+        console.log(`Prompt sent: ${prompt}`);
+
         // Initialize OpenAI object using OPENAI_API_KEY
         const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
 

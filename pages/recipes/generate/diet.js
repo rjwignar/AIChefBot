@@ -37,6 +37,8 @@ const DietPage = () => {
   const [useSavedDiets, setUseSavedDiets] = useState(false);
   // Sets the multi-select list
   const [selectList, setSelectList] = useState([]);
+  // Sets keywords (if any) entered by the user
+  const [keyword, setKeyword] = useState("");
 
   const handleSelectDiet = (selectedDiets) => {
     // Map over the selected diet objects to get their names and join them into a string
@@ -99,6 +101,10 @@ const DietPage = () => {
     }
   }, [useSavedDiets]);
 
+  const updateKeyword = (e) => {
+    setKeyword(e.target.value);
+  }
+
   // When the user presses the stop generating button reset everything back to their initial state
   const handleStopGenerating = () => {
     console.log("Stopped generating from previous diet list");
@@ -139,6 +145,7 @@ const DietPage = () => {
 
   // Generates the recipes:
   const handleGenerateClick = async () => {
+
     setGeneratePressed(true);
     try {
       // Get selected diet in string format (i.e. 'vegan, vegetarian')
@@ -150,7 +157,7 @@ const DietPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedDiet, messageHistory }),
+        body: JSON.stringify({ selectedDiet, messageHistory, keyword }),
       });
       /* ------------------------------------------------------ */
       /* --- Check if "res" is ok and content type is valid --- */
@@ -285,7 +292,7 @@ const DietPage = () => {
                   className="p-2"
                 />
                 {status !== "unauthenticated" && (
-                  <div className="d-flex justify-content-center w-100 mt-2">
+                  <div className="mt-2">
                     <Form>
                       <Form.Check
                         type="switch"
@@ -298,6 +305,9 @@ const DietPage = () => {
                     </Form>
                   </div>
                 )}
+                <hr></hr><br></br>
+                <Form.Label for="keyword">Enter any keywords you'd like to include, e.g. cuisine type, country of origin ...</Form.Label>
+                <Form.Control id="keyword" type="text" onChange={updateKeyword}/>
               </Col>
             </Row>
             <Row className="justify-content-center mb-5">
