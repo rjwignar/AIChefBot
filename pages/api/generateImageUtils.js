@@ -17,3 +17,16 @@ const generateOneRecipeImage = async (recipe) =>{
     // return updated recipe object
     return recipe;
 }
+
+export async function generateRecipeImages(recipes){
+    try{
+        const recipesWithImagesPromise = recipes.map(recipe => generateOneRecipeImage(recipe));
+        const recipesWithImages = await Promise.all(recipesWithImagesPromise);
+
+        console.log("array of recipes with images", recipesWithImages);
+
+        return recipesWithImages;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
