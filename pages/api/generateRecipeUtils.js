@@ -90,9 +90,9 @@ export async function generateRecipes(prompt, messageHistory) {
         // Extract recipe list from JSON
         const recipes = messageContent.recipes;
 
-        // Use an OpenAI DALL-E model to give generate an image for each recipe
+        // Use an OpenAI DALL-E model to generate an appropriate image and add an imageURL property to each recipe
         recipes = generateRecipeImages(recipes);
-        
+
         // Console Logging
         console.log("Generated Recipes Below", recipes);
 
