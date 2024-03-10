@@ -88,7 +88,7 @@ export async function generateRecipes(prompt, messageHistory) {
         const messageContent = JSON.parse(response.message.content);
 
         // Extract recipe list from JSON
-        const recipes = messageContent.recipes;
+        let recipes = messageContent.recipes;
 
         // Use an OpenAI DALL-E model to generate an appropriate image and add an imageURL property to each recipe
         recipes = generateRecipeImages(recipes);
