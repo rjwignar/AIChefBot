@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-
+import { generateRecipeImages } from './generateImageUtils';
 // This is how many recipes will be generated at a time. This may change once the generated recipes view is finalized
 const recipeCount = 3;
 
@@ -90,6 +90,9 @@ export async function generateRecipes(prompt, messageHistory) {
         // Extract recipe list from JSON
         const recipes = messageContent.recipes;
 
+        // Use an OpenAI DALL-E model to give generate an image for each recipe
+        recipes = generateRecipeImages(recipes);
+        
         // Console Logging
         console.log("Generated Recipes Below", recipes);
 
