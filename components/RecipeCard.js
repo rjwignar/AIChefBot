@@ -23,9 +23,27 @@ const RecipeCard = ({ recipe, onDelete }) => {
       }
    }, [recipe]);
 
+   const saveImage = async () => {
+      const res = await fetch(`/api/images/request`, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({imageURL: recipe.imageURL}),
+      });
+
+      const extractedData = await res.json();
+      // set imageURL to image secure_url, image_id to image public_id
+      recipe.imageURL = extractedData.secure_url;
+      recipe.image_id = extractedData.public_id;
+   }
    const handleSavingRecipe = async () => {
       // Log action
       console.log(`Saving recipe: ${recipe.name}`)
+
+      // Save recipe image to Cloudinary and add Cloudinary imageURL and image_id to recipe object
+      await saveImage();
+      console.log("updated recipe object", recipe);
       // Save recipe to user's recipe list
       const res = await fetch(`/api/recipes/request`, {
          method: "POST",
