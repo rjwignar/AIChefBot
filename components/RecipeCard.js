@@ -57,6 +57,19 @@ const RecipeCard = ({ recipe, onDelete }) => {
        setShowModal(false);
    }
 
+   const removeImage = async (image_id) => {
+      console.log(`Removing image with id: ${image_id}`);
+
+      // Delete image from Cloudinary environment
+      const res = await fetch(`/api/images/request`, {
+         method: "DELETE",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({image_id: image_id}),
+      });
+
+   }
    const handleRemoveRecipe = async() => {
       // Log action
       console.log(`Removing recipe: ${recipe.name}`);
