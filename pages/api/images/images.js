@@ -33,13 +33,13 @@ export async function deleteImage(image_id){
         cloudinary.uploader.destroy(
             image_id,
             {},
-            function(err, result) {
+            function(err, res) {
                 if (err){
                     console.error(err);
                     reject(err);
                 } else{
-                    console.log("result", result);
-                    resolve("Recipe image successfully deleted");
+                    console.log("result", res);
+                    resolve(res.result);
                 }
             }
         )
