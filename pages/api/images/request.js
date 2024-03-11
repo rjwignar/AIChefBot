@@ -1,7 +1,7 @@
 // define responses issued to fetch requests made for IMAGES (recipe image)
 
 // get our cloudinary image methods
-import { addImage } from "./images";
+import { addImage, deleteImage } from "./images";
 
 // handler for all relevant requests to /api/images/request
 async function handler(req, res) {
@@ -20,6 +20,24 @@ async function handler(req, res) {
         res.status(500).json({message: "Failed to add recipe image.", "Error: ": err});
       }
       break;
+    }
+
+    // DELETE
+    case "DELETE": {
+        try {
+            // Await recipe deletion
+            const result = await deleteImage(req.body);
+            
+            if (result === "ok") {
+                // image successfully deleted
+                res.status(204).json({message: "Recipe image successfully removed."});
+            } else {
+                res.status(404).json({ message: "Recipe image was not deleted." });
+            }
+        } catch (err) {
+            res.status(500).json({message: "Failed to delete recipe image.", "Error: ": err});
+        }
+        break;
     }
   }
 }
