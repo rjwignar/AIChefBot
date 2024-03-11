@@ -73,6 +73,11 @@ const RecipeCard = ({ recipe, onDelete }) => {
    const handleRemoveRecipe = async() => {
       // Log action
       console.log(`Removing recipe: ${recipe.name}`);
+
+      // Delete recipe image first, if it has an image hosted on Cloudinary
+      if (recipe.hasOwnProperty('image_id')){
+         await removeImage(recipe.image_id);
+      }
       // Delete recipe from user's recipe list
       const res = await fetch(`/api/recipes/request`, {
          method: "DELETE",
