@@ -27,3 +27,21 @@ export async function addImage(imageURL) {
             );
         });
 }
+
+export async function deleteImage(image_id){
+    return new Promise((resolve, reject) =>{
+        cloudinary.uploader.destroy(
+            image_id,
+            {},
+            function(err, result) {
+                if (err){
+                    console.error(err);
+                    reject(err);
+                } else{
+                    console.log("result", result);
+                    resolve("Recipe image successfully deleted");
+                }
+            }
+        )
+    })
+}
