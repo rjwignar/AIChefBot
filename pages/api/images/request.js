@@ -3,7 +3,7 @@
 // get our cloudinary image methods
 import { addImage } from "./images";
 
-// handler for all relevant requests
+// handler for all relevant requests to /api/images/request
 async function handler(req, res) {
   switch (req.method) {
     // POST
@@ -11,8 +11,8 @@ async function handler(req, res) {
       try {
         // Add recipe image
         try {
-          const imageDetails = await addImage(req.body);
-          res.status(201).json({imageURL: imageDetails.secure_url, image_id: imageDetails.public_id});
+          const imageDetails = await addImage(req.body.imageURL);
+          res.status(201).json({secure_url: imageDetails.secure_url, public_id: imageDetails.public_id});
         } catch (err) {
           console.error(err);
         }
