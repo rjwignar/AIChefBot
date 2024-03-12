@@ -29,11 +29,12 @@ const RecipeCard = ({ recipe, onDelete }) => {
          headers: {
             "Content-Type": "application/json",
          },
-         body: JSON.stringify({imageURL: recipe.imageURL}),
+         body: JSON.stringify({imageURL: recipe.tempImageURL}),
       });
 
       const extractedData = await res.json();
-      // set imageURL to image secure_url, image_id to image public_id
+      
+      // Give recipe two new properties; imageURL (Cloudinary image secure_url), image_id  (Cloudinary image public_id)
       recipe.imageURL = extractedData.secure_url;
       recipe.image_id = extractedData.public_id;
    }
