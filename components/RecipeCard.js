@@ -24,6 +24,8 @@ const RecipeCard = ({ recipe, onDelete }) => {
    }, [recipe]);
 
    const saveImage = async () => {
+      // if there is an AI-generated image, use it (tempImageURL)
+      // otherwise, use placeholder image
       const res = await fetch(`/api/images/request`, {
          method: "POST",
          headers: {
@@ -42,9 +44,11 @@ const RecipeCard = ({ recipe, onDelete }) => {
       // Log action
       console.log(`Saving recipe: ${recipe.name}`)
 
-      // Save recipe image to Cloudinary and add Cloudinary imageURL and image_id to recipe object
-      await saveImage();
-      console.log("updated recipe object", recipe);
+      // If the recipe has an AI-generated image, save it recipe image to Cloudinary and add Cloudinary imageURL and image_id to recipe object
+      if (recipe.hasOwnProperty('tempImageURL')){
+         await saveImage();
+         console.log("updated recipe object", recipe);
+      }
       // Save recipe to user's recipe list
       const res = await fetch(`/api/recipes/request`, {
          method: "POST",
