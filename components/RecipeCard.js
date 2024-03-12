@@ -33,7 +33,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
       });
 
       const extractedData = await res.json();
-      
+
       // Give recipe two new properties; imageURL (Cloudinary image secure_url), image_id  (Cloudinary image public_id)
       recipe.imageURL = extractedData.secure_url;
       recipe.image_id = extractedData.public_id;
@@ -101,7 +101,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
    return (
       <>
          <Card className="recipe-card mb-4" onClick={handleShow}>
-         <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL ? recipe.imageURL : 'https://i.imgur.com/iTpOC92.jpeg'}/>
+         <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
                <hr className='recipe-card-line'/>
