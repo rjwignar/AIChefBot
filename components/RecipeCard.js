@@ -66,7 +66,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
          headers: {
             "Content-Type": "application/json",
          },
-         body: JSON.stringify({image_id: image_id}),
+         body: JSON.stringify({image_ids: [image_id]}),
       });
 
    }

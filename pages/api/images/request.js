@@ -26,7 +26,7 @@ async function handler(req, res) {
         case "DELETE": {
             try {
                 // Await recipe deletion
-                const result = await deleteImage(req.body.image_id);
+                const result = await deleteImage(req.body.image_ids);
                 if (result === "ok") {
                     // image successfully deleted
                     res.status(204).json();

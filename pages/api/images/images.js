@@ -28,20 +28,24 @@ export async function addImage(imageURL) {
         });
 }
 
-export async function deleteImage(image_id){
+export async function deleteImage(image_ids){
     return new Promise((resolve, reject) =>{
-        cloudinary.uploader.destroy(
-            image_id,
-            {},
-            function(err, res) {
-                if (err){
-                    console.error(err);
-                    reject(err);
-                } else{
-                    console.log("result", res);
-                    resolve(res.result);
+        // if deleting one image
+        if (image_ids.length == 1){
+            console.log("deleting only one image");
+            cloudinary.uploader.destroy(
+                image_ids,
+                {},
+                function(err, res) {
+                    if (err){
+                        console.error(err);
+                        reject(err);
+                    } else{
+                        console.log("result", res);
+                        resolve(res.result);
+                    }
                 }
-            }
-        )
+            )
+        }
     })
 }
