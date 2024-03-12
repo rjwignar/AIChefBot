@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import RecipeCardList from "@/components/RecipeCardList";
 import LoadingScreen from "@/components/LoadingScreen";
 
 const IngredientsPage = () => {
+   const { data: session } = useSession();
    // Check if the generate button is pressed
    const [generatePressed, setGeneratePressed] = useState(false);
    // The recipes that are shown on screen. Get's reset on refresh, user stops generating etc...
@@ -13,13 +14,13 @@ const IngredientsPage = () => {
    // The message history
    const [messageHistory, setMessageHistory] = useState([]);
    // The string format of the ingredients
-   const [ingredients, setIngredients] = useState("");
+   const [selectedIngredients, setIngredients] = useState("");
    
    // Handle whenever an ingredient is entered
    const handleEnteredIngredients = (selectedIngredients) => {
       const ingredients = selectedIngredients.map((ingredients) => ingredients.value).join(", ");
       setIngredients(ingredients);
-      console.log(ingredients);
+      console.log('Current Selection: ' + ingredients);
    }
 
    const handleStopGenerating = () => {
@@ -35,12 +36,106 @@ const IngredientsPage = () => {
    const handleGenerateClick = async () => {
       console.log("Generating Recipes");
       setGeneratePressed(true);
+      try {
+         // Get selected ingredients in string format
+         console.log("Selected Ingredients: ", selectedIngredients);
+         console.log("Message History: ", messageHistory);
+         /* --- Fetch API to get recipes --- */
+         const res = await fetch("/api/generateRecipe", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ selectedIngredients, messageHistory }),
+         });
+          /* ------------------------------------------------------ */
+         /* --- Check if "res" is ok and content type is valid --- */
+         if (!res.ok) {
+            throw new Error(`Network response was not ok: ${res.statusText}`);
+         }
+         const contentType = res.headers.get("content-type");
+         if (!contentType || !contentType.includes("application/json")) {
+            throw new TypeError("Oops, we haven't got JSON!");
+         }
+         /* ------------------------------------------------------ */
+         /* --- Get Data From Response --- */
+         const data = await res.json();
+         console.log("Data was returned: ", data);
+         setRecipes(data.recipes);
+         setMessageHistory(data.messageHistory);
+         /* ------------------------------ */
+         /* Updating database stuff: */
+         if (session) {
+            updateDatabase(data.recipes.length);
+         }
+         /* ---------------------------- */
+      } catch (err) {
+         console.log(err);
+      }
    }
 
    const handleGenerateMoreClick = async () => {
       console.log("Generating More Recipes");
+      // For display purpose only:
       setRecipes(null);
+      // Generating More Logic:
+      try {
+         console.log(messageHistory);
+         const response = await fetch("/api/generateRecipe", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ messageHistory }),
+         });
+         /* --- Check if "res" is ok and content type is valid --- */
+         if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+         }
+
+         const contentType = response.headers.get("content-type");
+         if (!contentType || !contentType.includes("application/json")) {
+            throw new TypeError("Oops, we haven't got JSON!");
+         }
+         /* ------------------------------------------------------ */
+         /* --- Get Data From Response --- */
+         const data = await response.json();
+         console.log(data);
+         console.log("message history", data.messageHistory);
+         setRecipes(data.recipes);
+         setMessageHistory(data.messageHistory);
+         console.log("new message history", messageHistory);
+         console.log("recipes below in UI", recipes);
+         /* ------------------------------- */
+         /* Updating database */
+         if (session) {
+            updateDatabase(data.recipes.length);
+         }
+         /* ----------------- */
+      } catch (err) {
+         console.error(err);
+      }
    }
+
+   const updateDatabase = async (recipeCount) => {
+      console.log(`Adding ${recipeCount} to recipe count in database...`);
+      try {
+         // Add number of generated recipes to user's recipeCount
+         await fetch("/api/recipes/request", {
+            method: "PUT",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            userId: session.user.id,
+            recipeCount: recipeCount,
+            }),
+         });
+         console.log("Successfully updated recipe count.");
+      } catch (err) {
+         console.error("Unsuccessful update to database: ", err);
+      }
+   };
 
    return (
       <>
@@ -90,7 +185,7 @@ const IngredientsPage = () => {
                         </h5>
                         <Select
                            multi
-                           clearable={ingredients.length > 0}
+                           clearable={selectedIngredients.length > 0}
                            create
                            onCreateNew={(item) => console.log(item)}
                            values={[]}
@@ -112,7 +207,7 @@ const IngredientsPage = () => {
                            variant="success"
                            size="lg"
                            onClick={handleGenerateClick}
-                           disabled={ingredients == "" ? true : false}
+                           disabled={selectedIngredients == "" ? true : false}
                         >
                            Generate Recipes
                         </Button>
