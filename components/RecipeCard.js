@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
@@ -43,7 +42,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
       // Log action
       console.log(`Removing recipe: ${recipe.name}`);
       // Delete recipe from user's recipe list
-      const res = await fetch(`/api/recipes/request`, {
+      await fetch(`/api/recipes/request`, {
          method: "DELETE",
          headers: {
             "Content-Type": "application/json"
