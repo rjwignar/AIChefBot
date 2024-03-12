@@ -20,7 +20,12 @@ const generateOneRecipeImage = async (recipe) =>{
         // return updated recipe object
         return recipe;
     } catch (error) {
-        throw new Error(error);
+        // Sometimes the DALL-E model will return "400 Bad Request" if the prompt violates their strict content policy
+        // If this happens, we don't want to throw the error as it will suspend the app in the recipe generation animation
+        // We just want to log the error and return unmodified recipe with no generated image
+        // When displaying this recipe, the recipe card will instead have the placeholder image
+        console.error(error);
+        return recipe;
     }
 }
 
