@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Modal } from 'react-bootstrap';
+import { Card, Button, Modal, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRef } from 'react';
+import generatePDF from 'react-to-pdf';
+import { usePDF } from 'react-to-pdf';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
 const RecipeCard = ({ recipe, onDelete }) => {
+   // the reference element for the root of a to-PDF snapshot
+   const targetRef = useRef();
 
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
@@ -60,6 +64,21 @@ const RecipeCard = ({ recipe, onDelete }) => {
          onDelete(recipe);
       }
    }
+
+   const downloadPDF = () => {
+      // get footer from modal, which holds buttons
+      let e = document.getElementById('modal-footer')
+
+      // generate filename
+      let filename = recipe.name.replaceAll(' ', '-');
+
+      // react-to-pdf takes a "snapshot", hide the buttons before snapshot
+      e.style.display='none';
+      generatePDF(targetRef, {filename: `${filename}`});
+
+      // display buttons again
+      e.style.display='flex';
+   }
    
    return (
       <>
@@ -88,10 +107,12 @@ const RecipeCard = ({ recipe, onDelete }) => {
          </Card>
 
          <Modal show={showModal} onHide={handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+            {/* root of the PDF snapshot */}
+            <section ref={targetRef}>
             <Modal.Header closeButton>
                <Modal.Title className='recipe-modal-title'>{recipe.name}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body ref={targetRef}>
                {/* The detailed recipe view goes here */}
                <h5>Ingredients:</h5>
                <ul className='text-muted'>
@@ -118,10 +139,12 @@ const RecipeCard = ({ recipe, onDelete }) => {
                   </Button> 
                   )
                )}
+               <Button variant="success" onClick={downloadPDF}><i className="fas fa-download"></i></Button>
                <Button variant="secondary" onClick={handleClose}>
                   Close
                </Button>
             </Modal.Footer>
+            </section>
          </Modal>
       </>
    );
