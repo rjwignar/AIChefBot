@@ -47,5 +47,22 @@ export async function deleteImage(image_ids){
                 }
             )
         }
+        // else, delete multiple images
+        else{
+            console.log("About to delete multiple recipe images");
+            cloudinary.api.delete_resources(
+                image_ids,
+                {},
+                function(err, res) {
+                    if (err){
+                        console.error(err);
+                        reject(err);
+                    } else{
+                        console.log("Deleted a bunch of recipe images", res);
+                        resolve(res.result);
+                    }
+                }
+                );
+        }
     })
 }
