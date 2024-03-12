@@ -12,8 +12,10 @@ const generateOneRecipeImage = async (recipe) =>{
             prompt: imagePrompt,
         });
         
-        // give the recipe object a new property, imageURL
-        recipe.imageURL = image.data[0].url;
+        // give the recipe object a new property, tempImgURL
+        // this will be a variation of https://oaidalleapiprodscus.blob.core.windows.net/…ig=abcde
+        // openAI hosts these images for only an hour, so this image will be saved to Cloudinary
+        recipe.tempImageURL = image.data[0].url;
         
         // return updated recipe object
         return recipe;
