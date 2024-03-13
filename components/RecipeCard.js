@@ -3,7 +3,6 @@ import { Card, Button, Modal, Badge } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import generatePDF from 'react-to-pdf';
-import { usePDF } from 'react-to-pdf';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
@@ -127,7 +126,8 @@ const RecipeCard = ({ recipe, onDelete }) => {
                ))}
                </ol>
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer id="modal-footer">
+            <Button variant="success" onClick={downloadPDF}><i className="fas fa-download"></i></Button>
                {status !== "unauthenticated" && (
                   savedId === null ? (
                   <Button variant='primary' onClick={handleSavingRecipe}>
@@ -136,10 +136,9 @@ const RecipeCard = ({ recipe, onDelete }) => {
                   ) : (
                   <Button variant='primary' onClick={handleRemoveRecipe}>
                      Remove Recipe
-                  </Button> 
+                  </Button>
                   )
                )}
-               <Button variant="success" onClick={downloadPDF}><i className="fas fa-download"></i></Button>
                <Button variant="secondary" onClick={handleClose}>
                   Close
                </Button>
