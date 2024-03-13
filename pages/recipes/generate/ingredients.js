@@ -181,7 +181,7 @@ const IngredientsPage = () => {
                   <Row className="justify-content-center mb-4">
                      <Col className="flex-column align-items-center" md={9}>
                         <h5 className="diet-select-label">
-                           Type an ingredient then press enter.
+                           Type an ingredient, then press enter.
                         </h5>
                         <Select
                            multi
@@ -190,11 +190,11 @@ const IngredientsPage = () => {
                            onCreateNew={(item) => console.log(item)}
                            values={[]}
                            separator
-                           noDataLabel="Add an ingredient"
+                           noDataLabel="Hit 'Enter' to add."
                            dropdownHandle
                            closeOnSelect
                            closeOnClickInput
-                           placeholder="Enter an ingredient"
+                           placeholder="Type any ingredient"
                            onChange={(ingredients) => handleEnteredIngredients(ingredients)}
                            className="p-2"
                         />
