@@ -26,15 +26,17 @@ async function handler(req, res) {
         case "DELETE": {
             try {
                 // Await recipe deletion
-                const result = await deleteImage(req.body.image_ids);
-                if (result === "ok") {
+                const response = await deleteImage(req.body.image_ids);
+
+                // Successful mass delete has a deleted property, successful single delete has result = "ok"
+                if (response.deleted !== undefined || response.result === "ok") {
                     // image successfully deleted
                     res.status(204).json();
                 } else {
-                    res.status(404).json({ message: "Recipe image was not deleted." });
+                    res.status(404).json({ message: "Recipe image(s) was not deleted." });
                 }
             } catch (err) {
-                res.status(500).json({ message: "Failed to delete recipe image.", "Error: ": err });
+                res.status(500).json({ message: "Failed to delete recipe image(s).", "Error: ": err });
             }
             break;
         }

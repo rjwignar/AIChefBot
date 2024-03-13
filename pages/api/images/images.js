@@ -41,8 +41,8 @@ export async function deleteImage(image_ids){
                         console.error(err);
                         reject(err);
                     } else{
-                        console.log("result", res);
-                        resolve(res.result);
+                        console.log("result before sending", res);
+                        resolve(res);
                     }
                 }
             )
@@ -59,7 +59,7 @@ export async function deleteImage(image_ids){
                         reject(err);
                     } else{
                         console.log("Deleted a bunch of recipe images", res);
-                        resolve(res.result);
+                        resolve(res);
                     }
                 }
                 );
