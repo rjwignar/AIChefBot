@@ -38,14 +38,14 @@ function DeleteModal({ show, onHide, username }) {
     const removeImages = async (image_ids) => {
       console.log(`Removing images with these id values: ${image_ids}`);
 
-      // Delete images from Cloudinary environment
-      const res = await fetch(`/api/images/request`, {
-         method: "DELETE",
-         headers: {
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify({image_ids: image_ids}),
-      });
+         // Delete images from Cloudinary environment
+         const res = await fetch(`/api/images/request`, {
+            method: "DELETE",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({image_ids: image_ids}),
+         });
 
    }
    const deleteRecipeImages = async () =>{
@@ -63,6 +63,7 @@ function DeleteModal({ show, onHide, username }) {
       console.log(imageIds);
       // If there are any images hosted on Cloudinary, remove them
       if (imageIds.length >= 1){
+         console.log(`Removing ${imageIds.length} recipes`);
          await removeImages(imageIds);
       }
    }
@@ -74,6 +75,11 @@ function DeleteModal({ show, onHide, username }) {
       return;
     }
     console.log("Deleting account with " + username);
+
+      // Delete any saved recipe images from Cloudinary
+      await deleteRecipeImages();
+      
+      // TODO: Delete user from MongoDB
 
     const client = new CognitoIdentityProviderClient({ region: "us-east-1" });
 
