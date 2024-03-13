@@ -15,7 +15,7 @@ const GeneratePage = () => {
                </Col>
             </Row>
             <Row className="justify-content-md-center my-5 animate__animated animate__fadeInUp">
-               <Col md={6} lg={4} className="generate-card-body">
+               <Col lg={3} className="generate-card-body mt-3">
                   {/* For Ingredients */}
                   <a href="/recipes/generate/ingredients" className="generate-card ingredients">
                      <div className="overlay"></div>
@@ -25,7 +25,7 @@ const GeneratePage = () => {
                      <p className='generate-card-paragraph'>By Ingredients</p>
                   </a>
                </Col>
-               <Col md={6} lg={4} className="generate-card-body">
+               <Col lg={3} className="generate-card-body mt-3">
                   {/* For Ingredients And Diet */}
                   <a href="/recipes/generate/ingredients-and-diet" className="generate-card ingredientsAndDiet">
                      <div className="overlay"></div>
@@ -35,7 +35,7 @@ const GeneratePage = () => {
                      <p className='generate-card-paragraph'>By Ingredients & Diet</p>
                   </a>
                </Col>
-               <Col md={6} lg={4} className="generate-card-body">
+               <Col lg={3} className="generate-card-body mt-3">
                   {/* For Diet */}
                   <a href="/recipes/generate/diet" className="generate-card diet">
                      <div className="overlay"></div>
