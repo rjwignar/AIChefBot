@@ -1,5 +1,4 @@
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const GeneratePage = () => {
    return (
@@ -24,6 +23,16 @@ const GeneratePage = () => {
                      <i className="circle-icon fas fa-book fa-4x"></i>
                      </div>
                      <p className='generate-card-paragraph'>By Ingredients</p>
+                  </a>
+               </Col>
+               <Col md={6} lg={4} className="generate-card-body">
+                  {/* For Ingredients And Diet */}
+                  <a href="/recipes/generate/ingredients-and-diet" className="generate-card ingredientsAndDiet">
+                     <div className="overlay"></div>
+                     <div className="circle">
+                     <i className="circle-icon fab fa-pagelines fa-4x"></i>
+                     </div>
+                     <p className='generate-card-paragraph'>By Ingredients & Diet</p>
                   </a>
                </Col>
                <Col md={6} lg={4} className="generate-card-body">

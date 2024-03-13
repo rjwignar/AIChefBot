@@ -156,7 +156,7 @@ const IngredientsPage = () => {
                   <h1 className="hero-title">Discover Ingredient-Based Recipes</h1>
                   <p className="text-muted">
                      Generate recipes based on ingredients you have available. 
-                     Type an ingredient in the box below and we'll 
+                     Type any ingredients you have in the box below and we'll 
                      do the rest.
                   </p>
                </Col>
@@ -181,7 +181,7 @@ const IngredientsPage = () => {
                   <Row className="justify-content-center mb-4">
                      <Col className="flex-column align-items-center" md={9}>
                         <h5 className="diet-select-label">
-                           Type a ingredient then press enter to add it to the list.
+                           Type an ingredient then press enter.
                         </h5>
                         <Select
                            multi
