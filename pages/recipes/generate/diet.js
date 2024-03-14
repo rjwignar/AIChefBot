@@ -265,7 +265,7 @@ const DietPage = () => {
             <Row className="justify-content-center mb-4">
               <Col className="flex-column align-items-center" md={9}>
                 <h5 className="diet-select-label">
-                  Select a diet or dietary restriction
+                  Select a diet or dietary restriction.
                 </h5>
                 <Select
                   multi

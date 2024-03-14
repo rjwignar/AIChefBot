@@ -168,7 +168,7 @@ const IngredientsAndDietPage = () => {
             variant="secondary"
             size="md"
             disabled={!recipes ? true : false}>  
-               &laquo; Select Diet
+               &laquo; Select Diet and Ingredients
             </Button>
          }
          <Container className="mt-5">
@@ -221,7 +221,7 @@ const IngredientsAndDietPage = () => {
                      </Col>
                      <Col className="flex-column align-items-center" md={6}>
                         <h5 className="diet-select-label">
-                           Select a diet or dietary restriction
+                           Select a diet or dietary restriction.
                         </h5>
                         <Select
                            multi

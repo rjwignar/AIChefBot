@@ -147,7 +147,7 @@ const IngredientsPage = () => {
             variant="secondary"
             size="md"
             disabled={!recipes ? true : false}>  
-               &laquo; Select Diet
+               &laquo; Select Ingredients
             </Button>
          }
          <Container className="mt-5">
