@@ -2,7 +2,7 @@
 // define responses issued to fetch requests made for USERS
 
 // get our db methods
-import { removeAll, getUserById, addUser, updateUser } from "./user";
+import { getUserById, addUser, updateUser, removeUser } from "./user";
 
 // handler for all relevant requests
 async function handler(req, res) {
@@ -56,7 +56,7 @@ async function handler(req, res) {
     // DELETE
     case "DELETE":
       try {
-        await removeAll();
+        await removeUser(req.body);
       } catch (err) {
         console.log("Error in request.js, ", err);
       }
