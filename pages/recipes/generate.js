@@ -1,5 +1,4 @@
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const GeneratePage = () => {
    return (
@@ -16,7 +15,7 @@ const GeneratePage = () => {
                </Col>
             </Row>
             <Row className="justify-content-md-center my-5 animate__animated animate__fadeInUp">
-               <Col md={6} lg={4} className="generate-card-body">
+               <Col lg={3} className="generate-card-body mt-3">
                   {/* For Ingredients */}
                   <a href="/recipes/generate/ingredients" className="generate-card ingredients">
                      <div className="overlay"></div>
@@ -26,7 +25,17 @@ const GeneratePage = () => {
                      <p className='generate-card-paragraph'>By Ingredients</p>
                   </a>
                </Col>
-               <Col md={6} lg={4} className="generate-card-body">
+               <Col lg={3} className="generate-card-body mt-3">
+                  {/* For Ingredients And Diet */}
+                  <a href="/recipes/generate/ingredients-and-diet" className="generate-card ingredientsAndDiet">
+                     <div className="overlay"></div>
+                     <div className="circle">
+                     <i className="circle-icon fab fa-pagelines fa-4x"></i>
+                     </div>
+                     <p className='generate-card-paragraph'>By Ingredients & Diet</p>
+                  </a>
+               </Col>
+               <Col lg={3} className="generate-card-body mt-3">
                   {/* For Diet */}
                   <a href="/recipes/generate/diet" className="generate-card diet">
                      <div className="overlay"></div>
