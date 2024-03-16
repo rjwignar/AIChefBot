@@ -23,50 +23,50 @@ function DeleteModal({ show, onHide, username }) {
     onHide();
   };
 
-   const getRecipes = async () => {
-      try {
-        const res = await fetch(`/api/recipes/request?id=${session.user.id}`, {
-          method: "GET",
-        });
-        const recipes = await res.json();
-        return recipes;
-      } catch (err) {
-        console.error(err);
+  const getRecipes = async () => {
+    try {
+      const res = await fetch(`/api/recipes/request?id=${session.user.id}`, {
+        method: "GET",
+      });
+      const recipes = await res.json();
+      return recipes;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const removeImages = async (image_ids) => {
+    console.log(`Removing images with these id values: ${image_ids}`);
+
+    // Delete images from Cloudinary environment
+    const res = await fetch(`/api/images/request`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image_ids: image_ids }),
+    });
+
+  }
+  const deleteRecipeImages = async () => {
+    let recipeList = await getRecipes();
+    console.log("Recipe list for user", recipeList);
+
+    // extract list of AI-generated imageURLs from recipeList
+    const imageIds = recipeList.reduce((list, recipe) => {
+      if (recipe.hasOwnProperty('image_id')) {
+        list.push(recipe.image_id);
       }
-    };
+      return list;
+    }, []);
 
-    const removeImages = async (image_ids) => {
-      console.log(`Removing images with these id values: ${image_ids}`);
-
-         // Delete images from Cloudinary environment
-         const res = await fetch(`/api/images/request`, {
-            method: "DELETE",
-            headers: {
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({image_ids: image_ids}),
-         });
-
-   }
-   const deleteRecipeImages = async () =>{
-      let recipeList = await getRecipes();
-      console.log("Recipe list for user", recipeList);
-
-      // extract list of AI-generated imageURLs from recipeList
-      const imageIds = recipeList.reduce((list, recipe) =>{
-         if (recipe.hasOwnProperty('image_id')){
-            list.push(recipe.image_id);
-         }
-         return list;
-      },[]);
-
-      console.log(imageIds);
-      // If there are any images hosted on Cloudinary, remove them
-      if (imageIds.length >= 1){
-         console.log(`Removing ${imageIds.length} recipes`);
-         await removeImages(imageIds);
-      }
-   }
+    console.log(imageIds);
+    // If there are any images hosted on Cloudinary, remove them
+    if (imageIds.length >= 1) {
+      console.log(`Removing ${imageIds.length} recipes`);
+      await removeImages(imageIds);
+    }
+  }
 
   // Validate username and perform deletion
   const handleDeleteAccount = async () => {
@@ -76,10 +76,10 @@ function DeleteModal({ show, onHide, username }) {
     }
     console.log("Deleting account with " + username);
 
-      // Delete any saved recipe images from Cloudinary
-      await deleteRecipeImages();
-      
-      // TODO: Delete user from MongoDB
+    // Delete any saved recipe images from Cloudinary
+    await deleteRecipeImages();
+
+    // TODO: Delete user from MongoDB
 
     const client = new CognitoIdentityProviderClient({ region: "us-east-1" });
 
