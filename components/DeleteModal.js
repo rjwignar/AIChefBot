@@ -79,12 +79,10 @@ function DeleteModal({ show, onHide, username }) {
     // Delete any saved recipe images from Cloudinary
     await deleteRecipeImages();
 
-    // TODO: Delete user from MongoDB
-
     const client = new CognitoIdentityProviderClient({ region: "us-east-1" });
 
+    // DeleteUserRequest
     const input = {
-      // DeleteUserRequest
       AccessToken: session.user.accessToken, // required
     };
     try {
