@@ -23,9 +23,32 @@ const RecipeCard = ({ recipe, onDelete }) => {
       }
    }, [recipe]);
 
+   const saveImage = async () => {
+      // if there is an AI-generated image, use it (tempImageURL)
+      // otherwise, use placeholder image
+      const res = await fetch(`/api/images/request`, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({imageURL: recipe.tempImageURL}),
+      });
+
+      const extractedData = await res.json();
+
+      // Give recipe two new properties; imageURL (Cloudinary image secure_url), image_id  (Cloudinary image public_id)
+      recipe.imageURL = extractedData.secure_url;
+      recipe.image_id = extractedData.public_id;
+   }
    const handleSavingRecipe = async () => {
       // Log action
       console.log(`Saving recipe: ${recipe.name}`)
+
+      // If the recipe has an AI-generated image, save it recipe image to Cloudinary and add Cloudinary imageURL and image_id to recipe object
+      if (recipe.hasOwnProperty('tempImageURL')){
+         await saveImage();
+         console.log("updated recipe object", recipe);
+      }
       // Save recipe to user's recipe list
       const res = await fetch(`/api/recipes/request`, {
          method: "POST",
@@ -39,9 +62,27 @@ const RecipeCard = ({ recipe, onDelete }) => {
        setShowModal(false);
    }
 
+   const removeImage = async (image_id) => {
+      console.log(`Removing image with id: ${image_id}`);
+
+      // Delete image from Cloudinary environment
+      const res = await fetch(`/api/images/request`, {
+         method: "DELETE",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({image_ids: [image_id]}),
+      });
+
+   }
    const handleRemoveRecipe = async() => {
       // Log action
       console.log(`Removing recipe: ${recipe.name}`);
+
+      // Delete recipe image first, if it has an image hosted on Cloudinary
+      if (recipe.hasOwnProperty('image_id')){
+         await removeImage(recipe.image_id);
+      }
       // Delete recipe from user's recipe list
       const res = await fetch(`/api/recipes/request`, {
          method: "DELETE",
@@ -64,7 +105,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
    return (
       <>
          <Card className="recipe-card mb-4" onClick={handleShow}>
-            <Card.Img className='recipe-card-img' variant="top" src='https://i.imgur.com/iTpOC92.jpeg'/>
+         <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
                <hr className='recipe-card-line'/>
