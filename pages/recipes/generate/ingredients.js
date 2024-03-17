@@ -192,7 +192,7 @@ const IngredientsPage = () => {
                            separator
                            noDataLabel="Hit 'Enter' to add."
                            dropdownHandle
-                           closeOnSelect
+                           //closeOnSelect
                            closeOnClickInput
                            placeholder="Type any ingredient"
                            onChange={(ingredients) => handleEnteredIngredients(ingredients)}
