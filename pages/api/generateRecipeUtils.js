@@ -44,11 +44,12 @@ export function generateIngredientsPrompt(selectedIngredients) {
 }
 
 export function generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet) {
-    return `Generate ${recipeCount} recipes based on the following list of ingredients and diet. 
-    (Ignore any invalid ingredients or ingredients that doesn't make sense): ${selectedIngredients}, ${selectedDiet}.\n` +
+    return `Generate ${recipeCount} recipes based on the following list of ingredients, enuring they align with the selected diet preference (${selectedDiet}).
+    (Ignore any invalid ingredients or combinations that don't match the specified diet): ${selectedIngredients}.\n` +
         recipeRequirements + 
-        `following If there is any invalid ingredients or ingredients that doesn't make sense (i.e. any electronic or unwanted objects, any empty string, words, etc...) then 
-        ignore it and generate random recipes unless if there is any valid ingredients then use that to generate recipes instead of the invalid ingredients`;
+        `If there are any ingredients that conflict with the selected diet (${selectedDiet}), such as meat products in a vegetarian or pescatarian
+         diet, ensure that the generated recipes do not include those ingredients. Instead, substitute them with suitable alternatives that adhere 
+         to the chosen dietary restrictions.`;
 }
 
 // Because selectedRecipes can contain an assortment of random recipes, we're not exactly sure what recipes will be produced with this current prompt
