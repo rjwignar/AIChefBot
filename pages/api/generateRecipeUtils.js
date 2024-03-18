@@ -43,6 +43,15 @@ export function generateIngredientsPrompt(selectedIngredients) {
         ignore it and generate random recipes unless if there is any valid ingredients then use that to generate recipes instead of the invalid ingredients`;
 }
 
+export function generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet) {
+    return `Generate ${recipeCount} recipes based on the following list of ingredients, enuring they align with the selected diet preference (${selectedDiet}).
+    (Ignore any invalid ingredients or combinations that don't match the specified diet): ${selectedIngredients}.\n` +
+        recipeRequirements + 
+        `If there are any ingredients that conflict with the selected diet (${selectedDiet}), such as meat products in a vegetarian or pescatarian
+         diet, ensure that the generated recipes do not include those ingredients. Instead, substitute them with suitable alternatives that adhere 
+         to the chosen dietary restrictions.`;
+}
+
 // Because selectedRecipes can contain an assortment of random recipes, we're not exactly sure what recipes will be produced with this current prompt
 // In Sprint 3, we will have to experiment with this prompt.
 // As well, we may want to generate a different number of recipes than we would if we were generating from strictly ingredients or diet
