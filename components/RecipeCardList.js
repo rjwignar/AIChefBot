@@ -1,10 +1,13 @@
 
 import { Container, Col, Row } from 'react-bootstrap';
 import RecipeCard from "@/components/RecipeCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const RecipeCardList = ({recipes}) => {
+const RecipeCardList = ({ recipes }) => {
     const [savedRecipes, setSavedRecipes] = useState(recipes);
+
+    // Watch the recipes list for changes
+    useEffect(() => setSavedRecipes(recipes), [recipes]);
 
     // callback from RecipeCard, recipe is deleted from database, then:
     // filter out the deleted recipe, rerender the recipes array
