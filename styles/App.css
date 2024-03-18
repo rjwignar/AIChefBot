@@ -335,6 +335,14 @@ hr.recipe-card-line {
    --icon-color: #59b08b;
 }
 
+.ingredientsAndDiet {
+   --bg-color: #ffd861;
+   --bg-color-light: #ffeeba;
+   --text-color-hover: #4C5656;
+   --box-shadow-color: rgba(255, 215, 97, 0.48);
+   --icon-color: #d98a19
+}
+
 
 .generate-card {
    width: 220px;

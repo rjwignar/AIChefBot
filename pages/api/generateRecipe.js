@@ -1,5 +1,5 @@
 // pages/api/generateRecipe.js
-import { generateDietPrompt, generateIngredientsPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
+import { generateDietPrompt, generateIngredientsPrompt,  generateIngredientsWithDietPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
 
 // Do not remove this function or more it to another file
 // If you don't want this to appear in your console just comment the function call at the beginning of the handler
@@ -41,8 +41,22 @@ export default async function handler(req, res) {
                 res.status(200).json(response);
             }
             else {
+                if(req.body.hasOwnProperty('selectedDiet') && req.body.hasOwnProperty('selectedIngredients')){
+                    console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
+
+                    // destructure selectedDiet and messageHistory properties from req.body
+                    const { selectedDiet, selectedIngredients, messageHistory } = req.body;
+
+                    // Generate Diet prompt from selectedDiet
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
+
+                }
                 // User selected a diet and starts generating recipes
-                if (req.body.hasOwnProperty('selectedDiet')) {
+                else if (req.body.hasOwnProperty('selectedDiet')) {
                     console.log("User has started generating recipes by diet!");
 
                     // destructure selectedDiet and messageHistory properties from req.body
@@ -69,6 +83,7 @@ export default async function handler(req, res) {
                     // Push recipes and messageHistory in response
                     res.status(200).json(response);
                 }
+
                 // User selected list of recipes from recipe manager and is generating recipes
                 else if (req.body.hasOwnProperty('selectedRecipes')) {
                     console.log("User is generating similar recipes from a selection in their recipe management page!");

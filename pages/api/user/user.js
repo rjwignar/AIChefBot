@@ -72,8 +72,4 @@ export async function removeUser(userId) {
   
 }
 
-export async function removeAll() {
-  await collection.deleteMany({});
-}
-
 
