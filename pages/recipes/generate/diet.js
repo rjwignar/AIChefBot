@@ -86,12 +86,16 @@ const DietPage = () => {
       };
       getUser();
 
-      // Check cache
-      let [recipes, selectedDiets, messageHistory] = getCache();
+      /*
+        Check cache
+          - Destructure relevant JSON data
+          - Set application state
+      */
+      let {recipes, selectedDiets, messageHistory} = getCache();
       if (recipes && selectedDiets && messageHistory) {
-        setRecipes(JSON.parse(recipes));
-        setSelectedDiet(selectedDiet);
-        setMessageHistory(JSON.parse(messageHistory));
+        setRecipes(recipes);
+        setSelectedDiet(selectedDiets);
+        setMessageHistory(messageHistory);
         setGeneratePressed(true);
       }
     }
