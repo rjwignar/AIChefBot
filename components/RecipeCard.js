@@ -43,7 +43,9 @@ const RecipeCard = ({ recipe, onDelete }) => {
       recipe.imageURL = extractedData.secure_url;
       recipe.image_id = extractedData.public_id;
    }
-   const handleSavingRecipe = async () => {
+   const handleSavingRecipe = async (e) => {
+      e.target.disabled = true;
+
       // Log action
       console.log(`Saving recipe: ${recipe.name}`)
 
@@ -78,7 +80,8 @@ const RecipeCard = ({ recipe, onDelete }) => {
       });
 
    }
-   const handleRemoveRecipe = async() => {
+   const handleRemoveRecipe = async(e) => {
+      e.target.disabled = true;
       // Log action
       console.log(`Removing recipe: ${recipe.name}`);
 
@@ -171,11 +174,11 @@ const RecipeCard = ({ recipe, onDelete }) => {
             <Button variant="success" onClick={downloadPDF}><i className="fas fa-download"></i></Button>
                {status !== "unauthenticated" && (
                   savedId === null ? (
-                  <Button variant='primary' onClick={handleSavingRecipe}>
+                  <Button variant='primary' onClick={e => handleSavingRecipe(e)}>
                      Save Recipe
                   </Button> 
                   ) : (
-                  <Button variant='primary' onClick={handleRemoveRecipe}>
+                  <Button variant='primary' onClick={e => handleRemoveRecipe(e)}>
                      Remove Recipe
                   </Button>
                   )
