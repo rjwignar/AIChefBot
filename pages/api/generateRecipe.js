@@ -323,11 +323,21 @@ const handler = async (req, res) => {
 
         } catch (error) {
             console.error('Error fetching recipes:', error);
-            res.status(500).json({ error: error.message });
+            if (isEdgeRuntime){
+                return NextResponse.json({error: error.message}, { status: 500 });
+            }
+            else{
+                res.status(500).json({ error: error.message });
+            }    
         }
     } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+        if (isEdgeRuntime){
+            return NextResponse.json({error: `Method ${req.method} Not Allowed`}, { status: 405 })
+        }
+        else{
+            res.setHeader('Allow', ['POST']);
+            res.status(405).end(`Method ${req.method} Not Allowed`);
+        }    
     }
 }
 
