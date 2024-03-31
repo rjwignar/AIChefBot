@@ -213,18 +213,20 @@ const edgeHandler = async (req, res) =>{
 const oldhandler = isEdgeRuntime ? edgeHandler : regularHandler;
 
 const handler = async (req, res) => {
-    console.log("Using regular serverless runtime!");
+    console.log("Using updated handler!");
     // Inspect Request Body Properties and print to server console
-    // Assign request body
+
+    // Assign request body based on serverless vs. Edge runtime
     const requestBody = isEdgeRuntime ? await req.json() : req.body;
     inspectRequestBody(requestBody);
+    isEdgeRuntime ? console.log("Edge runtime detected") : console.log("Serverless runtime detected");
     if (req.method === 'POST') {
         try {
             // User is generating more recipes based on their initial recipe/diet constraints
-            if (req.body.messageHistory.length > 0) {
+            if (requestBody.messageHistory.length > 0) {
 
                 // destructure messageHistory from req.body as it's the only property of req.body
-                const { messageHistory } = req.body;
+                const { messageHistory } = requestBody;
                 console.log("here is message history", messageHistory);
 
                 // We use repeatPrompt to instruct LLM to reuse original instructions from initial request
@@ -232,7 +234,12 @@ const handler = async (req, res) => {
                 const response = await generateRecipes(repeatPrompt, messageHistory);
 
                 // Push recipes and messageHistory in response
-                res.status(200).json(response);
+                if (isEdgeRuntime){
+                    return NextResponse.json(response);
+                }
+                else{
+                    res.status(200).json(response);
+                }
             }
             else {
                 if(req.body.hasOwnProperty('selectedDiet') && req.body.hasOwnProperty('selectedIngredients')){
