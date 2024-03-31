@@ -210,6 +210,99 @@ const edgeHandler = async (req, res) =>{
        } 
 }
 
-const handler = isEdgeRuntime ? edgeHandler : regularHandler;
+const oldhandler = isEdgeRuntime ? edgeHandler : regularHandler;
+
+const handler = async (req, res) => {
+    console.log("Using regular serverless runtime!");
+    // Inspect Request Body Properties and print to server console
+    // Assign request body
+    const requestBody = isEdgeRuntime ? await req.json() : req.body;
+    inspectRequestBody(requestBody);
+    if (req.method === 'POST') {
+        try {
+            // User is generating more recipes based on their initial recipe/diet constraints
+            if (req.body.messageHistory.length > 0) {
+
+                // destructure messageHistory from req.body as it's the only property of req.body
+                const { messageHistory } = req.body;
+                console.log("here is message history", messageHistory);
+
+                // We use repeatPrompt to instruct LLM to reuse original instructions from initial request
+                // Pass this along with messageHistory to LLM
+                const response = await generateRecipes(repeatPrompt, messageHistory);
+
+                // Push recipes and messageHistory in response
+                res.status(200).json(response);
+            }
+            else {
+                if(req.body.hasOwnProperty('selectedDiet') && req.body.hasOwnProperty('selectedIngredients')){
+                    console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
+
+                    // destructure selectedDiet and messageHistory properties from req.body
+                    const { selectedDiet, selectedIngredients, messageHistory } = req.body;
+
+                    // Generate Diet prompt from selectedDiet
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
+
+                }
+                // User selected a diet and starts generating recipes
+                else if (req.body.hasOwnProperty('selectedDiet')) {
+                    console.log("User has started generating recipes by diet!");
+
+                    // destructure selectedDiet and messageHistory properties from req.body
+                    const { selectedDiet, messageHistory } = req.body;
+
+                    // Generate Diet prompt from selectedDiet
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateDietPrompt(selectedDiet), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
+                }
+                // User selected list of ingredients and starts generating recipes
+                else if (req.body.hasOwnProperty('selectedIngredients')) {
+                    console.log("User has started generating recipes by ingredients!");
+
+                    // destructure selectedIngredients and messageHistory properties from req.body
+                    const { selectedIngredients, messageHistory } = req.body;
+
+                    // Generate Ingredients Prompt from selectedIngredients
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
+                }
+
+                // User selected list of recipes from recipe manager and is generating recipes
+                else if (req.body.hasOwnProperty('selectedRecipes')) {
+                    console.log("User is generating similar recipes from a selection in their recipe management page!");
+
+                    // destructure selectedRecipes and messageHistory properties from req.body
+                    const {selectedRecipes, messageHistory} = req.body;
+
+                    // Generate Similar Recipes Prompt from selectedRecipes
+                    // Then pass it along with messageHistory to the LLM
+                    const response = await generateRecipes(generateSimilarRecipesPrompt(selectedRecipes), messageHistory);
+
+                    // Push recipes and messageHistory in response
+                    res.status(200).json(response);
+                }
+            }
+
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+            res.status(500).json({ error: error.message });
+        }
+    } else {
+        res.setHeader('Allow', ['POST']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+}
+
 
 export default handler;
