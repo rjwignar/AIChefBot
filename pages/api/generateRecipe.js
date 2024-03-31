@@ -281,18 +281,23 @@ const handler = async (req, res) => {
                     }
                 }
                 // User selected list of ingredients and starts generating recipes
-                else if (req.body.hasOwnProperty('selectedIngredients')) {
+                else if (requestBody.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients!");
 
-                    // destructure selectedIngredients and messageHistory properties from req.body
-                    const { selectedIngredients, messageHistory } = req.body;
+                    // destructure selectedIngredients and messageHistory properties from requestBody
+                    const { selectedIngredients, messageHistory } = requestBody;
 
                     // Generate Ingredients Prompt from selectedIngredients
                     // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients), messageHistory);
 
                     // Push recipes and messageHistory in response
-                    res.status(200).json(response);
+                    if (isEdgeRuntime){
+                        return NextResponse.json(response);
+                    }
+                    else{
+                        res.status(200).json(response);
+                    }
                 }
 
                 // User selected list of recipes from recipe manager and is generating recipes
