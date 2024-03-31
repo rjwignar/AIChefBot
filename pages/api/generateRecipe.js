@@ -5,7 +5,7 @@ import { generateDietPrompt, generateIngredientsPrompt,  generateIngredientsWith
 export const config = {
     runtime: "edge",
 }
-const isEdgeRuntime = (typeof EdgeRuntime !== 'string');
+const isEdgeRuntime = (typeof EdgeRuntime === 'string');
 // Do not remove this function or more it to another file
 // If you don't want this to appear in your console just comment the function call at the beginning of the handler
 function inspectRequestBody(requestBody) {
@@ -116,6 +116,7 @@ const regularHandler = async (req, res) => {
 const edgeHandler = async (req, res) =>{
        // Inspect Request Body Properties and print to server console
        console.log("Using Edge functions runtime");
+       console.log("is Edge time?",isEdgeRuntime);
        console.log("request", req);
        const request = await req.json();
        console.log("inspect after await", request);
@@ -209,6 +210,6 @@ const edgeHandler = async (req, res) =>{
        } 
 }
 
-const handler = isEdgeRuntime ? regularHandler : edgeHandler;
+const handler = isEdgeRuntime ? edgeHandler : regularHandler;
 
 export default handler;
