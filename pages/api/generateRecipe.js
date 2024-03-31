@@ -204,11 +204,10 @@ const edgeHandler = async (req, res) =>{
    
            } catch (error) {
                console.error('Error fetching recipes:', error);
-               return NextResponse.json({error: error.message});
+               return NextResponse.json({error: error.message}, { status: 500 });
            }
        } else {
-           res.setHeader('Allow', ['POST']);
-           res.status(405).end(`Method ${req.method} Not Allowed`);
+           return NextResponse.json({error: `Method ${req.method} Not Allowed`}, { status: 405 })
        } 
 }
 
