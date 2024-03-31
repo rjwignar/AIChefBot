@@ -1,6 +1,6 @@
 // pages/api/generateRecipe.js
-import { NextRequest, NextResponse } from 'next/server.js';
-import { generateDietPrompt, generateIngredientsPrompt,  generateIngredientsWithDietPrompt, generateSimilarRecipesPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
+import { NextResponse } from 'next/server.js';
+import { generateDietPrompt, generateIngredientsPrompt, generateIngredientsWithDietPrompt, generateSimilarRecipesPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
 
 // Use Edge runtime when deployed on Vercel instead of serverless runtime to avoid 10-second timeout limit when generating recipes
 export const config = {
@@ -49,15 +49,15 @@ const handler = async (req, res) => {
                 const response = await generateRecipes(repeatPrompt, messageHistory);
 
                 // Push recipes and messageHistory in response
-                if (isEdgeRuntime){
+                if (isEdgeRuntime) {
                     return NextResponse.json(response);
                 }
-                else{
+                else {
                     res.status(200).json(response);
                 }
             }
             else {
-                if(requestBody.hasOwnProperty('selectedDiet') && requestBody.hasOwnProperty('selectedIngredients')){
+                if (requestBody.hasOwnProperty('selectedDiet') && requestBody.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
 
                     // destructure selectedDiet and messageHistory properties from requestBody
@@ -67,13 +67,13 @@ const handler = async (req, res) => {
                     // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet), messageHistory);
 
-                // Push recipes and messageHistory in response
-                if (isEdgeRuntime){
-                    return NextResponse.json(response);
-                }
-                else{
-                    res.status(200).json(response);
-                }
+                    // Push recipes and messageHistory in response
+                    if (isEdgeRuntime) {
+                        return NextResponse.json(response);
+                    }
+                    else {
+                        res.status(200).json(response);
+                    }
 
                 }
                 // User selected a diet and starts generating recipes
@@ -88,10 +88,10 @@ const handler = async (req, res) => {
                     const response = await generateRecipes(generateDietPrompt(selectedDiet), messageHistory);
 
                     // Push recipes and messageHistory in response
-                    if (isEdgeRuntime){
+                    if (isEdgeRuntime) {
                         return NextResponse.json(response);
                     }
-                    else{
+                    else {
                         res.status(200).json(response);
                     }
                 }
@@ -107,10 +107,10 @@ const handler = async (req, res) => {
                     const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients), messageHistory);
 
                     // Push recipes and messageHistory in response
-                    if (isEdgeRuntime){
+                    if (isEdgeRuntime) {
                         return NextResponse.json(response);
                     }
-                    else{
+                    else {
                         res.status(200).json(response);
                     }
                 }
@@ -120,17 +120,17 @@ const handler = async (req, res) => {
                     console.log("User is generating similar recipes from a selection in their recipe management page!");
 
                     // destructure selectedRecipes and messageHistory properties from requestBody
-                    const {selectedRecipes, messageHistory} = requestBody;
+                    const { selectedRecipes, messageHistory } = requestBody;
 
                     // Generate Similar Recipes Prompt from selectedRecipes
                     // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateSimilarRecipesPrompt(selectedRecipes), messageHistory);
 
                     // Push recipes and messageHistory in response
-                    if (isEdgeRuntime){
+                    if (isEdgeRuntime) {
                         return NextResponse.json(response);
                     }
-                    else{
+                    else {
                         res.status(200).json(response);
                     }
                 }
@@ -138,23 +138,22 @@ const handler = async (req, res) => {
 
         } catch (error) {
             console.error('Error fetching recipes:', error);
-            if (isEdgeRuntime){
-                return NextResponse.json({error: error.message}, { status: 500 });
+            if (isEdgeRuntime) {
+                return NextResponse.json({ error: error.message }, { status: 500 });
             }
-            else{
+            else {
                 res.status(500).json({ error: error.message });
-            }    
+            }
         }
     } else {
-        if (isEdgeRuntime){
-            return NextResponse.json({error: `Method ${req.method} Not Allowed`}, { status: 405 })
+        if (isEdgeRuntime) {
+            return NextResponse.json({ error: `Method ${req.method} Not Allowed` }, { status: 405 })
         }
-        else{
+        else {
             res.setHeader('Allow', ['POST']);
             res.status(405).end(`Method ${req.method} Not Allowed`);
-        }    
+        }
     }
 }
-
 
 export default handler;
