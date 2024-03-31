@@ -225,7 +225,7 @@ const handler = async (req, res) => {
             // User is generating more recipes based on their initial recipe/diet constraints
             if (requestBody.messageHistory.length > 0) {
 
-                // destructure messageHistory from req.body as it's the only property of req.body
+                // destructure messageHistory from requestBody as it's the only property of requestBody
                 const { messageHistory } = requestBody;
                 console.log("here is message history", messageHistory);
 
@@ -242,33 +242,43 @@ const handler = async (req, res) => {
                 }
             }
             else {
-                if(req.body.hasOwnProperty('selectedDiet') && req.body.hasOwnProperty('selectedIngredients')){
+                if(requestBody.hasOwnProperty('selectedDiet') && requestBody.hasOwnProperty('selectedIngredients')){
                     console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
 
-                    // destructure selectedDiet and messageHistory properties from req.body
-                    const { selectedDiet, selectedIngredients, messageHistory } = req.body;
+                    // destructure selectedDiet and messageHistory properties from requestBody
+                    const { selectedDiet, selectedIngredients, messageHistory } = requestBody;
 
                     // Generate Diet prompt from selectedDiet
                     // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet), messageHistory);
 
-                    // Push recipes and messageHistory in response
+                // Push recipes and messageHistory in response
+                if (isEdgeRuntime){
+                    return NextResponse.json(response);
+                }
+                else{
                     res.status(200).json(response);
+                }
 
                 }
                 // User selected a diet and starts generating recipes
-                else if (req.body.hasOwnProperty('selectedDiet')) {
+                else if (requestBody.hasOwnProperty('selectedDiet')) {
                     console.log("User has started generating recipes by diet!");
 
-                    // destructure selectedDiet and messageHistory properties from req.body
-                    const { selectedDiet, messageHistory } = req.body;
+                    // destructure selectedDiet and messageHistory properties from requestBody
+                    const { selectedDiet, messageHistory } = requestBody;
 
                     // Generate Diet prompt from selectedDiet
                     // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateDietPrompt(selectedDiet), messageHistory);
 
                     // Push recipes and messageHistory in response
-                    res.status(200).json(response);
+                    if (isEdgeRuntime){
+                        return NextResponse.json(response);
+                    }
+                    else{
+                        res.status(200).json(response);
+                    }
                 }
                 // User selected list of ingredients and starts generating recipes
                 else if (req.body.hasOwnProperty('selectedIngredients')) {
