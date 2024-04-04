@@ -458,3 +458,16 @@ transition: color 0.3s ease-out;
 }
 
 /* Custom Choosing Generate Page */
+
+.action-buttons-container {
+   position: fixed;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   background: #fafcff;
+   padding: 25px 0;
+   /* border-top: 1px solid #dee2e6; */
+   display: flex;
+   justify-content: center;
+   z-index: 1030;
+}

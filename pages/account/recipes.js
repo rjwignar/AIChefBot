@@ -1,14 +1,29 @@
 // account/recipes/recipes.js
-import { Container, Col, Row, Form } from "react-bootstrap";
+import { Container, Col, Row, Form, Button, Dropdown } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import RecipeCardList from "@/components/RecipeCardList";
+import { Pagination } from 'react-bootstrap';
+import DeleteRecipesModal from "@/components/DeleteRecipesModal";
 
 // Page of manage recipes:
 export default function recipes() {
   const { data: session, status } = useSession();
   const [recipes, setRecipes] = useState(null);
-  const [filteredRecipes, setFilteredRecipes] = useState(null);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
+  // Variable to hold what page the user is in.
+  const [currentPage, setCurrentPage] = useState(1);
+  // Change value if you think it should be changed:
+  const [recipesPerPage] = useState(9);
+  const [isSortedMostRecent, setIsSortedMostRecent] = useState(false);
+
+  // selected Recipes
+  const [selectedRecipes, setSelectedRecipes] = useState([]);
+
+  const [showDeleteRecipesModal, setShowDeleteRecipesModal] = useState(false);
+
+  const handleShowDeleteRecipesModal = () => setShowDeleteRecipesModal(true);
+  const handleCloseDeleteRecipesModal = () => setShowDeleteRecipesModal(false);
 
   useEffect(() => {
     const authenticate = async () => {
@@ -25,6 +40,19 @@ export default function recipes() {
     if (!recipes) getRecipes();
   }, []);
 
+  // Sorts the recipes based on least or most recent.
+  useEffect(() => {
+    if (recipes) {
+      let sortedFilteredRecipes = [...filteredRecipes];
+      if (isSortedMostRecent) {
+        sortedFilteredRecipes.reverse();
+      } else {
+        sortedFilteredRecipes = [...recipes];
+      }
+      setFilteredRecipes(sortedFilteredRecipes);
+    }
+  }, [isSortedMostRecent, recipes]);  
+
   const getRecipes = async () => {
     try {
       const res = await fetch(`/api/recipes/request?id=${session.user.id}`, {
@@ -39,6 +67,7 @@ export default function recipes() {
   };
 
   const filterRecipes = (text) => {
+    setCurrentPage(1); // Reset to the first page on filter.
     // Replace dashes with spaces, and split search text into array of words
     let searchWords = text.replace(/-/g, " ").toLowerCase().split(" ");
     // If search text exists:
@@ -65,38 +94,106 @@ export default function recipes() {
     else setFilteredRecipes(recipes);
   };
 
+  // Calculate the recipes to show on the current page
+  const indexOfLastRecipe = currentPage * recipesPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+  // currentRecipes hold the 9 recipes.
+  const currentRecipes = filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Calculate page numbers
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(filteredRecipes.length / recipesPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const handleGenerateSimilarRecipes = () => {
+    console.log('GENERATING RECIPES BASED ON SELECTED RECIPES:');
+    console.log(selectedRecipes);
+  }
+
   return (
     <>
       <h1 className="hero-title">Saved Recipes</h1>
       <hr />
 
-      <Container>
+      <Container style={{ paddingBottom: '100px' }}>
         {/* 
           Filter through recipes with text
           Display filter search bar only if user has saved recipes
         */}
         {recipes && (
-          <Row className="align-items-center">
-            <Form.Control
-              id="filter-recipes"
-              className="mt-2"
-              type="text"
-              placeholder="Filter recipes"
-              onChange={(e) => filterRecipes(e.target.value)}
-            />
+          <Row className="align-items-center mt-3">
+            <Col md={3}>
+              <p className="text-muted mt-3">Showing {currentRecipes.length} of {recipes.length} Recipes</p>
+            </Col>
+            <Col md={7}>
+              <Form.Control
+                id="filter-recipes"
+                type="text"
+                placeholder="Filter recipes"
+                className="mb-3 mb-md-0" // Adds margin-bottom on smaller screens
+                onChange={(e) => filterRecipes(e.target.value)}
+              />
+            </Col>
+            <Col md={2}>
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  Sort: {isSortedMostRecent ? "Newest" : "Oldest"}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setIsSortedMostRecent(true)} disabled={isSortedMostRecent ? true : false}>Newest</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setIsSortedMostRecent(false)} disabled={isSortedMostRecent ? false : true}>Oldest</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
           </Row>
         )}
         <br />
         <br />
         {/* Render recipes if available */}
         {/* Needs to hide the save recipes button */}
-        {filteredRecipes &&
-          (filteredRecipes.length ? (
-            <RecipeCardList recipes={filteredRecipes} />
+        {currentRecipes &&
+          (currentRecipes.length ? (
+            <>
+              <RecipeCardList recipes={currentRecipes} isSelectable={true} selectedRecipes={selectedRecipes} setSelectedRecipes={setSelectedRecipes} />
+              <Row>
+                <Col className="d-flex justify-content-center">
+                  <Pagination>
+                    <Pagination.First onClick={() => paginate(1)} disabled={currentPage === 1} />
+                    <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
+                    <Pagination.Ellipsis disabled />
+      
+                    {pageNumbers.map(number => (
+                      <Pagination.Item key={number} active={number === currentPage} onClick={() => paginate(number)}>
+                        {number}
+                      </Pagination.Item>
+                    ))}
+      
+                    <Pagination.Ellipsis disabled />
+                    <Pagination.Next onClick={() => paginate(currentPage + 1)} disabled={currentPage === pageNumbers.length} />
+                    <Pagination.Last onClick={() => paginate(pageNumbers.length)} disabled={currentPage === pageNumbers.length} />
+                  </Pagination>
+                </Col>
+              </Row>
+            </>
           ) : (
             <p className="text-muted">No recipes saved...</p>
           ))}
       </Container>
+      {selectedRecipes.length > 0 && (
+          <div className="action-buttons-container">
+            <Button variant="secondary" onClick={() => setSelectedRecipes([])} className="me-2">Deselect All</Button>
+            <Button variant="success" onClick={handleGenerateSimilarRecipes} className="me-2">Generate Similar Recipes</Button>
+            <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
+          </div>
+      )}
+
+      <DeleteRecipesModal
+        show={showDeleteRecipesModal}
+        onHide={handleCloseDeleteRecipesModal}
+        recipes={selectedRecipes}
+      />
     </>
   );
 }

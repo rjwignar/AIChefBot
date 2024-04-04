@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Modal, Badge } from 'react-bootstrap';
+import { Card, Button, Modal, Badge, Form } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import generatePDF from 'react-to-pdf';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
-const RecipeCard = ({ recipe, onDelete }) => {
+// onSelect -> callback function to add/remove a recipe based on if it's selected.
+// isSelected -> Determines if the user selected the recipe or not
+// isSelectable -> Check if recipes can be selected or not.
+const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) => {
    // the reference element for the root of a to-PDF snapshot
    const targetRef = useRef();
 
@@ -122,11 +125,36 @@ const RecipeCard = ({ recipe, onDelete }) => {
       // display buttons again
       e.style.display='flex';
    }
+
+   // Handle if the recipe is selected
+   const handleSelectionChange = (e) => {
+      e.stopPropagation(); // Stop the event from bubbling up
+      onSelect(!isSelected); // Toggle the selected state
+   };
    
    return (
       <>
-         <Card className="recipe-card mb-4" onClick={handleShow}>
-         <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
+         {/* Users can select a recipe by also clicking on the recipe. */}
+         <Card className={`recipe-card mb-4 ${isSelectable && isSelected ? 'border-primary border-2' : ''}`} onClick={isSelectable ?  handleSelectionChange : handleShow}>
+            { isSelectable && (
+               <div>
+                  {/* Check box to allow for users to select */}
+                  <Form.Check
+                     type="checkbox"
+                     className="recipe-select-checkbox"
+                     checked={isSelected}
+                     onChange={(e) => handleSelectionChange(e)}
+                     onClick={(e) => e.stopPropagation()}
+                     style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        zIndex: '5', // Ensure checkbox is clickable above the image
+                     }}
+                  />
+               </div>
+            )}
+            <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
                <hr className='recipe-card-line'/>
