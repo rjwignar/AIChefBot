@@ -18,7 +18,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
    const [savedId, setSavedId] = useState(null);
 
    const handleClose = () => setShowModal(false);
-   const handleShow = () => setShowModal(true);
+   const handleShow = () => setShowModal(true);;
 
    // If the recipe has an _id property
    // We are working with a saved recipe
@@ -135,7 +135,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
    return (
       <>
          {/* Users can select a recipe by also clicking on the recipe. */}
-         <Card className={`recipe-card mb-4 ${isSelectable && isSelected ? 'border-primary border-2' : ''}`} onClick={isSelectable ?  handleSelectionChange : handleShow}>
+         <Card className={`recipe-card mb-4 ${isSelectable && isSelected ? 'border-primary border-2' : ''}`} onClick={!isSelectable ? handleShow : handleSelectionChange}>
             { isSelectable && (
                <div>
                   {/* Check box to allow for users to select */}
@@ -147,9 +147,10 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
                      onClick={(e) => e.stopPropagation()}
                      style={{
                         position: 'absolute',
-                        top: '10px',
-                        right: '10px',
+                        top: '15px',
+                        right: '15px',
                         zIndex: '5', // Ensure checkbox is clickable above the image
+                        transform: "scale(1.4)", 
                      }}
                   />
                </div>
@@ -171,7 +172,11 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
                <Card.Subtitle className='recipe-card-subtitle mb-4 mt-3 text-muted'>
                   {recipe.description}
                </Card.Subtitle>
-               <Button variant='primary' onClick={handleShow} className='recipe-card-btn d-block mx-auto w-50 mb-2'>
+               {/* Added e.stopPropagation to stop from selecting the recipe. */}
+               <Button variant='primary' onClick={(e) => {
+                  if (isSelectable) e.stopPropagation();
+                  handleShow();
+               }} className='recipe-card-btn d-block mx-auto w-50 mb-2'>
                   View {savedId && <span>Saved</span>} Recipe
                </Button>
             </Card.Body>

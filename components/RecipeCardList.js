@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
   When recipe list cannot be selected
     <RecipeCardList recipes={recipe}/>
   When recipe list can be selected
-    <RecipeCardList recipes={recipe} isSelectable={true} setSelectedRecipes={setSelectedRecipes}/>
+    <RecipeCardList recipes={recipe} isSelectable={true} setSelectedRecipes={setSelectedRecipes}, onUpdateAfterDelete/>
 */
 const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], setSelectedRecipes, onUpdateAfterDelete }) => {
     const [savedRecipes, setSavedRecipes] = useState(recipes);
