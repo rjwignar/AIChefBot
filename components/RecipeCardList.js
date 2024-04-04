@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
   When recipe list can be selected
     <RecipeCardList recipes={recipe} isSelectable={true} setSelectedRecipes={setSelectedRecipes}/>
 */
-const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], setSelectedRecipes}) => {
+const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], setSelectedRecipes, onUpdateAfterDelete }) => {
     const [savedRecipes, setSavedRecipes] = useState(recipes);
     // Watch the recipes list for changes
     useEffect(() => setSavedRecipes(recipes), [recipes]);
@@ -28,7 +28,11 @@ const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], s
     // callback from RecipeCard, recipe is deleted from database, then:
     // filter out the deleted recipe, rerender the recipes array
     const handleOnDelete = (recipe) => {
-        setSavedRecipes(savedRecipes.filter((e) => e._id != recipe._id));
+        const updatedRecipes  = savedRecipes.filter((e) => e._id !== recipe._id);
+        setSavedRecipes(updatedRecipes);
+        if (onUpdateAfterDelete) {
+          onUpdateAfterDelete(updatedRecipes); // Call parent's update function
+        }
     }
 
     const handleSelect = (recipe, isSelected) => {

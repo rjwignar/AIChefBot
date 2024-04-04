@@ -61,6 +61,7 @@ export default function recipes() {
       const recipes = await res.json();
       setRecipes(recipes);
       setFilteredRecipes(recipes);
+      setSelectedRecipes([]);
     } catch (err) {
       console.error(err);
     }
@@ -106,6 +107,12 @@ export default function recipes() {
   for (let i = 1; i <= Math.ceil(filteredRecipes.length / recipesPerPage); i++) {
     pageNumbers.push(i);
   }
+
+  const updateRecipesAfterDelete = (updatedRecipes) => {
+    getRecipes();
+    // Reset selectedRecipes if the deleted recipe was selected
+    setSelectedRecipes(prev => prev.filter(r => updatedRecipes.some(ur => ur._id === r._id)));
+  };
 
   const handleGenerateSimilarRecipes = () => {
     console.log('GENERATING RECIPES BASED ON SELECTED RECIPES:');
@@ -156,7 +163,12 @@ export default function recipes() {
         {currentRecipes &&
           (currentRecipes.length ? (
             <>
-              <RecipeCardList recipes={currentRecipes} isSelectable={true} selectedRecipes={selectedRecipes} setSelectedRecipes={setSelectedRecipes} />
+              <RecipeCardList 
+                recipes={currentRecipes} 
+                isSelectable={true} 
+                selectedRecipes={selectedRecipes} 
+                setSelectedRecipes={setSelectedRecipes}
+                onUpdateAfterDelete={updateRecipesAfterDelete} />
               <Row>
                 <Col className="d-flex justify-content-center">
                   <Pagination>
@@ -193,6 +205,10 @@ export default function recipes() {
         show={showDeleteRecipesModal}
         onHide={handleCloseDeleteRecipesModal}
         recipes={selectedRecipes}
+        // onDeleteSuccess={() => {
+        //   getRecipes();
+        //   setSelectedRecipes([]);
+        // }}
       />
     </>
   );

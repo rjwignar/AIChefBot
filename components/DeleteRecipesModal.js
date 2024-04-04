@@ -11,6 +11,7 @@ function DeleteRecipesModal({ show, onHide, recipes }) {
    const handleDeleteRecipes = async () => {
       console.log('Deleting Recipes');
       console.log(recipes);
+      enhancedOnHide();
    }
 
    return (
