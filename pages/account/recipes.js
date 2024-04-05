@@ -194,7 +194,7 @@ export default function recipes() {
           ))}
       </Container>
       {selectedRecipes.length > 0 && (
-          <div className="action-buttons-container">
+          <div className="action-buttons-container bg-primary bg-opacity-25">
             <Button variant="secondary" onClick={() => setSelectedRecipes([])} className="me-2">Deselect All</Button>
             <Button variant="success" onClick={handleGenerateSimilarRecipes} className="me-2">Generate Similar Recipes</Button>
             <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
