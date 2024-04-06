@@ -1,16 +1,21 @@
 // DeleteRecipesModal.js
 import { useState } from "react";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 
-function DeleteRecipesModal({ show, onHide, recipes }) {
+// onDeleteSuccess -> Unselects and resets recipes.
+function DeleteRecipesModal({ show, onHide, recipes, onDeleteSuccess }) {
    const enhancedOnHide = () => {
-      onHide();
+      onHide(); // Close the modal
+      onDeleteSuccess(); // Call the onDeleteSuccess prop function
    };
 
    // Handle Delete Recipe
    const handleDeleteRecipes = async () => {
       console.log('Deleting Recipes');
       console.log(recipes);
+      // Your deletion logic here...
+
+      // If deletion was successful hide modal and reset recipes list a unselect selected recipes
       enhancedOnHide();
    }
 

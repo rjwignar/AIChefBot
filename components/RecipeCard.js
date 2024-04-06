@@ -135,23 +135,22 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
    return (
       <>
          {/* Users can select a recipe by also clicking on the recipe. */}
-         <Card className={`recipe-card mb-4 ${isSelectable && isSelected ? 'border-primary border-2' : ''}`} onClick={!isSelectable ? handleShow : handleSelectionChange}>
+         <Card className={`recipe-card ${isSelectable && isSelected ? 'border-primary border-2' : ''}`} onClick={!isSelectable ? handleShow : handleSelectionChange}>
             { isSelectable && (
-               <div>
+               <div style={{
+                  position: 'absolute',
+                  top: '15px',
+                  left: '17px',
+                  margin: 0,
+                  transform: "scale(1.5)",
+               }}>
                   {/* Check box to allow for users to select */}
                   <Form.Check
                      type="checkbox"
-                     className="recipe-select-checkbox"
                      checked={isSelected}
                      onChange={(e) => handleSelectionChange(e)}
                      onClick={(e) => e.stopPropagation()}
-                     style={{
-                        position: 'absolute',
-                        top: '15px',
-                        right: '15px',
-                        zIndex: '5', // Ensure checkbox is clickable above the image
-                        transform: "scale(1.4)", 
-                     }}
+                     className="recipe-select-checkbox"
                   />
                </div>
             )}

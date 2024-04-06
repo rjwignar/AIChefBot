@@ -205,10 +205,10 @@ export default function recipes() {
         show={showDeleteRecipesModal}
         onHide={handleCloseDeleteRecipesModal}
         recipes={selectedRecipes}
-        // onDeleteSuccess={() => {
-        //   getRecipes();
-        //   setSelectedRecipes([]);
-        // }}
+        onDeleteSuccess={() => {
+          setSelectedRecipes([]); // Unselect selected recipes
+          getRecipes(); // Update the recipes list
+        }}
       />
     </>
   );
