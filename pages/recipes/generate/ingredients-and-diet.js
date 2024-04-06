@@ -28,6 +28,10 @@ const IngredientsAndDietPage = () => {
   const [recipes, setRecipes] = useState(null);
   // The message history
   const [messageHistory, setMessageHistory] = useState([]);
+   // Check if the user wants to only use the ingredients list
+  const [useIngredientsList, setUseIngredientsList] = useState(false);
+   // Use state to hold the prompt
+  const [promptIngredientsList, setPromptIngredientsList] = useState(".\nONLY use the ingredients that I listed to generate the recipes. Don't use or add any other ingredients other than the list I mentioned. Recipes should only be created using the listed ingredients.\n");
 
   // For Diets
   // The string format of the selected diet
@@ -130,7 +134,8 @@ const IngredientsAndDietPage = () => {
     const ingredients = selectedIngredients
       .map((ingredients) => ingredients.value)
       .join(", ");
-    setIngredients(ingredients);
+    let prompt = ingredients + promptIngredientsList;
+    setIngredients(prompt);
   };
 
   const handleStopGenerating = () => {
@@ -143,6 +148,7 @@ const IngredientsAndDietPage = () => {
     setUseSavedDiets(false);
     setSelectList([]);
     setIngredients("");
+    setUseIngredientsList(false);
   };
 
   const handleGenerateClick = async () => {
@@ -231,6 +237,19 @@ const IngredientsAndDietPage = () => {
     setUseSavedDiets(!useSavedDiets);
   };
 
+  // Simple toggle switch to include ingredients that aren't listed
+  const toggleUseIngredientsList = () => {
+    setUseIngredientsList(!useIngredientsList);
+    // Add a prompt in the end of selected ingredients depending on the toggle switch
+    if (!useIngredientsList) {
+      // Generate recipes with ingredients from the list + any ingredients that aren't listed.
+      setPromptIngredientsList(".\nUse the ingredients I listed and Add other ingredients that I haven't listed.\n");
+    } else {
+      // Generate recipes with only the ingredients from the list
+      setPromptIngredientsList(".\nONLY use the ingredients that I listed to generate the recipes. Don't use or add any other ingredients other than the list I mentioned. Recipes should only be created using the listed ingredients.\n");
+    }
+  };
+
   return (
     <>
       {/* Creates the Back Button */}
@@ -297,6 +316,18 @@ const IngredientsAndDietPage = () => {
                   }
                   className="p-2"
                 />
+                <div className="d-flex justify-content-center w-100 mt-2">
+                  <Form>
+                    <Form.Check
+                        type="switch"
+                        id="ingredients-switch"
+                        label="Include ingredients that aren't listed"
+                        checked={useIngredientsList}
+                        onChange={toggleUseIngredientsList}
+                        className="saved-diet-switch text-muted"
+                    />
+                  </Form>
+                </div>
               </Col>
               <Col className="flex-column align-items-center" md={6}>
                 <h5 className="diet-select-label">
@@ -319,21 +350,21 @@ const IngredientsAndDietPage = () => {
                   onChange={(diets) => handleSelectDiet(diets)}
                   className="p-2"
                 />
+                {status !== "unauthenticated" && (
+                  <div className="d-flex justify-content-center w-100 mt-2">
+                    <Form>
+                      <Form.Check
+                        type="switch"
+                        id="diets-switch"
+                        label="Use Saved Diets"
+                        checked={useSavedDiets}
+                        onChange={toggleUseSavedDiets}
+                        className="saved-diet-switch text-muted"
+                      />
+                    </Form>
+                  </div>
+                )}
               </Col>
-              {status !== "unauthenticated" && (
-                <div className="d-flex justify-content-center w-100 mt-2">
-                  <Form>
-                    <Form.Check
-                      type="switch"
-                      id="custom-switch"
-                      label="Use Saved Diets"
-                      checked={useSavedDiets}
-                      onChange={toggleUseSavedDiets}
-                      className="saved-diet-switch text-muted"
-                    />
-                  </Form>
-                </div>
-              )}
             </Row>
             <Row className="justify-content-center mb-5">
               <Col className="d-flex flex-column align-items-center">
