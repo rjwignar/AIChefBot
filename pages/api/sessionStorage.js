@@ -5,19 +5,23 @@
 
 
 // Array of JSON objects must be stringified
-// selectedDiets is a string
-export function setCache(recipes, messageHistory, selectedDiets) {
-    sessionStorage.setItem("recipes", JSON.stringify(recipes));
-    sessionStorage.setItem("messageHistory", JSON.stringify(messageHistory));
-    sessionStorage.setItem("selectedDiets", selectedDiets);
+export function setCache(data) {
+    sessionStorage.setItem("recipes", JSON.stringify(data.recipes));
+    sessionStorage.setItem("messageHistory", JSON.stringify(data.messageHistory));
+    // Which page were the recipes generated from?
+    // If both are true, ingredients + diet
+    // Otherwise, ingredients OR diet
+    console.log("THIS IS YOUR DATA: ", data);
+    sessionStorage.setItem('selectedIngredients', data.selectedIngredients ? true : false);
+    sessionStorage.setItem('selectedDiet', data.selectedDiet ? true : false);
 }
 
 // Array of JSON objects must be parsed
-// selectedDiets is a string
 export function getCache() {
     return {
         recipes: JSON.parse(sessionStorage.getItem("recipes")),
         messageHistory: JSON.parse(sessionStorage.getItem("messageHistory")),
-        selectedDiets: sessionStorage.getItem("selectedDiets"),
+        selectedIngredients: JSON.parse(sessionStorage.getItem("selectedDiet")),
+        selectedDiet: JSON.parse(sessionStorage.getItem("selectedDiet")),
     }
 }

@@ -452,6 +452,10 @@ transition: color 0.3s ease-out;
    animation-delay: 10s;
 }
 
+.generate-card:hover {
+   cursor: pointer;
+}
+
 .generate-card-paragraph {
    font-family: 'Geist', sans-serif !important;
    font-weight: bold !important;

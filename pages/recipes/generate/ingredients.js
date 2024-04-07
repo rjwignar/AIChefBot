@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import RecipeCardList from "@/components/RecipeCardList";
 import LoadingScreen from "@/components/LoadingScreen";
+import { setCache, getCache } from "@/pages/api/sessionStorage";
 
 const IngredientsPage = () => {
    const { data: session } = useSession();
@@ -15,6 +16,22 @@ const IngredientsPage = () => {
    const [messageHistory, setMessageHistory] = useState([]);
    // The string format of the ingredients
    const [selectedIngredients, setIngredients] = useState("");
+
+   useEffect(() => {
+      if (session) {
+         /*
+         Check cache
+            - Destructure relevant JSON data
+            - Set application state
+         */
+         let { recipes, messageHistory, selectedIngredients } = getCache();
+         if (recipes && messageHistory && selectedIngredients == true) {
+            setRecipes(recipes);
+            setMessageHistory(messageHistory);
+            setGeneratePressed(true);
+         }
+      }
+   }, [])
    
    // Handle whenever an ingredient is entered
    const handleEnteredIngredients = (selectedIngredients) => {
@@ -64,6 +81,12 @@ const IngredientsPage = () => {
          setRecipes(data.recipes);
          setMessageHistory(data.messageHistory);
          /* ------------------------------ */
+
+         // Clear old, set new cached data
+         sessionStorage.clear();
+         data.selectedIngredients = selectedIngredients;
+         setCache(data);
+
          /* Updating database stuff: */
          if (session) {
             updateDatabase(data.recipes.length);
@@ -107,6 +130,11 @@ const IngredientsPage = () => {
          console.log("new message history", messageHistory);
          console.log("recipes below in UI", recipes);
          /* ------------------------------- */
+
+         // Clear old, set new cached data
+         sessionStorage.clear();
+         setCache(data);
+
          /* Updating database */
          if (session) {
             updateDatabase(data.recipes.length);

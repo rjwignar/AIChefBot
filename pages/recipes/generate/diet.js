@@ -4,7 +4,6 @@ import RecipeCardList from "@/components/RecipeCardList";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
-
 import { setCache, getCache } from "@/pages/api/sessionStorage";
 
 // List of all diets
@@ -85,16 +84,15 @@ const DietPage = () => {
         }
       };
       getUser();
-
+      
       /*
         Check cache
           - Destructure relevant JSON data
           - Set application state
       */
-      let {recipes, selectedDiets, messageHistory} = getCache();
-      if (recipes && selectedDiets && messageHistory) {
+      let {recipes, messageHistory, selectedDiet} = getCache();
+      if (recipes && messageHistory && selectedDiet == true) {
         setRecipes(recipes);
-        setSelectedDiet(selectedDiets);
         setMessageHistory(messageHistory);
         setGeneratePressed(true);
       }
@@ -186,7 +184,8 @@ const DietPage = () => {
       setRecipes(data.recipes);
       // Store in session storage
       sessionStorage.clear();
-      setCache(data.recipes, data.messageHistory, selectedDiet);
+      data.selectedDiet = selectedDiet;
+      setCache(data);
       // Update message history
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
@@ -232,7 +231,7 @@ const DietPage = () => {
       setRecipes(data.recipes);
       // Clear old, set new cached data
       sessionStorage.clear();
-      setCache(data.recipes, data.messageHistory, selectedDiet);
+      setCache(data);
       // Update message history
       setMessageHistory(data.messageHistory);
       console.log("new message history", messageHistory);

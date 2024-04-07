@@ -1,6 +1,14 @@
 import { Container, Row, Col } from 'react-bootstrap';
+import { useRouter } from 'next/router';
 
 const GeneratePage = () => {
+
+   const router = useRouter();
+
+   const handleClick = (href) => {
+      router.push(href);
+   }
+
    return (
       <Container className='my-lg-5'>
          <Container>
@@ -17,7 +25,7 @@ const GeneratePage = () => {
             <Row className="justify-content-md-center my-5 animate__animated animate__fadeInUp">
                <Col lg={3} className="generate-card-body mt-3">
                   {/* For Ingredients */}
-                  <a href="/recipes/generate/ingredients" className="generate-card ingredients">
+                  <a className="generate-card ingredients" onClick={() => handleClick("/recipes/generate/ingredients")}>
                      <div className="overlay"></div>
                      <div className="circle">
                      <i className="circle-icon fas fa-book fa-4x"></i>
@@ -27,7 +35,7 @@ const GeneratePage = () => {
                </Col>
                <Col lg={3} className="generate-card-body mt-3">
                   {/* For Ingredients And Diet */}
-                  <a href="/recipes/generate/ingredients-and-diet" className="generate-card ingredientsAndDiet">
+                  <a className="generate-card ingredientsAndDiet" onClick={() => handleClick("/recipes/generate/ingredients-and-diet")}>
                      <div className="overlay"></div>
                      <div className="circle">
                      <i className="circle-icon fab fa-pagelines fa-4x"></i>
@@ -37,7 +45,7 @@ const GeneratePage = () => {
                </Col>
                <Col lg={3} className="generate-card-body mt-3">
                   {/* For Diet */}
-                  <a href="/recipes/generate/diet" className="generate-card diet">
+                  <a className="generate-card diet" onClick={() => handleClick("/recipes/generate/diet")}>
                      <div className="overlay"></div>
                      <div className="circle">
                      <i className="circle-icon fas fa-apple-alt fa-4x"></i>

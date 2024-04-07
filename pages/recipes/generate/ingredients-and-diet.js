@@ -4,6 +4,7 @@ import RecipeCardList from "@/components/RecipeCardList";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
+import { setCache, getCache } from "@/pages/api/sessionStorage";
 
 // List of all diets
 const diets = [
@@ -82,6 +83,26 @@ const IngredientsAndDietPage = () => {
       // Fill the select list with saved diets
       setSelectList(savedDietObjects);
     }
+
+    if (session) {
+      /*
+      Check cache
+        - Destructure relevant JSON data
+        - Set application state
+      */
+      let { 
+        recipes, 
+        messageHistory,
+        selectedDiet,
+        selectedIngredients
+      } = getCache();
+      console.log(getCache());
+      if (recipes && messageHistory && selectedIngredients == true && selectedDiet == true) {
+        setRecipes(recipes);
+        setMessageHistory(messageHistory);
+        setGeneratePressed(true);
+      }
+    }
   }, [useSavedDiets]);
 
   // Functions:
@@ -156,7 +177,11 @@ const IngredientsAndDietPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedDiet, selectedIngredients, messageHistory }),
+        body: JSON.stringify({
+          selectedDiet,
+          selectedIngredients,
+          messageHistory,
+        }),
       });
       /* ------------------------------------------------------ */
       /* --- Check if "res" is ok and content type is valid --- */
@@ -173,6 +198,12 @@ const IngredientsAndDietPage = () => {
       console.log("Data was returned: ", data);
       setRecipes(data.recipes);
       setMessageHistory(data.messageHistory);
+
+      // Clear old, set new cached data
+      sessionStorage.clear();
+      data.selectedDiet = selectedDiet;
+      data.selectedIngredients = selectedIngredients;
+      setCache(data);
       /* ------------------------------ */
       /* Updating database stuff: */
       if (session) {
@@ -215,6 +246,10 @@ const IngredientsAndDietPage = () => {
       setMessageHistory(data.messageHistory);
       console.log("new message history", messageHistory);
       console.log("recipes below in UI", recipes);
+
+      // Clear old, set new cached data
+      sessionStorage.clear();
+      setCache(data);
       /* ------------------------------- */
       /* Updating database */
       if (session) {
@@ -352,10 +387,8 @@ const IngredientsAndDietPage = () => {
             </Row>
           </Container>
         )}
-         {/* Render recipes if available */}
-         {recipes && (
-          <RecipeCardList recipes={recipes}/>
-        )}
+        {/* Render recipes if available */}
+        {recipes && <RecipeCardList recipes={recipes} />}
       </Container>
     </>
   );
