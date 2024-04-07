@@ -147,6 +147,7 @@ export default function recipes() {
     setGeneratePressed(false);
     setMessageHistory([]);
     setSelectedRecipes([]); // Unselect selected recipes
+    setGeneratedRecipes(null);
   }
 
   const handleGenerateSimilarRecipes = async () => {
