@@ -11,7 +11,6 @@ export function setCache(data) {
     // Which page were the recipes generated from?
     // If both are true, ingredients + diet
     // Otherwise, ingredients OR diet
-    console.log("THIS IS YOUR DATA: ", data);
     sessionStorage.setItem('selectedIngredients', data.selectedIngredients ? true : false);
     sessionStorage.setItem('selectedDiet', data.selectedDiet ? true : false);
 }
