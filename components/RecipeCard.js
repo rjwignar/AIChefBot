@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Modal, Badge } from 'react-bootstrap';
+import { Card, Button, Modal, Badge, Form } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import generatePDF from 'react-to-pdf';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
-const RecipeCard = ({ recipe, onDelete }) => {
+// onSelect -> callback function to add/remove a recipe based on if it's selected.
+// isSelected -> Determines if the user selected the recipe or not
+// isSelectable -> Check if recipes can be selected or not.
+const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) => {
    // the reference element for the root of a to-PDF snapshot
    const targetRef = useRef();
 
@@ -15,7 +18,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
    const [savedId, setSavedId] = useState(null);
 
    const handleClose = () => setShowModal(false);
-   const handleShow = () => setShowModal(true);
+   const handleShow = () => setShowModal(true);;
 
    // If the recipe has an _id property
    // We are working with a saved recipe
@@ -95,7 +98,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
          headers: {
             "Content-Type": "application/json"
          },
-         body: JSON.stringify({userId: session.user.id, recipeId: savedId}),
+         body: JSON.stringify({userId: session.user.id, recipeIds: savedId}),
       })
       setSavedId(null);
       setShowModal(false);
@@ -122,11 +125,36 @@ const RecipeCard = ({ recipe, onDelete }) => {
       // display buttons again
       e.style.display='flex';
    }
+
+   // Handle if the recipe is selected
+   const handleSelectionChange = (e) => {
+      e.stopPropagation(); // Stop the event from bubbling up
+      onSelect(!isSelected); // Toggle the selected state
+   };
    
    return (
       <>
-         <Card className="recipe-card mb-4" onClick={handleShow}>
-         <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
+         {/* Users can select a recipe by also clicking on the recipe. */}
+         <Card className={`recipe-card ${isSelectable && isSelected ? 'border-primary border-2' : ''}`} onClick={!isSelectable ? handleShow : handleSelectionChange}>
+            { isSelectable && (
+               <div style={{
+                  position: 'absolute',
+                  top: '15px',
+                  left: '17px',
+                  margin: 0,
+                  transform: "scale(1.5)",
+               }}>
+                  {/* Check box to allow for users to select */}
+                  <Form.Check
+                     type="checkbox"
+                     checked={isSelected}
+                     onChange={(e) => handleSelectionChange(e)}
+                     onClick={(e) => e.stopPropagation()}
+                     className="recipe-select-checkbox"
+                  />
+               </div>
+            )}
+            <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
                <hr className='recipe-card-line'/>
@@ -143,7 +171,11 @@ const RecipeCard = ({ recipe, onDelete }) => {
                <Card.Subtitle className='recipe-card-subtitle mb-4 mt-3 text-muted'>
                   {recipe.description}
                </Card.Subtitle>
-               <Button variant='primary' onClick={handleShow} className='recipe-card-btn d-block mx-auto w-50 mb-2'>
+               {/* Added e.stopPropagation to stop from selecting the recipe. */}
+               <Button variant='primary' onClick={(e) => {
+                  if (isSelectable) e.stopPropagation();
+                  handleShow();
+               }} className='recipe-card-btn d-block mx-auto w-50 mb-2'>
                   View {savedId && <span>Saved</span>} Recipe
                </Button>
             </Card.Body>

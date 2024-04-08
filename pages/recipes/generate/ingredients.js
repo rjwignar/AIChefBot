@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import RecipeCardList from "@/components/RecipeCardList";
@@ -16,6 +16,10 @@ const IngredientsPage = () => {
    const [messageHistory, setMessageHistory] = useState([]);
    // The string format of the ingredients
    const [selectedIngredients, setIngredients] = useState("");
+   // Holds how much ingredients is in the list
+   const [ingredientsList, setIngredientsList] = useState([]);
+   // Check if the user wants to only use the ingredients list
+   const [limitIngredients, setLimitIngredients] = useState(false);
 
    useEffect(() => {
       if (session) {
@@ -36,7 +40,8 @@ const IngredientsPage = () => {
    // Handle whenever an ingredient is entered
    const handleEnteredIngredients = (selectedIngredients) => {
       const ingredients = selectedIngredients.map((ingredients) => ingredients.value).join(", ");
-      setIngredients(ingredients);
+      setIngredientsList(selectedIngredients)
+      setIngredients(ingredients)
       console.log('Current Selection: ' + ingredients);
    }
 
@@ -47,6 +52,8 @@ const IngredientsPage = () => {
       setRecipes(null);
       setMessageHistory([]);
       setIngredients("");
+      setLimitIngredients(false);
+      setIngredientsList([]);
    }
 
    // Generates the recipes:
@@ -63,7 +70,7 @@ const IngredientsPage = () => {
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ selectedIngredients, messageHistory }),
+            body: JSON.stringify({ selectedIngredients, limitIngredients, messageHistory }),
          });
           /* ------------------------------------------------------ */
          /* --- Check if "res" is ok and content type is valid --- */
@@ -165,6 +172,11 @@ const IngredientsPage = () => {
       }
    };
 
+   // Simple toggle switch to include ingredients that aren't listed
+   const toggleUseIngredientsList = () => {
+      setLimitIngredients(!limitIngredients);
+   };
+
    return (
       <>
          {/* Creates the Back Button */}
@@ -226,6 +238,19 @@ const IngredientsPage = () => {
                            onChange={(ingredients) => handleEnteredIngredients(ingredients)}
                            className="p-2"
                         />
+                        <div className="d-flex justify-content-center w-100 mt-2">
+                           <Form>
+                              <Form.Check
+                                 type="switch"
+                                 id="custom-switch"
+                                 label="Limit unlisted ingredients (Need +5 Ingredients)"
+                                 checked={limitIngredients}
+                                 disabled={ingredientsList.length < 5}
+                                 onChange={toggleUseIngredientsList}
+                                 className="saved-diet-switch text-muted"
+                              />
+                           </Form>
+                        </div>
                      </Col>
                   </Row>
                   <Row className="justify-content-center mb-5">
