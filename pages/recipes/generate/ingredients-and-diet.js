@@ -28,6 +28,10 @@ const IngredientsAndDietPage = () => {
   const [recipes, setRecipes] = useState(null);
   // The message history
   const [messageHistory, setMessageHistory] = useState([]);
+  // Holds how much ingredients is in the list
+  const [ingredientsList, setIngredientsList] = useState([]);
+  // Check if the user wants to only use the ingredients list
+  const [limitIngredients, setLimitIngredients] = useState(false);
 
   // For Diets
   // The string format of the selected diet
@@ -130,6 +134,7 @@ const IngredientsAndDietPage = () => {
     const ingredients = selectedIngredients
       .map((ingredients) => ingredients.value)
       .join(", ");
+    setIngredientsList(selectedIngredients);
     setIngredients(ingredients);
   };
 
@@ -143,6 +148,8 @@ const IngredientsAndDietPage = () => {
     setUseSavedDiets(false);
     setSelectList([]);
     setIngredients("");
+    setLimitIngredients(false);
+    setIngredientsList([]);
   };
 
   const handleGenerateClick = async () => {
@@ -156,7 +163,7 @@ const IngredientsAndDietPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedDiet, selectedIngredients, messageHistory }),
+        body: JSON.stringify({ selectedDiet, selectedIngredients, limitIngredients, messageHistory }),
       });
       /* ------------------------------------------------------ */
       /* --- Check if "res" is ok and content type is valid --- */
@@ -231,6 +238,11 @@ const IngredientsAndDietPage = () => {
     setUseSavedDiets(!useSavedDiets);
   };
 
+  // Simple toggle switch to include ingredients that aren't listed
+  const toggleUseIngredientsList = () => {
+    setLimitIngredients(!limitIngredients);
+  };
+
   return (
     <>
       {/* Creates the Back Button */}
@@ -297,6 +309,19 @@ const IngredientsAndDietPage = () => {
                   }
                   className="p-2"
                 />
+                <div className="d-flex justify-content-center w-100 mt-2">
+                  <Form>
+                    <Form.Check
+                        type="switch"
+                        id="ingredients-switch"
+                        label="Limit unlisted ingredients (Need +5 Ingredients)"
+                        checked={limitIngredients}
+                        disabled={ingredientsList.length < 5}
+                        onChange={toggleUseIngredientsList}
+                        className="saved-diet-switch text-muted"
+                    />
+                  </Form>
+                </div>
               </Col>
               <Col className="flex-column align-items-center" md={6}>
                 <h5 className="diet-select-label">
@@ -319,21 +344,21 @@ const IngredientsAndDietPage = () => {
                   onChange={(diets) => handleSelectDiet(diets)}
                   className="p-2"
                 />
+                {status !== "unauthenticated" && (
+                  <div className="d-flex justify-content-center w-100 mt-2">
+                    <Form>
+                      <Form.Check
+                        type="switch"
+                        id="diets-switch"
+                        label="Use Saved Diets"
+                        checked={useSavedDiets}
+                        onChange={toggleUseSavedDiets}
+                        className="saved-diet-switch text-muted"
+                      />
+                    </Form>
+                  </div>
+                )}
               </Col>
-              {status !== "unauthenticated" && (
-                <div className="d-flex justify-content-center w-100 mt-2">
-                  <Form>
-                    <Form.Check
-                      type="switch"
-                      id="custom-switch"
-                      label="Use Saved Diets"
-                      checked={useSavedDiets}
-                      onChange={toggleUseSavedDiets}
-                      className="saved-diet-switch text-muted"
-                    />
-                  </Form>
-                </div>
-              )}
             </Row>
             <Row className="justify-content-center mb-5">
               <Col className="d-flex flex-column align-items-center">

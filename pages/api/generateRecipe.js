@@ -60,12 +60,12 @@ const handler = async (req, res) => {
                 if (requestBody.hasOwnProperty('selectedDiet') && requestBody.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
 
-                    // destructure selectedDiet and messageHistory properties from requestBody
-                    const { selectedDiet, selectedIngredients, messageHistory } = requestBody;
+                    // destructure selectedDiet and messageHistory properties from req.body
+                    const { selectedDiet, selectedIngredients, limitIngredients, messageHistory } = req.body;
 
                     // Generate Diet prompt from selectedDiet
                     // Then pass it along with messageHistory to the LLM
-                    const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet), messageHistory);
+                    const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet, limitIngredients), messageHistory);
 
                     // Push recipes and messageHistory in response
                     if (isEdgeRuntime) {
@@ -99,12 +99,12 @@ const handler = async (req, res) => {
                 else if (requestBody.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients!");
 
-                    // destructure selectedIngredients and messageHistory properties from requestBody
-                    const { selectedIngredients, messageHistory } = requestBody;
+                    // destructure selectedIngredients and messageHistory properties from req.body
+                    const { selectedIngredients, limitIngredients, messageHistory } = req.body;
 
                     // Generate Ingredients Prompt from selectedIngredients
                     // Then pass it along with messageHistory to the LLM
-                    const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients), messageHistory);
+                    const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients, limitIngredients), messageHistory);
 
                     // Push recipes and messageHistory in response
                     if (isEdgeRuntime) {
