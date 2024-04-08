@@ -45,11 +45,11 @@ export default async function handler(req, res) {
                     console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
 
                     // destructure selectedDiet and messageHistory properties from req.body
-                    const { selectedDiet, selectedIngredients, messageHistory } = req.body;
+                    const { selectedDiet, selectedIngredients, limitIngredients, messageHistory } = req.body;
 
                     // Generate Diet prompt from selectedDiet
                     // Then pass it along with messageHistory to the LLM
-                    const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet), messageHistory);
+                    const response = await generateRecipes(generateIngredientsWithDietPrompt(selectedIngredients, selectedDiet, limitIngredients), messageHistory);
 
                     // Push recipes and messageHistory in response
                     res.status(200).json(response);
@@ -74,11 +74,11 @@ export default async function handler(req, res) {
                     console.log("User has started generating recipes by ingredients!");
 
                     // destructure selectedIngredients and messageHistory properties from req.body
-                    const { selectedIngredients, messageHistory } = req.body;
+                    const { selectedIngredients, limitIngredients, messageHistory } = req.body;
 
                     // Generate Ingredients Prompt from selectedIngredients
                     // Then pass it along with messageHistory to the LLM
-                    const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients), messageHistory);
+                    const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients, limitIngredients), messageHistory);
 
                     // Push recipes and messageHistory in response
                     res.status(200).json(response);

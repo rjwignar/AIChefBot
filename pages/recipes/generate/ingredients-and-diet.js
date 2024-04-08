@@ -28,10 +28,10 @@ const IngredientsAndDietPage = () => {
   const [recipes, setRecipes] = useState(null);
   // The message history
   const [messageHistory, setMessageHistory] = useState([]);
-   // Check if the user wants to only use the ingredients list
-  const [useIngredientsList, setUseIngredientsList] = useState(false);
-   // Use state to hold the prompt
-  const [promptIngredientsList, setPromptIngredientsList] = useState(".\nONLY use the ingredients that I listed to generate the recipes. Don't use or add any other ingredients other than the list I mentioned. Recipes should only be created using the listed ingredients.\n");
+  // Holds how much ingredients is in the list
+  const [ingredientsList, setIngredientsList] = useState([]);
+  // Check if the user wants to only use the ingredients list
+  const [limitIngredients, setLimitIngredients] = useState(false);
 
   // For Diets
   // The string format of the selected diet
@@ -134,8 +134,8 @@ const IngredientsAndDietPage = () => {
     const ingredients = selectedIngredients
       .map((ingredients) => ingredients.value)
       .join(", ");
-    let prompt = ingredients + promptIngredientsList;
-    setIngredients(prompt);
+    setIngredientsList(selectedIngredients);
+    setIngredients(ingredients);
   };
 
   const handleStopGenerating = () => {
@@ -148,7 +148,8 @@ const IngredientsAndDietPage = () => {
     setUseSavedDiets(false);
     setSelectList([]);
     setIngredients("");
-    setUseIngredientsList(false);
+    setLimitIngredients(false);
+    setIngredientsList([]);
   };
 
   const handleGenerateClick = async () => {
@@ -162,7 +163,7 @@ const IngredientsAndDietPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedDiet, selectedIngredients, messageHistory }),
+        body: JSON.stringify({ selectedDiet, selectedIngredients, limitIngredients, messageHistory }),
       });
       /* ------------------------------------------------------ */
       /* --- Check if "res" is ok and content type is valid --- */
@@ -239,15 +240,7 @@ const IngredientsAndDietPage = () => {
 
   // Simple toggle switch to include ingredients that aren't listed
   const toggleUseIngredientsList = () => {
-    setUseIngredientsList(!useIngredientsList);
-    // Add a prompt in the end of selected ingredients depending on the toggle switch
-    if (!useIngredientsList) {
-      // Generate recipes with ingredients from the list + any ingredients that aren't listed.
-      setPromptIngredientsList(".\nUse the ingredients I listed and Add other ingredients that I haven't listed.\n");
-    } else {
-      // Generate recipes with only the ingredients from the list
-      setPromptIngredientsList(".\nONLY use the ingredients that I listed to generate the recipes. Don't use or add any other ingredients other than the list I mentioned. Recipes should only be created using the listed ingredients.\n");
-    }
+    setLimitIngredients(!limitIngredients);
   };
 
   return (
@@ -321,8 +314,9 @@ const IngredientsAndDietPage = () => {
                     <Form.Check
                         type="switch"
                         id="ingredients-switch"
-                        label="Include ingredients that aren't listed"
-                        checked={useIngredientsList}
+                        label="Limit unlisted ingredients (Need +5 Ingredients)"
+                        checked={limitIngredients}
+                        disabled={ingredientsList.length < 5}
                         onChange={toggleUseIngredientsList}
                         className="saved-diet-switch text-muted"
                     />

@@ -15,17 +15,17 @@ const IngredientsPage = () => {
    const [messageHistory, setMessageHistory] = useState([]);
    // The string format of the ingredients
    const [selectedIngredients, setIngredients] = useState("");
+   // Holds how much ingredients is in the list
+   const [ingredientsList, setIngredientsList] = useState([]);
    // Check if the user wants to only use the ingredients list
-   const [useIngredientsList, setUseIngredientsList] = useState(false);
-   // Use state to hold the prompt
-   const [promptIngredientsList, setPromptIngredientsList] = useState(".\nONLY use the ingredients that I listed to generate the recipes. Don't use or add any other ingredients other than the list I mentioned. Recipes should only be created using the listed ingredients.\n");
+   const [limitIngredients, setLimitIngredients] = useState(false);
    
    // Handle whenever an ingredient is entered
    const handleEnteredIngredients = (selectedIngredients) => {
       const ingredients = selectedIngredients.map((ingredients) => ingredients.value).join(", ");
-      let prompt = ingredients + promptIngredientsList;
-      setIngredients(prompt)
-      console.log('Current Selection: ' + prompt);
+      setIngredientsList(selectedIngredients)
+      setIngredients(ingredients)
+      console.log('Current Selection: ' + ingredients);
    }
 
    const handleStopGenerating = () => {
@@ -35,7 +35,8 @@ const IngredientsPage = () => {
       setRecipes(null);
       setMessageHistory([]);
       setIngredients("");
-      setUseIngredientsList(false);
+      setLimitIngredients(false);
+      setIngredientsList([]);
    }
 
    // Generates the recipes:
@@ -52,7 +53,7 @@ const IngredientsPage = () => {
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ selectedIngredients, messageHistory }),
+            body: JSON.stringify({ selectedIngredients, limitIngredients, messageHistory }),
          });
           /* ------------------------------------------------------ */
          /* --- Check if "res" is ok and content type is valid --- */
@@ -145,15 +146,7 @@ const IngredientsPage = () => {
 
    // Simple toggle switch to include ingredients that aren't listed
    const toggleUseIngredientsList = () => {
-      setUseIngredientsList(!useIngredientsList);
-      // Add a prompt in the end of selected ingredients depending on the toggle switch
-      if (!useIngredientsList) {
-         // Generate recipes with ingredients from the list + any ingredients that aren't listed.
-         setPromptIngredientsList(".\nUse the ingredients I listed and Add other ingredients that I haven't listed.\n");
-      } else {
-         // Generate recipes with only the ingredients from the list
-         setPromptIngredientsList(".\nONLY use the ingredients that I listed to generate the recipes. Don't use or add any other ingredients other than the list I mentioned. Recipes should only be created using the listed ingredients.\n");
-      }
+      setLimitIngredients(!limitIngredients);
    };
 
    return (
@@ -222,8 +215,9 @@ const IngredientsPage = () => {
                               <Form.Check
                                  type="switch"
                                  id="custom-switch"
-                                 label="Include ingredients that aren't listed"
-                                 checked={useIngredientsList}
+                                 label="Limit unlisted ingredients (Need +5 Ingredients)"
+                                 checked={limitIngredients}
+                                 disabled={ingredientsList.length < 5}
                                  onChange={toggleUseIngredientsList}
                                  className="saved-diet-switch text-muted"
                               />
