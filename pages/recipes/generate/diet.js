@@ -4,6 +4,7 @@ import RecipeCardList from "@/components/RecipeCardList";
 import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
+import { setCache, getCache } from "@/pages/api/sessionStorage";
 
 // List of all diets
 const diets = [
@@ -83,6 +84,18 @@ const DietPage = () => {
         }
       };
       getUser();
+      
+      /*
+        Check cache
+          - Destructure relevant JSON data
+          - Set application state
+      */
+      let {recipes, messageHistory, selectedDiet} = getCache();
+      if (recipes && messageHistory && selectedDiet == true) {
+        setRecipes(recipes);
+        setMessageHistory(messageHistory);
+        setGeneratePressed(true);
+      }
     }
   }, []);
 
@@ -140,6 +153,7 @@ const DietPage = () => {
   // Generates the recipes:
   const handleGenerateClick = async () => {
     setGeneratePressed(true);
+
     try {
       // Get selected diet in string format (i.e. 'vegan, vegetarian')
       console.log("Selected diet:", selectedDiet);
@@ -165,7 +179,14 @@ const DietPage = () => {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
+
+      // Update recipes data
       setRecipes(data.recipes);
+      // Store in session storage
+      sessionStorage.clear();
+      data.selectedDiet = selectedDiet;
+      setCache(data);
+      // Update message history
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
       /* Updating database stuff: */
@@ -205,7 +226,13 @@ const DietPage = () => {
       const data = await response.json();
       console.log(data);
       console.log("message history", data.messageHistory);
+
+      // Update recipes data
       setRecipes(data.recipes);
+      // Clear old, set new cached data
+      sessionStorage.clear();
+      setCache(data);
+      // Update message history
       setMessageHistory(data.messageHistory);
       console.log("new message history", messageHistory);
       console.log("recipes below in UI", recipes);
