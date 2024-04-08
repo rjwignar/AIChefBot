@@ -11,20 +11,65 @@ function DeleteRecipesModal({ show, onHide, recipes, onDeleteSuccess }) {
       onDeleteSuccess(); // Call the onDeleteSuccess prop function
    };
 
-   // Handle Delete Recipe
-   const handleDeleteRecipes = async () => {
-      console.log('Deleting Recipes');
-      console.log(recipes);
-      // Delete recipe from user's recipe list
-      await fetch(`/api/recipes/request`, {
+   const removeImages = async (imageIds) => {
+     console.log(`Removing images with ids: ${imageIds}`);
+
+     try {
+       // Delete image from Cloudinary environment
+       const res = await fetch(`/api/images/request`, {
          method: "DELETE",
          headers: {
-            "Content-Type": "application/json"
+           "Content-Type": "application/json",
          },
-         body: JSON.stringify({userId: session.user.id, recipeIds: recipes.map(recipe => recipe._id)}),
-      })
+         body: JSON.stringify({ image_ids: imageIds }),
+       });
+
+       if (res.ok){
+         console.log("Images deleted successfully")
+       } else {
+         console.error("Failed to delete images")
+       }
+
+     } catch (err) {
+      console.error("Error deleting images:", err);
+     }
+   };
+
+   // Handle Delete Recipe
+   const handleDeleteRecipes = async () => {
+      //console.log('Deleting Recipes');
+      //console.log("user id",session.user.id)
+      //console.log(recipes);
+
+      const imageIds = recipes.filter(recipe => recipe.hasOwnProperty('image_id')).map(recipe => recipe.image_id);
+
+      if (imageIds.length > 0){
+         removeImages(imageIds)
+      }
+
+      try {
+      //console.log(`Removing recipes with ids: ${recipes.map((recipe) => recipe._id)}`);
+      // Delete recipe from user's recipe list
+      const res = await fetch(`/api/recipes/request`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({userId: session.user.id, recipeIds: recipes.map((recipe) => recipe._id),
+        }),
+      });
+
+      if (res.ok) {
+      console.log("Recipes deleted successfully");
       // If deletion was successful hide modal and reset recipes list a unselect selected recipes
       enhancedOnHide();
+      }else{
+         console.error("Failed to delete recipes");
+      }
+
+      } catch (err){
+         console.error("Error removing recipes", err)
+      }
    }
 
    return (
