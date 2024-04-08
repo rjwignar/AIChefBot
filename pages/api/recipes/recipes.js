@@ -71,7 +71,7 @@ export async function deleteRecipes(data) {
             { $pull: { recipes: { _id: { $in: ids } } } }
         );
         console.log(res);
-        return { acknowledge: true };
+        return res;
     }
     catch(err) {
         console.error(err);
