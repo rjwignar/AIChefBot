@@ -24,3 +24,15 @@ export function getCache() {
         selectedDiet: JSON.parse(sessionStorage.getItem("selectedDiet")),
     }
 }
+
+export function updateCache(recipe, id) {
+    console.log("Updating cache, storing savedId...");
+    let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    for (let e of recipes) {
+        if (e.name == recipe.name) {
+            e._id = id;
+            break;
+        }
+    }
+    sessionStorage.setItem("recipes", JSON.stringify(recipes));
+}

@@ -3,6 +3,7 @@ import { Card, Button, Modal, Badge, Form } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import generatePDF from 'react-to-pdf';
+import { updateCache } from '@/pages/api/sessionStorage';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
@@ -67,6 +68,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
        });
        const savedRecipe = await res.json();
        setSavedId(savedRecipe._id);
+       updateCache(recipe, savedRecipe._id);
        setShowModal(false);
    }
 
