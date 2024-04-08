@@ -20,7 +20,7 @@ export function getCache() {
     return {
         recipes: JSON.parse(sessionStorage.getItem("recipes")),
         messageHistory: JSON.parse(sessionStorage.getItem("messageHistory")),
-        selectedIngredients: JSON.parse(sessionStorage.getItem("selectedDiet")),
+        selectedIngredients: JSON.parse(sessionStorage.getItem("selectedIngredients")),
         selectedDiet: JSON.parse(sessionStorage.getItem("selectedDiet")),
     }
 }

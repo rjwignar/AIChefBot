@@ -96,7 +96,7 @@ const IngredientsAndDietPage = () => {
         selectedDiet,
         selectedIngredients
       } = getCache();
-      console.log(getCache());
+      
       if (recipes && messageHistory && selectedIngredients == true && selectedDiet == true) {
         setRecipes(recipes);
         setMessageHistory(messageHistory);
