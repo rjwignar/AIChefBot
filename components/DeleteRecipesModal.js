@@ -1,9 +1,11 @@
 // DeleteRecipesModal.js
-import { useState } from "react";
 import { Modal, Button, Alert } from "react-bootstrap";
+import { useSession } from "next-auth/react";
 
 // onDeleteSuccess -> Unselects and resets recipes.
 function DeleteRecipesModal({ show, onHide, recipes, onDeleteSuccess }) {
+   const { data: session, status } = useSession();
+
    const enhancedOnHide = () => {
       onHide(); // Close the modal
       onDeleteSuccess(); // Call the onDeleteSuccess prop function
@@ -13,8 +15,14 @@ function DeleteRecipesModal({ show, onHide, recipes, onDeleteSuccess }) {
    const handleDeleteRecipes = async () => {
       console.log('Deleting Recipes');
       console.log(recipes);
-      // Your deletion logic here...
-
+      // Delete recipe from user's recipe list
+      await fetch(`/api/recipes/request`, {
+         method: "DELETE",
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({userId: session.user.id, recipeIds: recipes.map(recipe => recipe._id)}),
+      })
       // If deletion was successful hide modal and reset recipes list a unselect selected recipes
       enhancedOnHide();
    }

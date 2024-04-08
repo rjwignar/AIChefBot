@@ -2,7 +2,7 @@
 // define responses issued to fetch requests made for RECIPES
 
 // get our db methods
-import { getRecipesByUser, addRecipe, updateGeneratedRecipes, deleteRecipe } from "./recipes";
+import { getRecipesByUser, addRecipe, updateGeneratedRecipes, deleteRecipes } from "./recipes";
 
 // handler for all relevant requests
 async function handler(req, res) {
@@ -54,7 +54,7 @@ async function handler(req, res) {
     case "DELETE":
       try {
         // Await recipe deletion
-        const result = await deleteRecipe(req.body);
+        const result = await deleteRecipes(req.body);
         
         if (result.acknowledged) {
           // everything ok, return user as json

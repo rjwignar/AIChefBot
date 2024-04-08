@@ -61,17 +61,21 @@ export async function addRecipe(data) {
     }
 }
 
-// Delete a recipe from user's recipe list
-export async function deleteRecipe(data) {
+// Delete recipe(s) from user's recipe list
+export async function deleteRecipes(data) {
+    const ids = data.recipeIds.map(id => new ObjectId(id));
     try {
-        // Update user by userId, delete recipe by recipeId.
-        return await collection.updateOne(
+        // Update user by userId, delete recipes by recipeIds.
+        const res = await collection.updateMany(
             { _id: data.userId },
-            { $pull: { recipes: { _id: new ObjectId(data.recipeId) } } }
+            { $pull: { recipes: { _id: { $in: ids } } } }
         );
+        console.log(res);
+        return { acknowledge: true };
     }
     catch(err) {
         console.error(err);
         return null;
     }
 }
+
