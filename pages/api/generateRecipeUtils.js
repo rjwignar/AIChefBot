@@ -60,7 +60,10 @@ export function generateIngredientsWithDietPrompt(selectedIngredients, selectedD
 // In Sprint 3, we will have to experiment with this prompt.
 // As well, we may want to generate a different number of recipes than we would if we were generating from strictly ingredients or diet
 export function generateSimilarRecipesPrompt(selectedRecipes) {
-    return `Generate ${recipeCount} recipes that are similar to this list of recipes: ${selectedRecipes}\n` + recipeRequirements;
+    const selectedRecipesString = JSON.stringify({recipes: selectedRecipes}, null, 2);
+    return `Generate ${recipeCount} recipes that are similar to this list of recipes: ${selectedRecipesString}\n` + 
+            `Make sure that the recipes that are generated have some of the same ingredients in the new recipes.\n` +
+            recipeRequirements;
 }
 
 export const repeatPrompt =

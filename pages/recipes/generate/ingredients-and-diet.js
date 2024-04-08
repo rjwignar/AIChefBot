@@ -139,7 +139,7 @@ const IngredientsAndDietPage = () => {
   };
 
   const handleStopGenerating = () => {
-    console.log("Stopped generating from previous diet list");
+    console.log("Stopped generating from previous diet list and ingredients");
     console.log("Resetting all values");
     setGeneratePressed(false);
     setRecipes(null);
