@@ -1,5 +1,5 @@
 // pages/api/generateRecipe.js
-import { generateDietPrompt, generateIngredientsPrompt,  generateIngredientsWithDietPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
+import { generateDietPrompt, generateIngredientsPrompt,  generateIngredientsWithDietPrompt, generateSimilarRecipesPrompt, generateRecipes, repeatPrompt } from './generateRecipeUtils.js';
 
 // Do not remove this function or more it to another file
 // If you don't want this to appear in your console just comment the function call at the beginning of the handler
