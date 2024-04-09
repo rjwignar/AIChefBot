@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import generatePDF from 'react-to-pdf';
 import { updateCache } from '@/pages/api/sessionStorage';
+import { useRouter } from 'next/router';
 
 // recipe   -> the current recipe
 // onDelete -> callback function to remove this recipe from caller's recipes array
@@ -13,6 +14,7 @@ import { updateCache } from '@/pages/api/sessionStorage';
 const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) => {
    // the reference element for the root of a to-PDF snapshot
    const targetRef = useRef();
+   const router = useRouter();
 
    const { data: session, status } = useSession();
    const [showModal, setShowModal] = useState(false);
@@ -100,15 +102,14 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
          headers: {
             "Content-Type": "application/json"
          },
-         body: JSON.stringify({userId: session.user.id, recipeIds: savedId}),
+         body: JSON.stringify({userId: session.user.id, recipeIds: [savedId]}),
       })
       setSavedId(null);
       setShowModal(false);
 
-      // If recipes have an _id property
-      // They have been loaded from the database
-      // We should delete these from the user's view
-      if (recipe._id) {
+      // Check current URL
+      // Remove recipe from view if in account page, otherwise keep it
+      if (router.asPath == '/account/recipes') {
          onDelete(recipe);
       }
    }
