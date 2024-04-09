@@ -1,12 +1,12 @@
 # AIChefBot
 
-### AIChefBot is your recipe guide.
+### Your recipe assistant.
 
 Use this tool to find recipes that accomodate your dietary restrictions. Revisit the recipes you plan to make in the future, and find new recipes based on the ones you've tried, and enjoyed.
 
 <hr>
 
-## Guides
+### Guides
 
 #### [Installation Process](./Installation.md)
 
