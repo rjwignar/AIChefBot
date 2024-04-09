@@ -79,3 +79,14 @@ export async function deleteRecipes(data) {
     }
 }
 
+export async function updateDatabase() {
+    const date = new Date().toISOString().slice(0,10)
+    const cursor = collection.find({});
+    while (await cursor.hasNext()) {
+        const doc = await cursor.next();
+        const updateRecipes = doc.recipes.map(recipe => {
+            return {...recipe, date: date };
+        })
+        console.log(doc.recipes);
+    }
+}
