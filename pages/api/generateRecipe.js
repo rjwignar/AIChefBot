@@ -101,7 +101,7 @@ const handler = async (req, res) => {
 
                     // destructure selectedIngredients and messageHistory properties from req.body
                     const { selectedIngredients, limitIngredients, messageHistory } = req.body;
-
+                    
                     // Generate Ingredients Prompt from selectedIngredients
                     // Then pass it along with messageHistory to the LLM
                     const response = await generateRecipes(generateIngredientsPrompt(selectedIngredients, limitIngredients), messageHistory);

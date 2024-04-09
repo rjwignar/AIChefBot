@@ -175,6 +175,9 @@ const IngredientsAndDietPage = () => {
 
   const handleGenerateClick = async () => {
     setGeneratePressed(true);
+    if (messageHistory.length > 0) {
+      setRecipes(null);
+    }
     try {
       console.log("Selected Diet: " + selectedDiet);
       console.log("Selected Ingredients: " + selectedIngredients);
@@ -215,52 +218,6 @@ const IngredientsAndDietPage = () => {
       /* ---------------------------- */
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  const handleGenerateMoreClick = async () => {
-    // Resetting recipes
-    // This is for display purpose only
-    setRecipes(null);
-    try {
-      console.log(messageHistory);
-      const response = await fetch("/api/generateRecipe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ messageHistory }),
-      });
-      /* --- Check if "res" is ok and content type is valid --- */
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("Oops, we haven't got JSON!");
-      }
-      /* ------------------------------------------------------ */
-      /* --- Get Data From Response --- */
-      const data = await response.json();
-      console.log(data);
-      console.log("message history", data.messageHistory);
-      setRecipes(data.recipes);
-      setMessageHistory(data.messageHistory);
-      console.log("new message history", messageHistory);
-      console.log("recipes below in UI", recipes);
-
-      // Clear old, set new cached data
-      sessionStorage.clear();
-      setCache(data);
-      /* ------------------------------- */
-      /* Updating database */
-      if (session) {
-        updateDatabase(data.recipes.length);
-      }
-      /* ----------------- */
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
     }
   };
 
@@ -305,7 +262,7 @@ const IngredientsAndDietPage = () => {
           <Container className="mb-4">
             <Row>
               <Button
-                onClick={handleGenerateMoreClick}
+                onClick={handleGenerateClick}
                 className="generate-recipe-btn"
                 variant="success"
                 size="lg"
