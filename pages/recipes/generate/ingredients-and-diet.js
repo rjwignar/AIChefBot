@@ -179,8 +179,7 @@ const IngredientsAndDietPage = () => {
       setRecipes(null);
     }
     try {
-      console.log("Selected Diet: " + selectedDiet);
-      console.log("Selected Ingredients: " + selectedIngredients);
+      console.log("Fetching recipes from API by ingredient and diet...");
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",

@@ -63,9 +63,7 @@ const IngredientsPage = () => {
          setRecipes(null);
       }
       try {
-         // Get selected ingredients in string format
-         console.log("Selected Ingredients: ", selectedIngredients);
-         console.log("Message History: ", messageHistory);
+         console.log("Fetching recipes from API by ingredient...");
          /* --- Fetch API to get recipes --- */
          const res = await fetch("/api/generateRecipe", {
             method: "POST",

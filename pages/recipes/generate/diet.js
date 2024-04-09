@@ -158,6 +158,7 @@ const DietPage = () => {
       setRecipes(null);
     }
     try {
+      console.log("Fetching recipes from API by diet...");
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",
