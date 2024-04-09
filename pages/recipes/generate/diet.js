@@ -93,6 +93,7 @@ const DietPage = () => {
       let {recipes, messageHistory, selectedDiet} = getCache();
       if (recipes && messageHistory && selectedDiet == true) {
         setRecipes(recipes);
+        setSelectedDiet(selectedDiet);
         setMessageHistory(messageHistory);
         setGeneratePressed(true);
       }

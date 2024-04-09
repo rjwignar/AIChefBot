@@ -103,6 +103,8 @@ const IngredientsAndDietPage = () => {
       
       if (recipes && messageHistory && selectedIngredients == true && selectedDiet == true) {
         setRecipes(recipes);
+        setSelectedDiet(selectedDiet);
+        setIngredients(selectedIngredients);
         setMessageHistory(messageHistory);
         setGeneratePressed(true);
       }

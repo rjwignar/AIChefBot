@@ -31,6 +31,7 @@ const IngredientsPage = () => {
          let { recipes, messageHistory, selectedIngredients } = getCache();
          if (recipes && messageHistory && selectedIngredients == true) {
             setRecipes(recipes);
+            setIngredients(selectedIngredients);
             setMessageHistory(messageHistory);
             setGeneratePressed(true);
          }
