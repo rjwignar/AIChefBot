@@ -3,7 +3,7 @@ import { Card, Button, Modal, Badge, Form } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import generatePDF from 'react-to-pdf';
-import { updateCache } from '@/pages/api/sessionStorage';
+import { updateRecipeId, removeRecipeId } from '@/pages/api/sessionStorage';
 import { useRouter } from 'next/router';
 
 // recipe   -> the current recipe
@@ -70,7 +70,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
        });
        const savedRecipe = await res.json();
        setSavedId(savedRecipe._id);
-       updateCache(recipe, savedRecipe._id);
+       updateRecipeId(recipe, savedRecipe._id);
        setShowModal(false);
    }
 
@@ -111,6 +111,9 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
       // Remove recipe from view if in account page, otherwise keep it
       if (router.asPath == '/account/recipes') {
          onDelete(recipe);
+      }
+      else {
+         removeRecipeId(recipe);
       }
    }
 
