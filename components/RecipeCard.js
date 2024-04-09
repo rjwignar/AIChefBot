@@ -98,7 +98,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
          headers: {
             "Content-Type": "application/json"
          },
-         body: JSON.stringify({userId: session.user.id, recipeIds: savedId}),
+         body: JSON.stringify({userId: session.user.id, recipeIds: [savedId]}),
       })
       setSavedId(null);
       setShowModal(false);
