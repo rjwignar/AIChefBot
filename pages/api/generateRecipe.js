@@ -60,8 +60,8 @@ const handler = async (req, res) => {
                 if (requestBody.hasOwnProperty('selectedDiet') && requestBody.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients and DIET!!!!!!!!!!!!!!!!");
 
-                    // destructure selectedDiet and messageHistory properties from req.body
-                    const { selectedDiet, selectedIngredients, limitIngredients, messageHistory } = req.body;
+                    // destructure selectedDiet and messageHistory properties from requestBody
+                    const { selectedDiet, selectedIngredients, limitIngredients, messageHistory } = requestBody;
 
                     // Generate Diet prompt from selectedDiet
                     // Then pass it along with messageHistory to the LLM
@@ -99,8 +99,8 @@ const handler = async (req, res) => {
                 else if (requestBody.hasOwnProperty('selectedIngredients')) {
                     console.log("User has started generating recipes by ingredients!");
 
-                    // destructure selectedIngredients and messageHistory properties from req.body
-                    const { selectedIngredients, limitIngredients, messageHistory } = req.body;
+                    // destructure selectedIngredients and messageHistory properties from requestBody
+                    const { selectedIngredients, limitIngredients, messageHistory } = requestBody;
 
                     // Generate Ingredients Prompt from selectedIngredients
                     // Then pass it along with messageHistory to the LLM
