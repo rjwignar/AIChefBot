@@ -123,6 +123,7 @@ const DietPage = () => {
     setUseSavedDiets(false);
     setSelectList([]);
     setMessageHistory([]);
+    sessionStorage.clear();
   };
 
   // Simple toggle switch to use saved diets

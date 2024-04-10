@@ -173,6 +173,7 @@ const IngredientsAndDietPage = () => {
     setIngredients("");
     setLimitIngredients(false);
     setIngredientsList([]);
+    sessionStorage.clear();
   };
 
   const handleGenerateClick = async () => {

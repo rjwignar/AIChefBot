@@ -55,6 +55,7 @@ const IngredientsPage = () => {
       setIngredients("");
       setLimitIngredients(false);
       setIngredientsList([]);
+      sessionStorage.clear();
    }
 
    // Generates the recipes:
