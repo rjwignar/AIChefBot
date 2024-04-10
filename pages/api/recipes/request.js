@@ -7,7 +7,6 @@ import { updateDatabase } from './recipes';
 
 // handler for all relevant requests
 async function handler(req, res) {
-  updateDatabase();
   switch (req.method) {
     // GET
     case "GET": {
