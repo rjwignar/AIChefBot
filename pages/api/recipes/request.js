@@ -3,7 +3,6 @@
 
 // get our db methods
 import { getRecipesByUser, addRecipe, updateGeneratedRecipes, deleteRecipes } from "./recipes";
-import { updateDatabase } from './recipes';
 
 // handler for all relevant requests
 async function handler(req, res) {
