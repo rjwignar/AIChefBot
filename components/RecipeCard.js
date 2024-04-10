@@ -163,6 +163,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
             <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
+               <Badge className={"bg-success"}>Created: {recipe.created.slice(0,10)}</Badge>
                <hr className='recipe-card-line'/>
                <div className="ingredients-steps-count">
                   <span className="recipe-card-subtitle me-4">
