@@ -47,7 +47,7 @@ export async function addRecipe(data) {
         // assign a unique identifier
         data.recipe._id = new ObjectId();
         // assign a creation date
-        data.recipe.created = new Date().toISOString().slice(0,10);
+        data.recipe.created = new Date().toISOString();
         // Push recipe to user's recipe list
         const res = await collection.updateOne(
             {_id: data.userId}, 
