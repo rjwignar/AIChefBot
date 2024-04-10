@@ -24,3 +24,28 @@ export function getCache() {
         selectedDiet: JSON.parse(sessionStorage.getItem("selectedDiet")),
     }
 }
+
+export function updateRecipeId(recipe, id) {
+    console.log("Updating cache...");
+    let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    for (let e of recipes) {
+        if (e.name == recipe.name) {
+            e._id = id;
+            break;
+        }
+    }
+    sessionStorage.setItem("recipes", JSON.stringify(recipes));
+}
+
+export function removeRecipeId(recipe) {
+    console.log("Updating cache...");
+    let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    for (let e of recipes) {
+        console.log(e);
+        if (e.name == recipe.name) {
+            delete e._id;
+            break;
+        }
+    }
+    sessionStorage.setItem("recipes", JSON.stringify(recipes));
+}
