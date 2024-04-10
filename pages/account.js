@@ -5,6 +5,7 @@ import EmailModal from '@/components/EmailModal'
 import PasswordModal from '@/components/PasswordModal';
 import DeleteModal from '@/components/DeleteModal';
 import UpdateDietModal from '@/components/UpdateDietModal';
+import DeleteAllRecipesModal from "@/components/DeleteAllRecipesModal";
 import { useRouter } from 'next/router';
 
 // account.js: Displays the account info
@@ -18,6 +19,7 @@ export default function account() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateDietModal, setShowUpdateDietModal] = useState(false);
+  const [showDeleteAllRecipesModal, setShowDeleteAllRecipesModal] = useState(false);
 
   // User details
   // Contains
@@ -38,6 +40,9 @@ export default function account() {
 
   const handleShowUpdateDietModal = () => setShowUpdateDietModal(true);
   const handleCloseUpdateDietModal = () => setShowUpdateDietModal(false);
+
+  const handleShowDeleteAllRecipesModal = () => setShowDeleteAllRecipesModal(true);
+  const handleCloseDeleteAllRecipesModal = () => setShowDeleteAllRecipesModal(false);
 
   /* 
       Simple redirect to check if user is signed in
@@ -217,9 +222,14 @@ export default function account() {
               </Container>
               <hr className="accountLine" />
               <Container className="p-1 pt-3">
-                <Button className="btn btn-primary" onClick={(() => {router.push('/account/recipes')})}>
+                <Button className="me-2 btn btn-primary" onClick={(() => {router.push('/account/recipes')})}>
                   Manage Saved Recipes
                 </Button>
+                {user.recipes.length > 0 && (
+                <Button className="me-2 btn btn-danger" onClick={handleShowDeleteAllRecipesModal}>
+                  Delete All Recipes
+                </Button>
+                )}
               </Container>
             </Card.Body>
           )}
@@ -246,6 +256,11 @@ export default function account() {
         show={showUpdateDietModal}
         onHide={handleCloseUpdateDietModal}
         userData={user}
+      />
+      <DeleteAllRecipesModal
+      show={showDeleteAllRecipesModal}
+      onHide={handleCloseDeleteAllRecipesModal}
+      recipes={user ? user.recipes : "no Recipes"}
       />
     </>
   );
