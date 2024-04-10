@@ -46,6 +46,8 @@ export async function addRecipe(data) {
     try {
         // assign a unique identifier
         data.recipe._id = new ObjectId();
+        // assign a creation date
+        data.recipe.created = new Date().toISOString().slice(0,10);
         // Push recipe to user's recipe list
         const res = await collection.updateOne(
             {_id: data.userId}, 
@@ -76,17 +78,5 @@ export async function deleteRecipes(data) {
     catch(err) {
         console.error(err);
         return null;
-    }
-}
-
-export async function updateDatabase() {
-    const date = new Date().toISOString().slice(0,10)
-    const cursor = collection.find({});
-    while (await cursor.hasNext()) {
-        const doc = await cursor.next();
-        const updateRecipes = doc.recipes.map(recipe => {
-            return {...recipe, date: date };
-        })
-        console.log(doc.recipes);
     }
 }
