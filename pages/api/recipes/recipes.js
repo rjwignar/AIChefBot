@@ -53,6 +53,7 @@ export async function addRecipe(data) {
             {_id: data.userId}, 
             { $push: { recipes: data.recipe }}
         );
+        console.log("Added recipe: ", data.recipe);
         // Return with _id of added recipe.
         // Needed so this action can be undone in UI.
         return data.recipe._id;
