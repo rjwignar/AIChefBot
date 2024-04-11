@@ -51,8 +51,11 @@ export default function account() {
   useEffect(() => {
     const authenticate = async () => {
       // Putting it in a try catch to handle errors gracefully.
+      //changing up the if case
       try {
-        if (status === "unauthenticated") {
+        if (status === "authenticated") {
+          await getUser()
+        }else{
           await signIn("cognito");
         }
       } catch (error) {
@@ -60,17 +63,16 @@ export default function account() {
       }
     };
     authenticate();
-
-    const getUser = async () => {
-      const res = await fetch(`/api/user/request?id=${session.user.id}`, {
-        method: "GET",
-      });
-      const user = await res.json();
-      console.log(user);
-      setUser(user);
-    };
-    getUser();
   }, []);
+
+  const getUser = async () => {
+    const res = await fetch(`/api/user/request?id=${session.user.id}`, {
+      method: "GET",
+    });
+    const user = await res.json();
+    console.log(user);
+    setUser(user);
+  };
 
   return (
     <>
@@ -260,7 +262,10 @@ export default function account() {
       <DeleteAllRecipesModal
       show={showDeleteAllRecipesModal}
       onHide={handleCloseDeleteAllRecipesModal}
-      recipes={user ? user.recipes : "no Recipes"}
+      recipes={user ? user.recipes : []}
+      onDeleteSuccess={ () => {
+        getUser()
+      }}
       />
     </>
   );
