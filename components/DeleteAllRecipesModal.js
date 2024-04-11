@@ -1,18 +1,17 @@
 // DeleteAllRecipesModal.js
 import { Modal, Button, Alert } from "react-bootstrap";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
 // onDeleteSuccess -> Unselects and resets recipes.
 // make this use the user instead of recipes since we are deleting the accounts recipes!.
-function DeleteAllRecipesModal({ show, onHide, recipes}) {
+function DeleteAllRecipesModal({ show, onHide, recipes, onDeleteSuccess}) {
    const { data: session, status } = useSession();
-   const router = useRouter();
-   //const [recipes, setRecipes] = useState([]);
 
+   // enhancedOnHide is used for delete since if you click cancel they aren't deleting no need to fetch the recipes again since nothing has changed
    const enhancedOnHide = () => {
       onHide(); // Close the modal
-      //onDeleteSuccess(); // Call the onDeleteSuccess prop function
+      onDeleteSuccess(); // uses the prop function giving in this case it is get user
+
    };
 
    const removeImages = async (imageIds) => {
@@ -45,8 +44,6 @@ function DeleteAllRecipesModal({ show, onHide, recipes}) {
       //console.log("user id",session.user.id)
       //console.log(recipes);
 
-      //const recipes = await getRecipes();
-
       const imageIds = recipes.filter(recipe => recipe.hasOwnProperty('image_id')).map(recipe => recipe.image_id);
 
       if (imageIds.length >= 1){
@@ -69,7 +66,6 @@ function DeleteAllRecipesModal({ show, onHide, recipes}) {
       console.log("(DeleteAll) Recipes deleted successfully from DeleteAllRecipesModal");
       // If deletion was successful hide modal
       enhancedOnHide();
-      router.reload(); // refreshes the page after deleting
       }else{
          console.error("(DeleteAll) Failed to delete recipes from DeleteAllRecipesModal");
       }
@@ -82,16 +78,16 @@ function DeleteAllRecipesModal({ show, onHide, recipes}) {
    return (
       <Modal show={show} onHide={enhancedOnHide} centered>
          <Modal.Header closeButton>
-            <Modal.Title>Deleting All Recipes</Modal.Title>
+            <Modal.Title>Deleting All Recipes!</Modal.Title>
          </Modal.Header>
          <Modal.Body>
             <Alert variant="danger">
-               Warning: Deleting these recipes is irreversible. You will not be able
+               Warning: you are about delete all your recipes this is irreversible. You will not be able
                to recover any of these recipes after deletion.
             </Alert>
          </Modal.Body>
          <Modal.Footer>
-            <Button variant="secondary" onClick={enhancedOnHide}>
+            <Button variant="secondary" onClick={onHide}>
                Cancel
             </Button>
             <Button
