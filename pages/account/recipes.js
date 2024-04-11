@@ -16,7 +16,7 @@ export default function recipes() {
   const [currentPage, setCurrentPage] = useState(1);
   // Change value if you think it should be changed:
   const [recipesPerPage] = useState(9);
-  const [isSortedMostRecent, setIsSortedMostRecent] = useState(false);
+  const [isSortedMostRecent, setIsSortedMostRecent] = useState(true);
   // Check if the generate button is pressed
   const [generatePressed, setGeneratePressed] = useState(false);
   // The recipes generated based on similar recipes.
@@ -25,6 +25,7 @@ export default function recipes() {
   const [messageHistory, setMessageHistory] = useState([]);
   // selected Recipes
   const [selectedRecipes, setSelectedRecipes] = useState([]);
+  const [filterText, setFilterText] = useState("");
 
   const [showDeleteRecipesModal, setShowDeleteRecipesModal] = useState(false);
 
@@ -148,6 +149,7 @@ export default function recipes() {
     setMessageHistory([]);
     setSelectedRecipes([]); // Unselect selected recipes
     setGeneratedRecipes(null);
+    setFilterText("");
   }
 
   const handleGenerateSimilarRecipes = async () => {
@@ -280,6 +282,7 @@ export default function recipes() {
         // manage account recipes page:
         <>
           <h1 className="hero-title">Saved Recipes</h1>
+          <p className="text-muted mt-3">Showing {currentRecipes.length} of {filteredRecipes.length} Recipes</p>
           <hr />
 
           <Container style={{ paddingBottom: '100px' }}>
@@ -288,20 +291,23 @@ export default function recipes() {
               Display filter search bar only if user has saved recipes
             */}
             {recipes && (
-              <Row className="align-items-center mt-3">
-                <Col md={3}>
-                  <p className="text-muted mt-3">Showing {currentRecipes.length} of {recipes.length} Recipes</p>
+              <Row className="align-items-center">
+                <Col xs="auto">
+                  <Button variant={selectedRecipes.length > 0 ? "secondary" : "primary"} onClick={() => {selectedRecipes.length > 0 ? setSelectedRecipes([]) : setSelectedRecipes(filteredRecipes)}}>
+                    {selectedRecipes.length > 0 ? <>Deselect All Recipes</> : <>Select All Recipes</>}
+                  </Button>
                 </Col>
-                <Col md={7}>
+                <Col>
                   <Form.Control
                     id="filter-recipes"
                     type="text"
                     placeholder="Filter recipes"
-                    className="mb-3 mb-md-0" // Adds margin-bottom on smaller screens
-                    onChange={(e) => filterRecipes(e.target.value)}
+                    className="me-3 mb-md-0" // Adds margin-bottom on smaller screens
+                    value={filterText}
+                    onChange={(e) => {filterRecipes(e.target.value); setFilterText(e.target.value);}}
                   />
                 </Col>
-                <Col md={2}>
+                <Col xs="auto">
                   <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                       Sort: {isSortedMostRecent ? "Newest" : "Oldest"}
@@ -332,15 +338,11 @@ export default function recipes() {
                       <Pagination>
                         <Pagination.First onClick={() => paginate(1)} disabled={currentPage === 1} />
                         <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
-                        <Pagination.Ellipsis disabled />
-          
                         {pageNumbers.map(number => (
                           <Pagination.Item key={number} active={number === currentPage} onClick={() => paginate(number)}>
                             {number}
                           </Pagination.Item>
                         ))}
-          
-                        <Pagination.Ellipsis disabled />
                         <Pagination.Next onClick={() => paginate(currentPage + 1)} disabled={currentPage === pageNumbers.length} />
                         <Pagination.Last onClick={() => paginate(pageNumbers.length)} disabled={currentPage === pageNumbers.length} />
                       </Pagination>
@@ -353,8 +355,13 @@ export default function recipes() {
           </Container>
           {selectedRecipes.length > 0 && (
               <div className="action-buttons-container bg-primary bg-opacity-25">
-                <Button variant="secondary" onClick={() => setSelectedRecipes([])} className="me-2">Deselect All</Button>
-                <Button variant="success" onClick={handleGenerateSimilarRecipes} className="me-2">Generate Similar Recipes</Button>
+                <Button 
+                  variant="success" 
+                  onClick={handleGenerateSimilarRecipes} 
+                  disabled={selectedRecipes.length > 9 ? true : false} 
+                  className="me-2">
+                    {selectedRecipes.length > 6 ? <>Too Many Recipes!</> : <>Generate Similar Recipes</>}
+                </Button>
                 <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
               </div>
           )}
@@ -364,8 +371,8 @@ export default function recipes() {
             onHide={handleCloseDeleteRecipesModal}
             recipes={selectedRecipes}
             onDeleteSuccess={() => {
-              setSelectedRecipes([]); // Unselect selected recipes
               getRecipes(); // Update the recipes list
+              setFilterText("");
             }}
           />
         </>
