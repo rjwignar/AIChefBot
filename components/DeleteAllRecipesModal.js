@@ -2,10 +2,10 @@
 import { Modal, Button, Alert } from "react-bootstrap";
 import { useSession } from "next-auth/react";
 
-// onDeleteSuccess -> Unselects and resets recipes.
+// onDeleteSuccess -> gets the users recipes after delete to update front-end.
 // make this use the user instead of recipes since we are deleting the accounts recipes!.
 function DeleteAllRecipesModal({ show, onHide, recipes, onDeleteSuccess}) {
-   const { data: session, status } = useSession();
+   const { data: session } = useSession();
 
    // enhancedOnHide is used for delete since if you click cancel they aren't deleting no need to fetch the recipes again since nothing has changed
    const enhancedOnHide = () => {
@@ -63,9 +63,9 @@ function DeleteAllRecipesModal({ show, onHide, recipes, onDeleteSuccess}) {
       });
 
       if (res.ok) {
-      console.log("(DeleteAll) Recipes deleted successfully from DeleteAllRecipesModal");
-      // If deletion was successful hide modal
-      enhancedOnHide();
+         console.log("(DeleteAll) Recipes deleted successfully from DeleteAllRecipesModal");
+         // If deletion was successful hide modal and send a delete
+         enhancedOnHide();
       }else{
          console.error("(DeleteAll) Failed to delete recipes from DeleteAllRecipesModal");
       }
