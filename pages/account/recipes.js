@@ -7,6 +7,7 @@ import { Pagination } from 'react-bootstrap';
 import DeleteRecipesModal from "@/components/DeleteRecipesModal";
 import LoadingScreen from "@/components/LoadingScreen";
 import { setCache, getCache } from "@/pages/api/sessionStorage";
+import { requestImageGeneration } from "@/pages/api/generateImageUtils";
 
 // Page of manage recipes:
 export default function recipes() {
@@ -194,7 +195,13 @@ export default function recipes() {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
-      setGeneratedRecipes(data.recipes);
+
+      // Generate Recipe Images
+      const recipesWithImages = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", recipesWithImages);
+      
+      // Set recipes to recipesWithImages
+      setGeneratedRecipes(recipesWithImages);
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
       sessionStorage.clear()
