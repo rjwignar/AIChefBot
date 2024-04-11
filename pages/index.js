@@ -4,11 +4,20 @@ import { useRouter } from 'next/router';
 
 export default function Home() {
   const router = useRouter();
-
   return (
     <>
       <Container className='hero-section'>
         <Row className='align-items-center'>
+          <Col md={5}>
+            <br/>
+            <Image 
+              src='https://i.imgur.com/4mvbVW0.png' 
+              width={450} 
+              height={200} 
+              fluid 
+              alt='Robot cooking' 
+              className='hero-img'/>
+          </Col>
           <Col md={7}>
             <br/>
             <h1 className='hero-title'>Meet your AI Chef</h1>
@@ -19,16 +28,6 @@ export default function Home() {
             <button className="landing-page-btn" role="button" onClick={() => router.push("/recipes/generate")}>
               Get Started
             </button>
-          </Col>
-          <Col md={5} className='text-end'>
-            <br/>
-            <Image 
-              src='https://i.imgur.com/4mvbVW0.png' 
-              width={450} 
-              height={200} 
-              fluid 
-              alt='Robot cooking' 
-              className='hero-img'/>
           </Col>
         </Row>
       </Container>

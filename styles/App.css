@@ -83,7 +83,7 @@ hr.accountLine {
    align-items: center;
    appearance: none;
    background-color: #3EB2FD;
-   background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%);
+   background-image: linear-gradient(1deg, #1b7f25, #43e153 99%);
    background-size: calc(100% + 20px) calc(100% + 20px);
    border-radius: 30px;
    border-width: 0;
