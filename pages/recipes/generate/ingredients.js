@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import RecipeCardList from "@/components/RecipeCardList";
 import LoadingScreen from "@/components/LoadingScreen";
 import { setCache, getCache } from "@/pages/api/sessionStorage";
+import { requestImageGeneration } from "@/pages/api/generateImageUtils";
 
 const IngredientsPage = () => {
    const { data: session } = useSession();
@@ -87,7 +88,13 @@ const IngredientsPage = () => {
          /* --- Get Data From Response --- */
          const data = await res.json();
          console.log("Data was returned: ", data);
-         setRecipes(data.recipes);
+         
+         // Generate Recipe Images
+         const recipesWithImages = await requestImageGeneration(data.recipes);
+         console.log("recipes with images in UI", recipesWithImages);
+
+         // Set recipes to recipesWithImages
+         setRecipes(recipesWithImages);
          setMessageHistory(data.messageHistory);
          /* ------------------------------ */
 

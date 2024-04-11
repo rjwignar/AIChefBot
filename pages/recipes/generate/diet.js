@@ -5,6 +5,7 @@ import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { setCache, getCache } from "@/pages/api/sessionStorage";
+import { requestImageGeneration } from "@/pages/api/generateImageUtils";
 
 // List of all diets
 const diets = [
@@ -182,8 +183,13 @@ const DietPage = () => {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
-      // Update recipes data
-      setRecipes(data.recipes);
+
+      // Generate Recipe Images
+      const recipesWithImages = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", recipesWithImages);
+
+      // Set recipes to recipesWithImages
+      setRecipes(recipesWithImages);
       // Store in session storage
       sessionStorage.clear();
       data.selectedDiet = selectedDiet;
