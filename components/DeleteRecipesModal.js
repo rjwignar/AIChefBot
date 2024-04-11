@@ -1,6 +1,7 @@
 // DeleteRecipesModal.js
 import { Modal, Button, Alert } from "react-bootstrap";
 import { useSession } from "next-auth/react";
+import { cacheClearSavedAll } from "@/pages/api/sessionStorage";
 
 // onDeleteSuccess -> Unselects and resets recipes.
 function DeleteRecipesModal({ show, onHide, recipes, onDeleteSuccess }) {
@@ -60,9 +61,10 @@ function DeleteRecipesModal({ show, onHide, recipes, onDeleteSuccess }) {
       });
 
       if (res.ok) {
-      console.log("Recipes deleted successfully");
-      // If deletion was successful hide modal and reset recipes list a unselect selected recipes
-      enhancedOnHide();
+         cacheClearSavedAll(recipes);
+         console.log("Recipes deleted successfully");
+         // If deletion was successful hide modal and reset recipes list a unselect selected recipes
+         enhancedOnHide();
       }else{
          console.error("Failed to delete recipes");
       }
