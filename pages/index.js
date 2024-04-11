@@ -25,7 +25,7 @@ export default function Home() {
               AIChefBot allows you to generate recipes based on simple input. Get started without an account, or register to save your favourite recipes.
             </p>
             {/*Pathway to generate recipes:*/}
-            <button className="landing-page-btn" role="button" onClick={() => router.push("/recipes/generate")}>
+            <button className="landing-page-btn main-btn" role="button" onClick={() => router.push("/recipes/generate")}>
               Get Started
             </button>
           </Col>
