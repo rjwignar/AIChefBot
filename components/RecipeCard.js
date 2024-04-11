@@ -112,9 +112,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
       if (router.asPath == '/account/recipes') {
          onDelete(recipe);
       }
-      else {
-         cacheSetUnsaved(recipe);
-      }
+      cacheSetUnsaved(recipe);
    }
 
    const downloadPDF = () => {
