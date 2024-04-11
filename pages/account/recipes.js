@@ -358,9 +358,9 @@ export default function recipes() {
                 <Button 
                   variant="success" 
                   onClick={handleGenerateSimilarRecipes} 
-                  disabled={selectedRecipes.length > 9 ? true : false} 
+                  disabled={selectedRecipes.length > 6 ? true : false} 
                   className="me-2">
-                    {selectedRecipes.length > 6 ? <>Too Many Recipes!</> : <>Generate Similar Recipes</>}
+                    {selectedRecipes.length > 6 ? <>Too Many Recipes (Less than or Equal to 6)!</> : <>Generate Similar Recipes</>}
                 </Button>
                 <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
               </div>
