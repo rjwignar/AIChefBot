@@ -8,6 +8,8 @@ This document gives an overview of how to install a working version of AIChefBot
 - [Environment Variables](#Environment_Variables)
 - [Deployment](#Deployment)
 
+<hr>
+
 ### Installation
 
 Set up a local development repository, clone the source repository via SSH.
@@ -51,7 +53,15 @@ From here, you'll have to manage your funds. From the sidebar, navigate to **usa
 
 #### 2. MongoDB Atlas
 
+[Sign up to MongoDB Atlas](https://www.mongodb.com/atlas)
 
+- Click **Create a deployment**
+- Choose the cluster you'd like to use. The free version is **M0**.
+- Give your cluster a name, such as **yourname_AIChefBot**.
+- Copy your **Username** and **Password**, these will be used as your *administrator* values in your `.env_example` file.
+- Copy your **Username** value in to the `.env` file and replace `YOUR_MONGODB_ATLAS_ADMIN_NAME`.
+- Copy your **Password** value in to the `.env` file and replace `YOUR_MONGODB_ATLAS_PASSWORD`.
+- Delete the **users** database, to be replaced by AIChefBot's **users** database.
 
 #### 3. Cloudinary
 
