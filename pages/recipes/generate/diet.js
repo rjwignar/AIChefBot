@@ -184,6 +184,9 @@ const DietPage = () => {
       const data = await res.json();
       console.log("Data was returned: ", data);
 
+      // Show recipes, no image generated yet
+      setRecipes(data.recipes);
+
       // Generate Recipe Images and update data.recipes with images for caching purposes
       data.recipes = await requestImageGeneration(data.recipes);
       console.log("recipes with images in UI", data.recipes);
