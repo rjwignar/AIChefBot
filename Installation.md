@@ -86,50 +86,50 @@ After these steps, you will have created your own **Cloudinary Product Environme
 
 #### 4. AWS Cognito
 
-1. you will have to create a AWS Account [Sign up to AWS](https://aws.amazon.com/console/) 
-2. when you are at console home search **Cognito**
-3. click **Create user pool**
+1. You will have to create a AWS Account [Sign up to AWS](https://aws.amazon.com/console/) 
+2. When you are at console home search **Cognito**
+3. Click **Create user pool**
 
 ### Step 1: Configure sign-in experience
-1. select this options **User name, Email**
+1. Select the options **User name, Email**
 
 ### Step 2: Configure security requirements
-1. make whatever password policy you want or you can leave it default
-2. make sure to select **No MFA** (you can add MFA but will add cost)
-3. **Enable self service account recovery** is checked and use **Email only** (other options have additional cost)
+1. Make whatever password policy you want or you can leave it default
+2. Make sure to select **No MFA** (you can add MFA but will add cost)
+3. Make sure **Enable self service account recovery** is checked and use **Email only** (other options have additional cost)
 
 ### Step 3: Configure sign-up experience
-1. **Enable self-registration** is selected 
-2. **Keep original attribute value active when an update is pending** is selected
-3. in required attributes dropdown add **name**
+1. Make sure **Enable self-registration** is selected 
+2. Make sure **Keep original attribute value active when an update is pending** is selected
+3. In the required attributes dropdown add **name**
 
 ### Step 4: Configure message delivery
-1. select **Send email with Cognito** keep the rest default
+1. Select **Send email with Cognito** keep the rest default
 
 ### Step 5: Integrate your app
-1. give your user pool a name `yourname-aichefbot-users`
-2. select **Use the Cognito Hosted UI** 
-3. select **Use a Cognito domain** 
-4. keep **https://** and type in a name. This will be your domain when users log in (avoid using your name here since this will be public)
-5. select **Public client** enter a App client name such as `yourname-aichefbot-app`
-6. select **Don't generate a client secret**
-7. allowed callback URLs (can edit this later) copy and paste `http://localhost:3000/api/auth/callback/cognito`
-8. click the dropdown **Advanced app client settings** scroll down to **OpenID Connect scopes** click the dropdown and add `aws.cognito.signin.user.admin` scope.
-9.  click **Add sign-out URL** copy and paste `http://localhost:3000`
+1. Give your user pool a name such as `yourname-aichefbot-users`
+2. Select **Use the Cognito Hosted UI** 
+3. Select **Use a Cognito domain** 
+4. Keep **https://** and type in a name. This will be your domain when users log in (avoid using your name here since this will be public)
+5. Select **Public client** enter a App client name such as `yourname-aichefbot-app`
+6. Select **Don't generate a client secret**
+7. Allowed callback URLs (can edit this later) copy and paste `http://localhost:3000/api/auth/callback/cognito`
+8. Click the dropdown **Advanced app client settings** scroll down to **OpenID Connect scopes** click the dropdown and add `aws.cognito.signin.user.admin` scope.
+9. Click **Add sign-out URL** copy and paste `http://localhost:3000`
   
 ### Step 6: Review and Create
-double check all the values are correct create your user pool
+Double check all the values are correct create your user pool.
 
 ### Getting your keys
-1. click on your newly created user pool
-2. copy the **User Pool ID** and replace `YOUR_USER_POOL_ID` inside`.env` 
-3. click the **App integration** tab
-4. copy the **Cognito domain** and replace `YOUR_COGNITO_UI_DOMAIN` inside`.env`
-5. scroll all they way down till you see **App client list**
-6. on the **Client ID** tab copy the value and replace `YOUR_COGNITO_CLIENT_ID` inside`.env`
+1. Click on your newly created user pool
+2. Copy the **User Pool ID** and replace `YOUR_USER_POOL_ID` inside`.env` 
+3. Click the **App integration** tab
+4. Copy the **Cognito domain** and replace `YOUR_COGNITO_UI_DOMAIN` inside`.env`
+5. Scroll all they way down till you see **App client list**
+6. On the **Client ID** tab copy the value and replace `YOUR_COGNITO_CLIENT_ID` inside`.env`
 
 ### OAuth Sign-In and Out Redirect URLS, AWS Amazon Cognito Logout Endpoint URL and AWS Amazon Cognito Issuer
-these keys are provided for you in the .env_example [here](./env_exmaple)
+these keys are provided for you in the .env_example [here](./env_exmaple) copy them and add to your `.env`
 
 ### NextAuthJS secret
 generate a secret with
