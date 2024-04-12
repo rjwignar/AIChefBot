@@ -293,8 +293,8 @@ export default function recipes() {
             {recipes && (
               <Row className="align-items-center">
                 <Col xs="auto">
-                  <Button variant={selectedRecipes.length > 0 ? "secondary" : "primary"} onClick={() => {selectedRecipes.length > 0 ? setSelectedRecipes([]) : setSelectedRecipes(filteredRecipes)}}>
-                    {selectedRecipes.length > 0 ? <>Deselect All Recipes</> : <>Select All Recipes</>}
+                  <Button variant={selectedRecipes.length > 0 ? "secondary" : "primary"} onClick={() => {selectedRecipes.length > 0 ? setSelectedRecipes([]) : setSelectedRecipes(filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe))}}>
+                    {selectedRecipes.length > 0 ? <>Deselect All Recipes Displayed</> : <>Select All Recipes Displayed</>}
                   </Button>
                 </Col>
                 <Col>
@@ -358,9 +358,9 @@ export default function recipes() {
                 <Button 
                   variant="success" 
                   onClick={handleGenerateSimilarRecipes} 
-                  disabled={selectedRecipes.length > 6 ? true : false} 
+                  disabled={selectedRecipes.length > 9 ? true : false} 
                   className="me-2">
-                    {selectedRecipes.length > 6 ? <>Too Many Recipes (Less than or Equal to 6)!</> : <>Generate Similar Recipes</>}
+                    {selectedRecipes.length > 9 ? <>Too Many Recipes (Less than or Equal to 9)!</> : <>Generate Similar Recipes</>}
                 </Button>
                 <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
               </div>
