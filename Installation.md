@@ -203,8 +203,8 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 -
 - 
 - Refer to **steps 7 to 9** of [User Pool Setup Part 5](#step-5-integrate-your-app):
-  - Step 7: Add the following as an allowed Callback URL: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
-  - Step 9: Add the following as a Sign-Out URL: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
+  - Step 7: Add the following as an **Allowed Callback URL**: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
+  - Step 9: Add the following as a **Sign-Out URL**: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
 
 ##### Update Vercel Deployment Environment Variables
 You must add these values to your deployment's Environment Variables:
