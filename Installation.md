@@ -185,18 +185,28 @@ This means the Production deployment will always be up-to-date with the latest c
 - From the **Deployment Dashboard**, left-click the **Visit** button to open and access the deployed app.
 
 #### Post-Deployment Requirements for User Authentication with AWS Cognito User Pool
-After deploying AIChefBot to Vercel, you need to update the following environment variables:
+After deploying AIChefBot to Vercel, you need to update the following environment variables in both your **AWS Cognito User Pool** AND your **Vercel Deployment**:
 | .env Variable Name | Updated Value |
 | OAUTH_SIGN_IN_REDIRECT_URL | DEPLOYMENT_BASE_URL/api/auth/callback/cognito |
 | OAUTH_SIGN_OUT_REDIRECT_URL | DEPLOYMENT_BASE_URL |
 
 Where `DEPLOYMENT_BASE_URL` is your deployment's base URL, based on the `YOUR_PROJECT_NAME` value used during deployment.
 **For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like `https://ai-chef-bot-test.vercel.app`.
-In this case, you will have the following OAUTH variables:
+**In this example,** you will have the following OAUTH variables:
 OAUTH_SIGN_IN_REDIRECT_URL=https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito
 OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 
-**WARNING:** If you do not add these environment variables to your deployment you will **NOT** able to use user authentication on your deployment.
+**WARNING:** If you do not add these environment variables to both your **AWS Cognito User Pool** AND your **Vercel Deployment** you will **NOT** able to use user authentication on your deployment.
+
+##### Update AWS Cognito User Pool 
+- First, navigate to your AWS Cognito User Pool.
+-
+- 
+- Refer to **steps 7 to 9** of [User Pool Setup Part 5](#step-5-integrate-your-app):
+  - Step 7: Add the following as an allowed Callback URL: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
+  - Step 9: Add the following as a Sign-Out URL: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
+
+##### Update Vercel Deployment Environment Variables
 You must add these values to your deployment's Environment Variables:
 - From your deployed project's **Deployment Dashboard**, left-click the **Settings** button.
 - On the **Project Settings** page, left-click the **Environment Variables** button to access the **Environment Variables** page
