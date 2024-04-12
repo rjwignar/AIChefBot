@@ -196,12 +196,12 @@ export default function recipes() {
       const data = await res.json();
       console.log("Data was returned: ", data);
 
-      // Generate Recipe Images
-      const recipesWithImages = await requestImageGeneration(data.recipes);
-      console.log("recipes with images in UI", recipesWithImages);
-      
-      // Set recipes to recipesWithImages
-      setGeneratedRecipes(recipesWithImages);
+      // Generate Recipe Images and update data.recipes with images for caching purposes
+      data.recipes = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", data.recipes);
+
+      // Set recipes to updated recipes with images
+      setGeneratedRecipes(data.recipes);
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
       sessionStorage.clear()

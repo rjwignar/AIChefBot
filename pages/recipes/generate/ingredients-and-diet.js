@@ -206,12 +206,12 @@ const IngredientsAndDietPage = () => {
       const data = await res.json();
       console.log("Data was returned: ", data);
 
-      // Generate Recipe Images
-      const recipesWithImages = await requestImageGeneration(data.recipes);
-      console.log("recipes with images in UI", recipesWithImages);
+      // Generate Recipe Images and update data.recipes with images for caching purposes
+      data.recipes = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", data.recipes);
 
-      // Set recipes to recipesWithImages
-      setRecipes(recipesWithImages);
+      // Set recipes to updated recipes with images
+      setRecipes(data.recipes);
       setMessageHistory(data.messageHistory);
 
       // Clear old, set new cached data
