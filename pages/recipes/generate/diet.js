@@ -187,12 +187,18 @@ const DietPage = () => {
       // Show recipes, no image generated yet
       setRecipes(data.recipes);
 
+      // // Store in session storage
+      sessionStorage.clear();
+      data.selectedDiet = selectedDiet;
+      setCache(data);
+
       // Generate Recipe Images and update data.recipes with images for caching purposes
       data.recipes = await requestImageGeneration(data.recipes);
       console.log("recipes with images in UI", data.recipes);
 
       // Set recipes to updated recipes with images
       setRecipes(data.recipes);
+
       // Store in session storage
       sessionStorage.clear();
       data.selectedDiet = selectedDiet;

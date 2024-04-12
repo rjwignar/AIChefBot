@@ -92,6 +92,11 @@ const IngredientsPage = () => {
          // Show recipes, no image generated yet
          setRecipes(data.recipes);
 
+         // // Store in session storage
+         sessionStorage.clear();
+         data.selectedIngredients = selectedIngredients;
+         setCache(data);
+
          // Generate Recipe Images and update data.recipes with images for caching purposes
          data.recipes = await requestImageGeneration(data.recipes);
          console.log("recipes with images in UI", data.recipes);
