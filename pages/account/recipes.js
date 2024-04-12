@@ -360,7 +360,7 @@ export default function recipes() {
                   onClick={handleGenerateSimilarRecipes} 
                   disabled={selectedRecipes.length > 9 ? true : false} 
                   className="me-2">
-                    {selectedRecipes.length > 9 ? <>Too Many Recipes (Less than or Equal to 9)!</> : <>Generate Similar Recipes</>}
+                    {selectedRecipes.length > 9 ? <>Can't Generate! 9 Recipes Max.</> : <>Generate Similar Recipes</>}
                 </Button>
                 <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
               </div>
