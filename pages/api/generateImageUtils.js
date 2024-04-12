@@ -48,8 +48,8 @@ export async function requestImageGeneration(recipes) {
     // if there is an AI-generated image, use it (tempImageURL)
     // otherwise, use placeholder image
     console.log("recipes to be sent", recipes);
-    const res = await fetch(`/api/images/request`, {
-       method: "PUT",
+    const res = await fetch(`/api/images/openai/request`, {
+       method: "POST",
        headers: {
           "Content-Type": "application/json",
        },
