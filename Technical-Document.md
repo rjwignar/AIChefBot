@@ -1,5 +1,7 @@
 # Technical Document
 
+![Technical Document Header](https://github.com/rjwignar/AIChefBot/assets/97624401/79957b9e-83e2-4e6f-912e-1bf1f23c17f0)
+
 ## Overview
 
 AIChefBot is an innovative web application designed to generate unique and creative recipes using OpenAI's language model. This document outlines the technical aspects of AIChefBot, including its architecture, technologies used in the frontend and backend, and various other system components.
@@ -77,8 +79,18 @@ Below includes diagrams we've created when planning the project which should hel
 
 **Login/Registration**
 
+![Login And Registration](https://github.com/rjwignar/AIChefBot/assets/97624401/b2c1dfd9-a42b-4c72-9657-9735ba240086)
+
 **Manage Account**
+
+![Manage Account](https://github.com/rjwignar/AIChefBot/assets/97624401/6845a904-2579-4433-a98f-55a67e8a73bf)
+
 
 **Manage Recipes**
 
+![Manage Recipes](https://github.com/rjwignar/AIChefBot/assets/97624401/bdee0f82-3367-42fd-803b-e5926e627220)
+
+
 **Generate Recipes**
+
+![Generate Recipes](https://github.com/rjwignar/AIChefBot/assets/97624401/f62274a6-b9e5-4c7a-9963-7da440de532d)
