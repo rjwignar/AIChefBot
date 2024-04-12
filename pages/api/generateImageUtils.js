@@ -24,7 +24,7 @@ const generateOneRecipeImage = async (recipe) =>{
         // If this happens, we don't want to throw the error as it will suspend the app in the recipe generation animation
         // We just want to log the error and return unmodified recipe with no generated image
         // When displaying this recipe, the recipe card will instead have the placeholder image
-        console.error(error);
+        console.error(`Error when generating image of ${recipe.name}: ${error}`);
         return recipe;
     }
 }
