@@ -27,13 +27,37 @@ Install packages using NPM (this may take a minute).
 $ npm install
 ```
 
-#### Environment Variables
+### Environment Variables
 
 Before a working version of AIChefBot can be run in a local repository, one must acquire and set environment variables.
 
 ```touch .env```
 
 See an example of the `.env` file [here](./.env_example)
+
+### Getting your keys
+
+#### 1. OpenAI
+
+[Sign up to OpenAI](https://platform.openai.com/signup)
+
+- Frmo the sidebar, find the **API Keys** section.
+- Click **Create new secret key**
+- Give your key a name
+- Copy your key into `.env` and replace `YOUR_OPENAI_API_KEY` with your new API key.
+
+From here, you'll have to manage your funds. From the sidebar, navigate to **usage**, and put some funds in your account to use our OpenAI's models to generate your own recipes and images.
+
+
+#### 2. MongoDB Atlas
+
+
+
+#### 3. Cloudinary
+
+
+
+#### 4. AWS Cognito
 
 Here you will have access to the most recent version of the application. To make changes and contribute, see the [contributing](./CONTRIBUTING.md) document.
 
