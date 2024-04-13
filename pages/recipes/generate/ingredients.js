@@ -21,6 +21,8 @@ const IngredientsPage = () => {
    const [ingredientsList, setIngredientsList] = useState([]);
    // Check if the user wants to only use the ingredients list
    const [limitIngredients, setLimitIngredients] = useState(false);
+   // Sets image awaiting state
+   const [awaitingImages, setAwaitingImages] = useState(false); 
 
    useEffect(() => {
       if (session) {
@@ -67,6 +69,7 @@ const IngredientsPage = () => {
       }
       try {
          console.log("Fetching recipes from API by ingredient...");
+         setAwaitingImages(false);
          /* --- Fetch API to get recipes --- */
          const res = await fetch("/api/generateRecipe", {
             method: "POST",
@@ -89,6 +92,9 @@ const IngredientsPage = () => {
          const data = await res.json();
          console.log("Data was returned: ", data);
          
+         // If image generation turned on, set awaitingImages to True
+         setAwaitingImages(true);
+
          // Generate Recipe Images and update data.recipes with images for caching purposes
          data.recipes = await requestImageGeneration(data.recipes);
          console.log("recipes with images in UI", data.recipes);
@@ -175,7 +181,7 @@ const IngredientsPage = () => {
                         Generate New Recipes
                      </Button>
                   </Row>
-                  {!recipes && <LoadingScreen/>}
+                  {!recipes && <LoadingScreen awaitingImages={awaitingImages}/>}
                </Container>
             ) : (
                <Container>

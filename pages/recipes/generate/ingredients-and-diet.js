@@ -34,7 +34,8 @@ const IngredientsAndDietPage = () => {
   const [ingredientsList, setIngredientsList] = useState([]);
   // Check if the user wants to only use the ingredients list
   const [limitIngredients, setLimitIngredients] = useState(false);
-
+  // Sets image awaiting state
+  const [awaitingImages, setAwaitingImages] = useState(false); 
   // For Diets
   // The string format of the selected diet
   const [selectedDiet, setSelectedDiet] = useState("");
@@ -184,6 +185,7 @@ const IngredientsAndDietPage = () => {
     }
     try {
       console.log("Fetching recipes from API by ingredient and diet...");
+      setAwaitingImages(false);
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",
@@ -205,6 +207,9 @@ const IngredientsAndDietPage = () => {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
+
+      // If image generation turned on, set awaitingImages to True
+      setAwaitingImages(true);
 
       // Generate Recipe Images and update data.recipes with images for caching purposes
       data.recipes = await requestImageGeneration(data.recipes);
@@ -280,7 +285,7 @@ const IngredientsAndDietPage = () => {
                 Generate New Recipes
               </Button>
             </Row>
-            {!recipes && <LoadingScreen />}
+            {!recipes && <LoadingScreen awaitingImages={awaitingImages}/>}
           </Container>
         ) : (
           <Container>

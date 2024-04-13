@@ -27,6 +27,8 @@ export default function recipes() {
   const [messageHistory, setMessageHistory] = useState([]);
   // selected Recipes
   const [selectedRecipes, setSelectedRecipes] = useState([]);
+  // Sets image awaiting state
+  const [awaitingImages, setAwaitingImages] = useState(false);
 
   const [showDeleteRecipesModal, setShowDeleteRecipesModal] = useState(false);
 
@@ -174,6 +176,7 @@ export default function recipes() {
     }
     try {
       console.log("Messages History: " + messageHistory);
+      setAwaitingImages(false);
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",
@@ -195,6 +198,9 @@ export default function recipes() {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
+
+      // If image generation turned on, set awaitingImages to True
+      setAwaitingImages(true);
 
       // Generate Recipe Images and update data.recipes with images for caching purposes
       data.recipes = await requestImageGeneration(data.recipes);
@@ -256,7 +262,7 @@ export default function recipes() {
                   Generate New Recipes
                 </Button>
               </Row>
-              {!generatedRecipes && <LoadingScreen />}
+              {!generatedRecipes && <LoadingScreen awaitingImages={awaitingImages}/>}
             </Container>
           {/* Render recipes if available */}
           {generatedRecipes && (
