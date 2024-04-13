@@ -200,8 +200,10 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 
 ##### Update AWS Cognito User Pool 
 - First, navigate to your AWS Cognito User Pool.
--
-- 
+- Navigate to **App integration** tab, scroll down till you find **App client list**.
+- click your app name, scroll down to **Hosted UI** click edit.
+- in the **Allowed callback URLs** section click Add another URL refer to step 7 right below.
+- After go to the **Allowed sign-out URLs** section click Add another URL refer to step 9 right below. 
 - Refer to **steps 7 to 9** of [User Pool Setup Part 5](#step-5-integrate-your-app):
   - Step 7: Add the following as an **Allowed Callback URL**: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
   - Step 9: Add the following as a **Sign-Out URL**: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
