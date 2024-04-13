@@ -4,7 +4,7 @@
 
 Use this tool to find recipes that accomodate your dietary restrictions. Revisit the recipes you plan to make in the future, and find new recipes based on the ones you've tried, and enjoyed.
 
-### Start Generating Recipes Today!
+### [Start Generating Recipes Today!](https://ai-chef-bot.vercel.app/)
 
 AIChefbot is deployed with the help of [Vercel](https://vercel.com/).
 To access the website, navigate to https://ai-chef-bot.vercel.app/.
