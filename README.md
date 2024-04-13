@@ -6,7 +6,7 @@ Use this tool to find recipes that accomodate your dietary restrictions. Revisit
 
 ### Start Generating Recipes Today!
 
-AIChefbot is hosted on [Vercel](https://vercel.com/).
+AIChefbot is deployed with the help of [Vercel](https://vercel.com/).
 To access the website, navigate to https://ai-chef-bot.vercel.app/.
 
 As a guest user, you will have access to recipe generation, and can download these recipes as a PDF.
