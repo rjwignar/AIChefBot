@@ -6,6 +6,7 @@ import RecipeCardList from "@/components/RecipeCardList";
 import { Pagination } from 'react-bootstrap';
 import DeleteRecipesModal from "@/components/DeleteRecipesModal";
 import LoadingScreen from "@/components/LoadingScreen";
+import { setCache, getCache } from "@/pages/api/sessionStorage";
 
 // Page of manage recipes:
 export default function recipes() {
@@ -45,6 +46,20 @@ export default function recipes() {
     };
     authenticate();
     if (!recipes) getRecipes();
+  }, []);
+
+  useEffect(() => {
+    /*
+      Check cache
+        - Destructure relevant JSON data
+        - Set application state
+    */
+    let {recipes, messageHistory, similarRecipes} = getCache();
+    if (recipes && messageHistory && similarRecipes == true) {
+      setGeneratedRecipes(recipes);
+      setMessageHistory(messageHistory);
+      setGeneratePressed(true);
+    }
   }, []);
 
   // Sorts the recipes based on least or most recent.
@@ -150,10 +165,14 @@ export default function recipes() {
     setSelectedRecipes([]); // Unselect selected recipes
     setGeneratedRecipes(null);
     setFilterText("");
+    sessionStorage.clear();
   }
 
   const handleGenerateSimilarRecipes = async () => {
     setGeneratePressed(true);
+    if (messageHistory.length > 0) {
+      setGeneratedRecipes(null);
+    }
     try {
       console.log("Messages History: " + messageHistory);
       /* --- Fetch API to get recipes ---  */
@@ -180,6 +199,9 @@ export default function recipes() {
       setGeneratedRecipes(data.recipes);
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
+      sessionStorage.clear()
+      data.similarRecipes = true;
+      setCache(data);
       /* Updating database stuff: */
       if (session) {
         updateDatabase(data.recipes.length);
@@ -187,48 +209,6 @@ export default function recipes() {
       /* ---------------------------- */
     } catch (err) {
       console.error(err);
-    }
-  }
-
-  const handleGenerateMoreClick = async () => {
-    // Resetting recipes
-    // This is for display purpose only
-    setGeneratedRecipes(null);
-    try {
-      console.log(messageHistory);
-      const response = await fetch("/api/generateRecipe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ messageHistory }),
-      });
-      /* --- Check if "res" is ok and content type is valid --- */
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("Oops, we haven't got JSON!");
-      }
-      /* ------------------------------------------------------ */
-      /* --- Get Data From Response --- */
-      const data = await response.json();
-      console.log(data);
-      console.log("message history", data.messageHistory);
-      setGeneratedRecipes(data.recipes);
-      setMessageHistory(data.messageHistory);
-      console.log("new message history", messageHistory);
-      console.log("recipes below in UI", recipes);
-      /* ------------------------------- */
-      /* Updating database */
-      if (session) {
-        updateDatabase(data.recipes.length);
-      }
-      /* ----------------- */
-    } catch (err) {
-      console.error(err)
     }
   }
 
@@ -262,7 +242,7 @@ export default function recipes() {
           <Container className="mb-4">
               <Row>
                 <Button
-                  onClick={handleGenerateMoreClick}
+                  onClick={handleGenerateSimilarRecipes}
                   className="generate-recipe-btn"
                   variant="success"
                   size="lg"
@@ -294,7 +274,7 @@ export default function recipes() {
               <Row className="align-items-center">
                 <Col xs="auto">
                   <Button variant={selectedRecipes.length > 0 ? "secondary" : "primary"} onClick={() => {selectedRecipes.length > 0 ? setSelectedRecipes([]) : setSelectedRecipes(filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe))}}>
-                    {selectedRecipes.length > 0 ? <>Deselect All Recipes Displayed</> : <>Select All Recipes Displayed</>}
+                    {selectedRecipes.length > 0 ? <>Deselect All {currentRecipes.length} Recipes</> : <>Select All {currentRecipes.length} Recipes</>}
                   </Button>
                 </Col>
                 <Col>

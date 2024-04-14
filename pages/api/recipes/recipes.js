@@ -46,11 +46,14 @@ export async function addRecipe(data) {
     try {
         // assign a unique identifier
         data.recipe._id = new ObjectId();
+        // assign a creation date
+        data.recipe.created = new Date().toISOString();
         // Push recipe to user's recipe list
         const res = await collection.updateOne(
             {_id: data.userId}, 
             { $push: { recipes: data.recipe }}
         );
+        console.log("Added recipe: ", data.recipe);
         // Return with _id of added recipe.
         // Needed so this action can be undone in UI.
         return data.recipe._id;
@@ -78,4 +81,3 @@ export async function deleteRecipes(data) {
         return null;
     }
 }
-
