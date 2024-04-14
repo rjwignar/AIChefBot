@@ -172,11 +172,11 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
                <div className="ingredients-steps-count">
                   <span className="recipe-card-subtitle me-4">
                      <i className="fas fa-book"></i> 
-                     <strong className='ms-2'>{recipe.ingredients.length}</strong> Ingredients
+                     <strong className='ms-2'>{recipe.ingredients.length ? recipe.ingredients.length : 0}</strong> Ingredients
                   </span>
                   <span className='recipe-card-subtitle'>
                      <i className="fas fa-utensils"></i> 
-                     <strong className='ms-2'>{recipe.steps.length}</strong> Steps
+                     <strong className='ms-2'>{recipe.steps.length ? recipe.steps.length : 0}</strong> Steps
                      </span>
                </div>
                <Card.Subtitle className='recipe-card-subtitle mb-4 mt-3 text-muted'>
