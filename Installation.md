@@ -90,23 +90,23 @@ After these steps, you will have created your own **Cloudinary Product Environme
 2. When you are at console home search **Cognito**
 3. Click **Create user pool**
 
-### Step 1: Configure sign-in experience
+##### Configure sign-in experience
 1. Select the options **User name, Email**
 
-### Step 2: Configure security requirements
+##### Configure security requirements
 1. Make whatever password policy you want or you can leave it default
 2. Make sure to select **No MFA** (you can add MFA but will add cost)
 3. Make sure **Enable self service account recovery** is checked and use **Email only** (other options have additional cost)
 
-### Step 3: Configure sign-up experience
+##### Configure sign-up experience
 1. Make sure **Enable self-registration** is selected 
 2. Make sure **Keep original attribute value active when an update is pending** is selected
 3. In the required attributes dropdown add **name**
 
-### Step 4: Configure message delivery
+##### Configure message delivery
 1. Select **Send email with Cognito** keep the rest default
 
-### Step 5: Integrate your app
+##### Integrate your app
 1. Give your user pool a name such as `yourname-aichefbot-users`
 2. Select **Use the Cognito Hosted UI** 
 3. Select **Use a Cognito domain** 
@@ -129,10 +129,10 @@ Double check all the values are correct create your user pool.
 6. On the **Client ID** tab copy the value and replace `YOUR_COGNITO_CLIENT_ID` inside`.env`
 
 ### OAuth Sign-In and Out Redirect URLS, AWS Amazon Cognito Logout Endpoint URL and AWS Amazon Cognito Issuer
-these keys are provided for you in the .env_example [here](./env_exmaple) copy them and add to your `.env`
+These keys are provided for you in the .env_example [here](./env_example) copy them and add to your `.env`
 
 ### NextAuthJS secret
-generate a secret with
+Generate a secret with
 ```bash
 $ openssl rand -base64 64
 ```
