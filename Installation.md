@@ -86,27 +86,27 @@ After these steps, you will have created your own **Cloudinary Product Environme
 
 #### 4. AWS Cognito
 
-1. You will have to create a AWS Account [Sign up to AWS](https://aws.amazon.com/console/) 
-2. When you are at console home search **Cognito**
-3. Click **Create user pool**
+You will have to create a AWS Account [Sign up to AWS](https://aws.amazon.com/console/) 
+1. When you are at console home search **Cognito**
+2. Click **Create user pool**
 
-##### Configure sign-in experience
-1. Select the options **User name, Email**
+**Configure sign-in experience**
+Select the options **User name, Email**
 
-##### Configure security requirements
+**Configure security requirements**
 1. Make whatever password policy you want or you can leave it default
 2. Make sure to select **No MFA** (you can add MFA but will add cost)
 3. Make sure **Enable self service account recovery** is checked and use **Email only** (other options have additional cost)
 
-##### Configure sign-up experience
+**Configure sign-up experience**
 1. Make sure **Enable self-registration** is selected 
 2. Make sure **Keep original attribute value active when an update is pending** is selected
 3. In the required attributes dropdown add **name**
 
-##### Configure message delivery
+**Configure message delivery**
 1. Select **Send email with Cognito** keep the rest default
 
-##### Integrate your app
+**Integrate your app**
 1. Give your user pool a name such as `yourname-aichefbot-users`
 2. Select **Use the Cognito Hosted UI** 
 3. Select **Use a Cognito domain** 
@@ -117,10 +117,10 @@ After these steps, you will have created your own **Cloudinary Product Environme
 8. Click the dropdown **Advanced app client settings** scroll down to **OpenID Connect scopes** click the dropdown and add `aws.cognito.signin.user.admin` scope.
 9. Click **Add sign-out URL** copy and paste `http://localhost:3000`
   
-### Step 6: Review and Create
+**Review and Create**
 Double check all the values are correct create your user pool.
 
-### Getting your keys
+**Getting your keys**
 1. Click on your newly created user pool
 2. Copy the **User Pool ID** and replace `YOUR_USER_POOL_ID` inside`.env` 
 3. Click the **App integration** tab
@@ -128,19 +128,19 @@ Double check all the values are correct create your user pool.
 5. Scroll all they way down till you see **App client list**
 6. On the **Client ID** tab copy the value and replace `YOUR_COGNITO_CLIENT_ID` inside`.env`
 
-### OAuth Sign-In and Out Redirect URLS, AWS Amazon Cognito Logout Endpoint URL and AWS Amazon Cognito Issuer
+**OAuth Sign-In and Out Redirect URLS, AWS Amazon Cognito Logout Endpoint URL and AWS Amazon Cognito Issuer**
 These keys are provided for you in the .env_example [here](./env_example) copy them and add to your `.env`
 
-### NextAuthJS secret
+NextAuthJS secret
 Generate a secret with
 ```bash
 $ openssl rand -base64 64
 ```
 copy that value and replace `YOUR_NEXTAUTH_SECRET` inside `.env`
 
-Here you will have access to the most recent version of the application. To make changes and contribute, see the [contributing](./CONTRIBUTING.md) document.
-
 ### Running the Development Version
+
+After following these steps, you will be able to run a full version of the most recent version of the application. To make changes and contribute, see the [contributing](./CONTRIBUTING.md) document.
 
 ```bash
 $ npm run dev
