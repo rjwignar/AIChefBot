@@ -5,7 +5,7 @@ This document gives an overview of how to install a working version of AIChefBot
 
 ### Contents
 - [Local Install](#installation)
-- [Environment Variables](#Environment_Variables)
+- [Environment Variables](#Environment-Variables)
 - [Deployment](#Deployment)
 
 <hr>
@@ -230,5 +230,3 @@ After saving the new environment variables, you must **redeploy** your deploymen
 After redeployment is complete, user authentication via AWS Cognito will be restored to your production deployment.
 
 You can now navigate to your deployment and interact with it as it was meant to be.
-
----
