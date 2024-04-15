@@ -33,7 +33,7 @@ AIChefBot leverages a robust architecture designed to provide a seamless experie
 
 **Client-Side**
 
-The client-side is built with [Next.js](https://nestjs.com/) and interacts with backend via RESTful APIs. For frontend we're using [react-bootstrap](https://react-bootstrap.netlify.app/) as our main css framework with other custom styles.
+The client-side is built with [Next.js](https://nextjs.org/) and interacts with backend via RESTful APIs. For frontend we're using [react-bootstrap](https://react-bootstrap.netlify.app/) as our main css framework with other custom styles.
 
 **Server-Side**
 
@@ -49,7 +49,7 @@ This data flow diagram (DFD) maps the flow of information throughout the system:
 
 Below outlines the key of technologies and libraries used in building the frontend application.
 
-- **Nest.js**: Framework for rendering pages on both server and client side.
+- **Next.js**: Framework for rendering pages on both server and client side.
 - **React**: Used for building user interface components.
 - **React-Bootstrap**: Main CSS framework for rapid UI development.
 
