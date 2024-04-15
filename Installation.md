@@ -152,6 +152,7 @@ $ npm run dev
 
 Navigate to `http://localhost:3000` in your chosen browser to experience the development version.
 
+<br>
 <hr>
 <br>
 
