@@ -163,7 +163,7 @@ const RecipeCard = ({ recipe, onDelete, onSelect, isSelected, isSelectable }) =>
             <Card.Img className='recipe-card-img' variant="top" src={recipe.imageURL || recipe.tempImageURL || 'https://i.imgur.com/iTpOC92.jpeg'}/>
             <Card.Body className='p-3'>
                <Card.Title className='recipe-card-title mt-2'>{recipe.name}</Card.Title>
-               {router.asPath == '/account/recipes' && 
+               {router.asPath == '/account/recipes' && recipe.created && 
                   <Badge className={"bg-success bg-opacity-75"}>
                      Created:&nbsp;
                      {new Date(recipe.created).toLocaleDateString()}
