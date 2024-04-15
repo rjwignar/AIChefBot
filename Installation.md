@@ -218,7 +218,7 @@ OAUTH_SIGN_IN_REDIRECT_URL=https://ai-chef-bot-test.vercel.app/api/auth/callback
 
 OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 
-**WARNING:** If you do not add these environment variables to both your **AWS Cognito User Pool** AND your **Vercel Deployment** you will **NOT** able to use user authentication on your deployment.
+**WARNING:** If you do not add these environment variables to both your **AWS Cognito User Pool** AND your **Vercel Deployment** you will **NOT** able to login or create an account on your deployment.
 
 ##### Add Allowed Callback and Allowed Sign-Out URLs (AWS Cognito User Pool)
 
