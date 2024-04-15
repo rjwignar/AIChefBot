@@ -161,14 +161,21 @@ The most convenient way to deploy AIChefBot on Vercel is to deploy the code from
 Deploying your project from GitHub is useful because any changes pushed to the main branch (e.g. by Pull Request) will trigger re-deployment of the updated main branch to Vercel.
 This means the Production deployment will always be up-to-date with the latest code changes.
 
+#### Login to Vercel
+
 - To deploy AIChefBot to Vercel, first navigate to https://vercel.com/ then left-click the **Log In** button at the top right corner of the page.
 - From the Log In page, left-click the **Continue with GitHub** button.
 - A browser window will open, prompting you to sign into GitHub to continue to Vercel.
 - Successfully logging in to GitHub, the window will close and you will be redirected to the **Vercel Projects Overview** page.
+
+#### Begin adding AIChefBot as a Vercel Project
+
 - On the top right corner of the **Projects Overview Page**, left-click the **Add New** button, then left-click the **Project** button.
 - This will prompt you to import a Git respository from GitHub.
 - Select AIChefBot then left-click the **Import** button.
 - At this point, you will be directed to the **Configure Project** page.
+
+#### Configure Project
 - You will need to enter the following information:
 
 | Field | Value |
@@ -181,14 +188,20 @@ This means the Production deployment will always be up-to-date with the latest c
 
 `*`: `YOUR_PROJECT_NAME` will affect the final deployment URL provisioned by Vercel.
 
-**For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like `https://ai-chef-bot-test.vercel.app`.
+**For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like:
+`https://ai-chef-bot-test.vercel.app`.
+
+#### Deploy Project
 
 - After you have added the above information, left-click the **Deploy** button to deploy AIChefBot.
 - Once Deployment is complete, you will see a **Congratulations!** page. From there, left-click the **Continue to Dashboard** button to go to your deployment dashboard.
 - From the **Deployment Dashboard**, left-click the **Visit** button to open and access the deployed app.
 
-#### Post-Deployment Requirements for User Authentication with AWS Cognito User Pool
-After deploying AIChefBot to Vercel, you need to update the following environment variables in both your **AWS Cognito User Pool** AND your **Vercel Deployment**:
+#### Integrate Cognito User Pool with Deployment
+After deploying AIChefBot to Vercel, you need to integrate your Cognito User Pool with your deployment.
+If you do not do this, you will **not** be able to **register** or **login** to your deployment.
+
+To integrate your User Pool with your deployment, you must update the following environment variables in both your **AWS Cognito User Pool** AND your **Vercel Deployment**:
 
 | .env Variable Name | Updated Value |
 | OAUTH_SIGN_IN_REDIRECT_URL | DEPLOYMENT_BASE_URL/api/auth/callback/cognito |
@@ -196,7 +209,8 @@ After deploying AIChefBot to Vercel, you need to update the following environmen
 
 Where `DEPLOYMENT_BASE_URL` is your deployment's base URL, based on the `YOUR_PROJECT_NAME` value used during deployment.
 
-**For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like `https://ai-chef-bot-test.vercel.app`.
+**For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like:
+`https://ai-chef-bot-test.vercel.app`.
 
 **In this example,** you will have the following OAUTH variables:
 
@@ -206,7 +220,8 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 
 **WARNING:** If you do not add these environment variables to both your **AWS Cognito User Pool** AND your **Vercel Deployment** you will **NOT** able to use user authentication on your deployment.
 
-##### Update AWS Cognito User Pool 
+##### Add Allowed Callback and Allowed Sign-Out URLs (AWS Cognito User Pool)
+
 - First, navigate to your AWS Cognito User Pool.
 - Navigate to **App integration** tab, scroll down till you find **App client list**.
 - click your app name, scroll down to **Hosted UI** click edit.
@@ -216,7 +231,8 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
   - Step 7: Add the following as an **Allowed Callback URL**: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
   - Step 9: Add the following as a **Sign-Out URL**: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
 
-##### Update Vercel Deployment Environment Variables
+##### Add new Allowed Callback and Allowed Sign-Out URLs to Vercel Deployment Environment Variables
+
 You must add these values to your deployment's Environment Variables:
 - From your deployed project's **Deployment Dashboard**, left-click the **Settings** button.
 - On the **Project Settings** page, left-click the **Environment Variables** button to access the **Environment Variables** page
@@ -229,11 +245,14 @@ You must add these values to your deployment's Environment Variables:
 
 - Left-click the **Save** button to save these environment variables.
 
+##### Redeploy Project
 After saving the new environment variables, you must **redeploy** your deployment so the production build will have these environment variables:
 - On the same page, left-click the **Project** button to go to the **Production Deployment** page
 - Then left-click the **Build Logs** button.
 - Beside the Visit button, left-click the **vertical ellipsis** button (three `.`'s on top of each other), **then left-click Redeploy**
 - Left-click **Redeploy** to confirm redeployment.
+
+#### Start Generating Recipes
 
 After redeployment is complete, user authentication via AWS Cognito will be restored to your production deployment.
 
