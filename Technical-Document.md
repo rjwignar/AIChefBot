@@ -41,7 +41,9 @@ The backend server is also powered by Next.js that handles API requests, integra
 
 ### Data Flow Diagram
 
-This data flow diagram (DFD) maps the flow of information throughout the system.
+This data flow diagram (DFD) maps the flow of information throughout the system:
+![image](https://github.com/rjwignar/AIChefBot/assets/78163326/2491e472-c6d1-424b-a5f7-7c35718ba6e9)
+
 
 ## Frontend Technologies
 
@@ -55,14 +57,15 @@ Below outlines the key of technologies and libraries used in building the fronte
 
 This section outlines the technologies and services utilized in the backend of AIChefBot to ensure easy data management, user authentication, and media storage. Each component listed below plays a crucial role in the system's overall functionality.
 
-- **Node.js**: The core of our server-side application, Node.js provides a powerful runtime environment.
-- **MongoDB**: We use MongoDB, a NoSQL database, to manage all dynamic data related to users and their interactions. This includes stored diets, saved recipes, and any other user-specific information.
-- **AWS Cognito**: User management is handled securely through AWS Cognito, which makes authentication and authorization easy. This includes managing sensitive user information such as email, passwords, and usernames.
-- **Cloudinary**: To handle the storage and retrieval of recipe images efficiently, we've used Cloudinary.
+- **[Node.js](https://nodejs.org/en)**: The core of our server-side application, Node.js provides a powerful runtime environment.
+- **[MongoDB](https://www.mongodb.com/atlas)**: We use MongoDB, a NoSQL database, to manage all dynamic data related to users and their interactions. This includes stored diets, saved recipes, and any other user-specific information.
+- **[AWS Cognito](https://aws.amazon.com/pm/cognito/)**: User management is handled securely through AWS Cognito, which makes authentication and authorization easy. This includes managing sensitive user information such as email, passwords, and usernames.
+- **[Cloudinary](https://cloudinary.com/)**: To handle the storage and retrieval of recipe images efficiently, we've used Cloudinary.
+- **[OpenAI API](https://platform.openai.com/docs/introduction)**: We use [OpenAI](https://openai.com/)'s [text generation models](https://platform.openai.com/docs/guides/text-generation) (i.e. GPT-3.5) and [image generation models](https://platform.openai.com/docs/guides/images) (i.e. [DALL-E 2](https://openai.com/dall-e-2)) to generate recipes and recipe images.
 
 ### OpenAI API Integration
 
-AIChefBot integrates with the OpenAI API, the main purpose of this project, to dynamically generate random recipes based on the users input. The integration process is meticulously designed to be intuitive and efficient, to ensure a seamless user experience.
+AIChefBot integrates with the [OpenAI API](https://platform.openai.com/docs/introduction), the main purpose of this project, to dynamically generate random recipes based on the users input. The integration process is meticulously designed to be intuitive and efficient, to ensure a seamless user experience.
 
 **User Input Collection**
 
