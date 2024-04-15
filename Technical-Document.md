@@ -49,9 +49,9 @@ This data flow diagram (DFD) maps the flow of information throughout the system:
 
 Below outlines the key of technologies and libraries used in building the frontend application.
 
-- **Next.js**: Framework for rendering pages on both server and client side.
-- **React**: Used for building user interface components.
-- **React-Bootstrap**: Main CSS framework for rapid UI development.
+- **[Next.js](https://nextjs.org/)**: Framework for rendering pages on both server and client side.
+- **[React](https://react.dev/)**: Used for building user interface components.
+- **[React-Bootstrap](https://react-bootstrap.netlify.app/)**: Main CSS framework for rapid UI development.
 
 ## Backend Technologies
 
@@ -73,7 +73,7 @@ Initially, the application prompts the user to generate based on their preferenc
 
 **Recipe Generation**
 
-Upon gathering the user's preferences, AIChefBot then utilizes the `gpt-3.5-turbo-1106` model from OpenAI to interpret the input and generate corresponding recipes. We made it so that the AI model should return the recipes in a structured JSON format, which inclues detailed ingredients, instructions, and steps. Furthermore, we're also using [dall-e](https://openai.com/dall-e-3) to generate images for those recipes.
+Upon gathering the user's preferences, AIChefBot then utilizes the `gpt-3.5-turbo-1106` model from OpenAI to interpret the input and generate corresponding recipes. We made it so that the AI model should return the recipes in a structured JSON format, which inclues detailed ingredients, instructions, and steps. Furthermore, we're also using [DALL-E](https://openai.com/dall-e-2) to generate images for those recipes.
 
 
 ## System Diagrams
