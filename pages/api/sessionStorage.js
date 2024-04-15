@@ -1,8 +1,7 @@
-// Module for caching recipes in session storage
-// a) User registers when they generate a recipe they like
-// b) User navigates from page and wants to see the same recipes
 
-// Array of JSON objects must be stringified
+// Module for caching recipes in session storage
+// Also cache page from which recipes were generated from
+
 export function setCache(data) {
     sessionStorage.setItem("recipes", JSON.stringify(data.recipes));
     sessionStorage.setItem("messageHistory", JSON.stringify(data.messageHistory));
@@ -16,7 +15,6 @@ export function setCache(data) {
     sessionStorage.setItem('similarRecipes', data.similarRecipes ? true : false);
 }
 
-// Array of JSON objects must be parsed
 export function getCache() {
     return {
         recipes: JSON.parse(sessionStorage.getItem("recipes")),
@@ -27,10 +25,15 @@ export function getCache() {
     }
 }
 
-export function updateRecipeId(recipe, id) {
-    console.log("Updating cache...");
+export function cacheSetSaved(recipe, id) {
+    // Get recipes
     let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    if (!recipes) {
+        return null;
+    }
+    // For each recipe
     for (let e of recipes) {
+        // If recipe matches, give _id property
         if (e.name == recipe.name) {
             e._id = id;
             break;
@@ -39,15 +42,43 @@ export function updateRecipeId(recipe, id) {
     sessionStorage.setItem("recipes", JSON.stringify(recipes));
 }
 
-export function removeRecipeId(recipe) {
-    console.log("Updating cache...");
+export function cacheSetUnsaved(recipe) {
+    // Get recipes
     let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    if (!recipes) { 
+        return;
+    }
+    // For each recipe
     for (let e of recipes) {
-        console.log(e);
+        // If recipe matches, delete _id property
         if (e.name == recipe.name) {
             delete e._id;
             break;
         }
     }
+    // Set new recipes item
     sessionStorage.setItem("recipes", JSON.stringify(recipes));
 }
+
+export function cacheClearSavedAll(deletedRecipes) {
+    // Update cache to reflect recipes being unsaved,
+    // But keep them in the cache
+    
+    // Get recipes from cache
+    let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    if (!recipes) {
+        return;
+    }
+    console.log(recipes);
+    // Get array of recipe IDs from all up for deletion
+    const recipeIds = deletedRecipes.map(deletedRecipes => deletedRecipes._id);
+    console.log(recipeIds);
+    // For each cachedRecipe,
+    for (let rcp of recipes) {
+        // If this recipe is up for deletion,
+        if (rcp._id && recipeIds.includes(rcp._id)) {
+            // Remove the ID from the cached recipe
+            cacheSetUnsaved(rcp);
+        }
+    }
+ }
