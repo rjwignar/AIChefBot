@@ -37,6 +37,9 @@ export function cacheSetSaved(recipe, id) {
 export function cacheSetUnsaved(recipe) {
     // Get recipes
     let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    if (!recipes) { 
+        return;
+    }
     // For each recipe
     for (let e of recipes) {
         // If recipe matches, delete _id property
