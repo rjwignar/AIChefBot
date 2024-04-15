@@ -61,7 +61,7 @@ export function cacheClearSavedAll(deletedRecipes) {
     // Get array of recipe IDs from all up for deletion
     const recipeIds = deletedRecipes.map(deletedRecipes => deletedRecipes._id);
     // For each cachedRecipe,
-    for (let rcp of cachedRecipes) {
+    for (let rcp of recipes) {
         // If this recipe is up for deletion,
         if (rcp._id && recipeIds.includes(rcp._id)) {
             // Remove the ID from the cached recipe
