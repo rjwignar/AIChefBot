@@ -62,15 +62,20 @@ export default function recipes() {
     }
   }, []);
 
-  // Sorts the recipes based on least or most recent.
+  // Sorts the recipes based on most or least recent.
   useEffect(() => {
     if (recipes) {
       let sortedFilteredRecipes = [...filteredRecipes];
-      if (isSortedMostRecent) {
-        sortedFilteredRecipes.reverse();
-      } else {
-        sortedFilteredRecipes = [...recipes];
-      }
+      
+      
+      // Sort the recipes based on the "created" attribute
+      sortedFilteredRecipes.sort((a, b) => {
+        // Convert the date strings to Date objects for reliable comparison
+        let dateA = new Date(a.created);
+        let dateB = new Date(b.created);
+        // Determine sort order based on the isSortedMostRecent flag
+        return isSortedMostRecent ? dateB - dateA : dateA - dateB;
+      });
       setFilteredRecipes(sortedFilteredRecipes);
     }
   }, [isSortedMostRecent, recipes]);  
