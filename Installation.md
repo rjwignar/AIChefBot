@@ -90,23 +90,23 @@ You will have to create a AWS Account [Sign up to AWS](https://aws.amazon.com/co
 1. When you are at console home search **Cognito**
 2. Click **Create user pool**
 
-**Configure sign-in experience**
+##### **Configure sign-in experience**
 Select the options **User name, Email**
 
-**Configure security requirements**
+##### **Configure security requirements**
 1. Make whatever password policy you want or you can leave it default
 2. Make sure to select **No MFA** (you can add MFA but will add cost)
 3. Make sure **Enable self service account recovery** is checked and use **Email only** (other options have additional cost)
 
-**Configure sign-up experience**
+##### **Configure sign-up experience**
 1. Make sure **Enable self-registration** is selected 
 2. Make sure **Keep original attribute value active when an update is pending** is selected
 3. In the required attributes dropdown add **name**
 
-**Configure message delivery**
+##### **Configure message delivery**
 1. Select **Send email with Cognito** keep the rest default
 
-**Integrate your app**
+##### **Integrate your app**
 1. Give your user pool a name such as `yourname-aichefbot-users`
 2. Select **Use the Cognito Hosted UI** 
 3. Select **Use a Cognito domain** 
@@ -117,10 +117,10 @@ Select the options **User name, Email**
 8. Click the dropdown **Advanced app client settings** scroll down to **OpenID Connect scopes** click the dropdown and add `aws.cognito.signin.user.admin` scope.
 9. Click **Add sign-out URL** copy and paste `http://localhost:3000`
   
-**Review and Create**
+##### **Review and Create**
 Double check all the values are correct create your user pool.
 
-**Getting your keys**
+##### **Getting your keys**
 1. Click on your newly created user pool
 2. Copy the **User Pool ID** and replace `YOUR_USER_POOL_ID` inside`.env` 
 3. Click the **App integration** tab
@@ -211,7 +211,7 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 - click your app name, scroll down to **Hosted UI** click edit.
 - in the **Allowed callback URLs** section click Add another URL refer to step 7 right below.
 - After go to the **Allowed sign-out URLs** section click Add another URL refer to step 9 right below. 
-- Refer to **steps 7 to 9** of [User Pool Setup - Integrate Your App](#integrate-your-app):
+- Refer to **Steps 7 to 9** of [AWS Cognito - Integrate Your App](#integrate-your-app):
   - Step 7: Add the following as an **Allowed Callback URL**: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
   - Step 9: Add the following as a **Sign-Out URL**: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
 
