@@ -129,14 +129,15 @@ Double check all the values are correct create your user pool.
 6. On the **Client ID** tab copy the value and replace `YOUR_COGNITO_CLIENT_ID` inside`.env`
 
 **OAuth Sign-In and Out Redirect URLS, AWS Amazon Cognito Logout Endpoint URL and AWS Amazon Cognito Issuer**
-These keys are provided for you in the .env_example [here](./env_example) copy them and add to your `.env`
 
-NextAuthJS secret
+These keys are provided for you in the `.env_example` [here](./.env_example) copy them and add to `.env`.
+
+**NextAuthJS secret**
 Generate a secret with
 ```bash
 $ openssl rand -base64 64
 ```
-copy that value and replace `YOUR_NEXTAUTH_SECRET` inside `.env`
+copy that value and replace `YOUR_NEXTAUTH_SECRET` inside `.env`.
 
 ### Running the Development Version
 
