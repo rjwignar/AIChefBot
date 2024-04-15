@@ -23,6 +23,9 @@ export function getCache() {
 export function cacheSetSaved(recipe, id) {
     // Get recipes
     let recipes = JSON.parse(sessionStorage.getItem("recipes"));
+    if (!recipes) {
+        return null;
+    }
     // For each recipe
     for (let e of recipes) {
         // If recipe matches, give _id property
@@ -57,12 +60,14 @@ export function cacheClearSavedAll(deletedRecipes) {
     // But keep them in the cache
     
     // Get recipes from cache
-    let {recipes} = getCache();
+    let recipes = JSON.parse(sessionStorage.getItem("recipes"));
     if (!recipes) {
         return;
     }
+    console.log(recipes);
     // Get array of recipe IDs from all up for deletion
     const recipeIds = deletedRecipes.map(deletedRecipes => deletedRecipes._id);
+    console.log(recipeIds);
     // For each cachedRecipe,
     for (let rcp of recipes) {
         // If this recipe is up for deletion,
