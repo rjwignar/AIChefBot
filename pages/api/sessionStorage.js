@@ -49,14 +49,17 @@ export function cacheSetUnsaved(recipe) {
     sessionStorage.setItem("recipes", JSON.stringify(recipes));
 }
 
-export function cacheClearSavedAll(recipes) {
+export function cacheClearSavedAll(deletedRecipes) {
     // Update cache to reflect recipes being unsaved,
     // But keep them in the cache
     
     // Get recipes from cache
-    let cachedRecipes = getCache().recipes;
+    let {recipes} = getCache();
+    if (!recipes) {
+        return;
+    }
     // Get array of recipe IDs from all up for deletion
-    const recipeIds = recipes.map(recipe => recipe._id);
+    const recipeIds = deletedRecipes.map(deletedRecipes => deletedRecipes._id);
     // For each cachedRecipe,
     for (let rcp of cachedRecipes) {
         // If this recipe is up for deletion,
