@@ -1,10 +1,10 @@
 // pages/api/generateImageUtils.js
 import OpenAI from 'openai';
 
-const openai = new OpenAI({apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY})
 
 const generateOneRecipeImage = async (recipe) =>{
     try{
+        const openai = new OpenAI({apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY});
         const imagePrompt = `${recipe.name}, prepared using the following ingredients: ${recipe.ingredients}.
         The dish is beautifully plated and presented as though featured on a high-end restaurant menu.`
         const image = await openai.images.generate({
@@ -43,3 +43,27 @@ export async function generateRecipeImages(recipes){
         throw new Error(error);
     }
 }
+
+export async function requestImageGeneration(recipes) {
+    // if there is an AI-generated image, use it (tempImageURL)
+    // otherwise, use placeholder image
+    console.log("recipes to be sent", recipes);
+    const res = await fetch(`/api/images/openai/request`, {
+       method: "POST",
+       headers: {
+          "Content-Type": "application/json",
+       },
+       body: JSON.stringify({recipes: recipes}),
+    });
+    if (!res.ok) {
+        throw new Error(`Network response was not ok: ${res.statusText}`);
+      }
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new TypeError("Oops, we haven't got JSON!");
+      }
+    const recipesWithImage = await res.json();
+
+    console.log("extracted data", recipesWithImage);
+    return recipesWithImage;
+ }

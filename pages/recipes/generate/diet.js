@@ -5,6 +5,7 @@ import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { setCache, getCache } from "@/pages/api/sessionStorage";
+import { requestImageGeneration } from "@/pages/api/generateImageUtils";
 
 // List of all diets
 const diets = [
@@ -38,6 +39,8 @@ const DietPage = () => {
   const [useSavedDiets, setUseSavedDiets] = useState(false);
   // Sets the multi-select list
   const [selectList, setSelectList] = useState([]);
+  // Sets image awaiting state
+  const [awaitingImages, setAwaitingImages] = useState(false); 
 
   const handleSelectDiet = (selectedDiets) => {
     // Map over the selected diet objects to get their names and join them into a string
@@ -161,6 +164,7 @@ const DietPage = () => {
     }
     try {
       console.log("Fetching recipes from API by diet...");
+      setAwaitingImages(false);
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",
@@ -182,7 +186,15 @@ const DietPage = () => {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
-      // Update recipes data
+
+      // If image generation turned on, set awaitingImages to True
+      setAwaitingImages(true);
+
+      // Generate Recipe Images and update data.recipes with images for caching purposes
+      data.recipes = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", data.recipes);
+
+      // Set recipes to updated recipes with images
       setRecipes(data.recipes);
       // Store in session storage
       sessionStorage.clear();
@@ -239,7 +251,7 @@ const DietPage = () => {
                 Generate New Recipes
               </Button>
             </Row>
-            {!recipes && <LoadingScreen />}
+            {!recipes && <LoadingScreen awaitingImages={awaitingImages}/>}
           </Container>
         ) : (
           <Container>
