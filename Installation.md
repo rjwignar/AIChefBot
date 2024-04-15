@@ -84,29 +84,29 @@ To create and manage recipe images with your own **Cloudinary Product Environmen
 
 After these steps, you will have created your own **Cloudinary Product Environment** and added the environment variables required to connect to it.
 
-#### 4. AWS Cognito
+#### 4. AWS Cognito**
 
 You will have to create a AWS Account [Sign up to AWS](https://aws.amazon.com/console/) 
 1. When you are at console home search **Cognito**
 2. Click **Create user pool**
 
-##### **Configure sign-in experience**
+**Configure sign-in experience**
 Select the options **User name, Email**
 
-##### **Configure security requirements**
+**Configure security requirements**
 1. Make whatever password policy you want or you can leave it default
 2. Make sure to select **No MFA** (you can add MFA but will add cost)
 3. Make sure **Enable self service account recovery** is checked and use **Email only** (other options have additional cost)
 
-##### **Configure sign-up experience**
+**Configure sign-up experience**
 1. Make sure **Enable self-registration** is selected 
 2. Make sure **Keep original attribute value active when an update is pending** is selected
 3. In the required attributes dropdown add **name**
 
-##### **Configure message delivery**
+**Configure message delivery**
 1. Select **Send email with Cognito** keep the rest default
 
-##### **Integrate your app**
+**Integrate your app**
 1. Give your user pool a name such as `yourname-aichefbot-users`
 2. Select **Use the Cognito Hosted UI** 
 3. Select **Use a Cognito domain** 
@@ -117,10 +117,10 @@ Select the options **User name, Email**
 8. Click the dropdown **Advanced app client settings** scroll down to **OpenID Connect scopes** click the dropdown and add `aws.cognito.signin.user.admin` scope.
 9. Click **Add sign-out URL** copy and paste `http://localhost:3000`
   
-##### **Review and Create**
+**Review and Create**
 Double check all the values are correct create your user pool.
 
-##### **Getting your keys**
+**Getting your keys**
 1. Click on your newly created user pool
 2. Copy the **User Pool ID** and replace `YOUR_USER_POOL_ID` inside`.env` 
 3. Click the **App integration** tab
@@ -153,6 +153,7 @@ $ npm run dev
 Navigate to `http://localhost:3000` in your chosen browser to experience the development version.
 
 <hr>
+<br>
 
 ### Deployment
 
