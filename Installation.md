@@ -189,6 +189,7 @@ This means the Production deployment will always be up-to-date with the latest c
 
 #### Post-Deployment Requirements for User Authentication with AWS Cognito User Pool
 After deploying AIChefBot to Vercel, you need to update the following environment variables in both your **AWS Cognito User Pool** AND your **Vercel Deployment**:
+
 | .env Variable Name | Updated Value |
 | OAUTH_SIGN_IN_REDIRECT_URL | DEPLOYMENT_BASE_URL/api/auth/callback/cognito |
 | OAUTH_SIGN_OUT_REDIRECT_URL | DEPLOYMENT_BASE_URL |
