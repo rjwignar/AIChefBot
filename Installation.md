@@ -228,8 +228,16 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 - in the **Allowed callback URLs** section click Add another URL refer to step 7 right below.
 - After go to the **Allowed sign-out URLs** section click Add another URL refer to step 9 right below. 
 - Refer to **Steps 7 to 9** of [AWS Cognito - Integrate Your App](#integrate-your-app):
-  - Step 7: Add the following as an **Allowed Callback URL**: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
-  - Step 9: Add the following as a **Sign-Out URL**: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
+  - Step 7: Add the following as an **Allowed Callback URL**:
+  
+  `DEPLOYMENT_BASE_URL/api/auth/callback/cognito`
+  
+  (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
+  - Step 9: Add the following as a **Sign-Out URL**:
+  
+  `DEPLOYMENT_BASE_URL`
+  
+  (e.g. https://ai-chef-bot-test.vercel.app)
 
 ##### Add new Allowed Callback and Allowed Sign-Out URLs to Vercel Deployment Environment Variables
 
