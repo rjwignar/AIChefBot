@@ -133,6 +133,7 @@ Double check all the values are correct create your user pool.
 These keys are provided for you in the `.env_example` [here](./.env_example) copy them and add to `.env`.
 
 **NextAuthJS secret**
+
 Generate a secret with
 ```bash
 $ openssl rand -base64 64
@@ -179,6 +180,7 @@ This means the Production deployment will always be up-to-date with the latest c
 | Environment Variables | Drag and drop your local .env file to populate environment variables |
 
 `*`: `YOUR_PROJECT_NAME` will affect the final deployment URL provisioned by Vercel.
+
 **For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like `https://ai-chef-bot-test.vercel.app`.
 
 - After you have added the above information, left-click the **Deploy** button to deploy AIChefBot.
@@ -192,9 +194,13 @@ After deploying AIChefBot to Vercel, you need to update the following environmen
 | OAUTH_SIGN_OUT_REDIRECT_URL | DEPLOYMENT_BASE_URL |
 
 Where `DEPLOYMENT_BASE_URL` is your deployment's base URL, based on the `YOUR_PROJECT_NAME` value used during deployment.
+
 **For example**: If you enter a `YOUR_PROJECT_NAME` (project name) value of `ai-chef-bot-test`, the final deployment URL will look something like `https://ai-chef-bot-test.vercel.app`.
+
 **In this example,** you will have the following OAUTH variables:
+
 OAUTH_SIGN_IN_REDIRECT_URL=https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito
+
 OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 
 **WARNING:** If you do not add these environment variables to both your **AWS Cognito User Pool** AND your **Vercel Deployment** you will **NOT** able to use user authentication on your deployment.
@@ -205,7 +211,7 @@ OAUTH_SIGN_OUT_REDIRECT_URL=https://ai-chef-bot-test.vercel.app
 - click your app name, scroll down to **Hosted UI** click edit.
 - in the **Allowed callback URLs** section click Add another URL refer to step 7 right below.
 - After go to the **Allowed sign-out URLs** section click Add another URL refer to step 9 right below. 
-- Refer to **steps 7 to 9** of [User Pool Setup Part 5](#step-5-integrate-your-app):
+- Refer to **steps 7 to 9** of [User Pool Setup - Integrate Your App](#integrate-your-app):
   - Step 7: Add the following as an **Allowed Callback URL**: DEPLOYMENT_BASE_URL/api/auth/callback/cognito (e.g. https://ai-chef-bot-test.vercel.app/api/auth/callback/cognito)
   - Step 9: Add the following as a **Sign-Out URL**: DEPLOYMENT_BASE_URL (e.g. https://ai-chef-bot-test.vercel.app)
 
