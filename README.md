@@ -9,7 +9,7 @@ Use this tool to find recipes that accomodate your dietary restrictions. Revisit
 AIChefbot is deployed with the help of [Vercel](https://vercel.com/).
 To access the website, navigate to https://ai-chef-bot.vercel.app/.
 
-As a guest user, you will have access to recipe generation, and can download these recipes as a PDF.
+As a guest user, you will have access to recipe generation, and can download recipes to your device as a PDF.
 However, to access the full range of features, including saving recipes and generating similar recipes, please register and login to your account.
 <hr>
 
