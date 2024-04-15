@@ -1,5 +1,6 @@
 
-// Cache recipes and which page they were generated from
+// Module for caching recipes in session storage
+// Also cache page from which recipes were generated from
 
 export function setCache(data) {
     sessionStorage.setItem("recipes", JSON.stringify(data.recipes));
@@ -7,8 +8,11 @@ export function setCache(data) {
     // Which page were the recipes generated from?
     // If both are true, ingredients + diet
     // Otherwise, ingredients OR diet
+
+    // Property could be undefined, so we use false for undefined
     sessionStorage.setItem('selectedIngredients', data.selectedIngredients ? true : false);
     sessionStorage.setItem('selectedDiet', data.selectedDiet ? true : false);
+    sessionStorage.setItem('similarRecipes', data.similarRecipes ? true : false);
 }
 
 export function getCache() {
@@ -17,6 +21,7 @@ export function getCache() {
         messageHistory: JSON.parse(sessionStorage.getItem("messageHistory")),
         selectedIngredients: JSON.parse(sessionStorage.getItem("selectedIngredients")),
         selectedDiet: JSON.parse(sessionStorage.getItem("selectedDiet")),
+        similarRecipes: JSON.parse(sessionStorage.getItem("similarRecipes")),
     }
 }
 

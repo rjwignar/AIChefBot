@@ -54,7 +54,7 @@ export default function MainNav() {
             <Nav>
               {status === "unauthenticated" ? (
                 <button
-                  className="landing-page-btn"
+                  className="landing-page-btn nav-btn"
                   role="button"
                   onClick={() => signIn("cognito")}
                 >

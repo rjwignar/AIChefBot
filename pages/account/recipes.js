@@ -6,6 +6,8 @@ import RecipeCardList from "@/components/RecipeCardList";
 import { Pagination } from 'react-bootstrap';
 import DeleteRecipesModal from "@/components/DeleteRecipesModal";
 import LoadingScreen from "@/components/LoadingScreen";
+import { setCache, getCache } from "@/pages/api/sessionStorage";
+import { requestImageGeneration } from "@/pages/api/generateImageUtils";
 
 // Page of manage recipes:
 export default function recipes() {
@@ -16,7 +18,7 @@ export default function recipes() {
   const [currentPage, setCurrentPage] = useState(1);
   // Change value if you think it should be changed:
   const [recipesPerPage] = useState(9);
-  const [isSortedMostRecent, setIsSortedMostRecent] = useState(false);
+  const [isSortedMostRecent, setIsSortedMostRecent] = useState(true);
   // Check if the generate button is pressed
   const [generatePressed, setGeneratePressed] = useState(false);
   // The recipes generated based on similar recipes.
@@ -25,6 +27,10 @@ export default function recipes() {
   const [messageHistory, setMessageHistory] = useState([]);
   // selected Recipes
   const [selectedRecipes, setSelectedRecipes] = useState([]);
+  // Sets image awaiting state
+  const [awaitingImages, setAwaitingImages] = useState(false);
+
+  const [filterText, setFilterText] = useState("");
 
   const [showDeleteRecipesModal, setShowDeleteRecipesModal] = useState(false);
 
@@ -46,15 +52,34 @@ export default function recipes() {
     if (!recipes) getRecipes();
   }, []);
 
-  // Sorts the recipes based on least or most recent.
+  useEffect(() => {
+    /*
+      Check cache
+        - Destructure relevant JSON data
+        - Set application state
+    */
+    let {recipes, messageHistory, similarRecipes} = getCache();
+    if (recipes && messageHistory && similarRecipes == true) {
+      setGeneratedRecipes(recipes);
+      setMessageHistory(messageHistory);
+      setGeneratePressed(true);
+    }
+  }, []);
+
+  // Sorts the recipes based on most or least recent.
   useEffect(() => {
     if (recipes) {
       let sortedFilteredRecipes = [...filteredRecipes];
-      if (isSortedMostRecent) {
-        sortedFilteredRecipes.reverse();
-      } else {
-        sortedFilteredRecipes = [...recipes];
-      }
+      
+      
+      // Sort the recipes based on the "created" attribute
+      sortedFilteredRecipes.sort((a, b) => {
+        // Convert the date strings to Date objects for reliable comparison
+        let dateA = new Date(a.created);
+        let dateB = new Date(b.created);
+        // Determine sort order based on the isSortedMostRecent flag
+        return isSortedMostRecent ? dateB - dateA : dateA - dateB;
+      });
       setFilteredRecipes(sortedFilteredRecipes);
     }
   }, [isSortedMostRecent, recipes]);  
@@ -148,12 +173,18 @@ export default function recipes() {
     setMessageHistory([]);
     setSelectedRecipes([]); // Unselect selected recipes
     setGeneratedRecipes(null);
+    setFilterText("");
+    sessionStorage.clear();
   }
 
   const handleGenerateSimilarRecipes = async () => {
     setGeneratePressed(true);
+    if (messageHistory.length > 0) {
+      setGeneratedRecipes(null);
+    }
     try {
       console.log("Messages History: " + messageHistory);
+      setAwaitingImages(false);
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",
@@ -175,9 +206,21 @@ export default function recipes() {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
+
+      // If image generation turned on, set awaitingImages to True
+      setAwaitingImages(true);
+
+      // Generate Recipe Images and update data.recipes with images for caching purposes
+      data.recipes = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", data.recipes);
+
+      // Set recipes to updated recipes with images
       setGeneratedRecipes(data.recipes);
       setMessageHistory(data.messageHistory);
       /* ------------------------------ */
+      sessionStorage.clear()
+      data.similarRecipes = true;
+      setCache(data);
       /* Updating database stuff: */
       if (session) {
         updateDatabase(data.recipes.length);
@@ -185,48 +228,6 @@ export default function recipes() {
       /* ---------------------------- */
     } catch (err) {
       console.error(err);
-    }
-  }
-
-  const handleGenerateMoreClick = async () => {
-    // Resetting recipes
-    // This is for display purpose only
-    setGeneratedRecipes(null);
-    try {
-      console.log(messageHistory);
-      const response = await fetch("/api/generateRecipe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ messageHistory }),
-      });
-      /* --- Check if "res" is ok and content type is valid --- */
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("Oops, we haven't got JSON!");
-      }
-      /* ------------------------------------------------------ */
-      /* --- Get Data From Response --- */
-      const data = await response.json();
-      console.log(data);
-      console.log("message history", data.messageHistory);
-      setGeneratedRecipes(data.recipes);
-      setMessageHistory(data.messageHistory);
-      console.log("new message history", messageHistory);
-      console.log("recipes below in UI", recipes);
-      /* ------------------------------- */
-      /* Updating database */
-      if (session) {
-        updateDatabase(data.recipes.length);
-      }
-      /* ----------------- */
-    } catch (err) {
-      console.error(err)
     }
   }
 
@@ -260,7 +261,7 @@ export default function recipes() {
           <Container className="mb-4">
               <Row>
                 <Button
-                  onClick={handleGenerateMoreClick}
+                  onClick={handleGenerateSimilarRecipes}
                   className="generate-recipe-btn"
                   variant="success"
                   size="lg"
@@ -269,7 +270,7 @@ export default function recipes() {
                   Generate New Recipes
                 </Button>
               </Row>
-              {!generatedRecipes && <LoadingScreen />}
+              {!generatedRecipes && <LoadingScreen awaitingImages={awaitingImages}/>}
             </Container>
           {/* Render recipes if available */}
           {generatedRecipes && (
@@ -280,6 +281,7 @@ export default function recipes() {
         // manage account recipes page:
         <>
           <h1 className="hero-title">Saved Recipes</h1>
+          <p className="text-muted mt-3">Showing {currentRecipes.length} of {filteredRecipes.length} Recipes</p>
           <hr />
 
           <Container style={{ paddingBottom: '100px' }}>
@@ -288,20 +290,23 @@ export default function recipes() {
               Display filter search bar only if user has saved recipes
             */}
             {recipes && (
-              <Row className="align-items-center mt-3">
-                <Col md={3}>
-                  <p className="text-muted mt-3">Showing {currentRecipes.length} of {recipes.length} Recipes</p>
+              <Row className="align-items-center">
+                <Col xs="auto">
+                  <Button variant={selectedRecipes.length > 0 ? "secondary" : "primary"} onClick={() => {selectedRecipes.length > 0 ? setSelectedRecipes([]) : setSelectedRecipes(filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe))}}>
+                    {selectedRecipes.length > 0 ? <>Deselect All {currentRecipes.length} Recipes</> : <>Select All {currentRecipes.length} Recipes</>}
+                  </Button>
                 </Col>
-                <Col md={7}>
+                <Col>
                   <Form.Control
                     id="filter-recipes"
                     type="text"
                     placeholder="Filter recipes"
-                    className="mb-3 mb-md-0" // Adds margin-bottom on smaller screens
-                    onChange={(e) => filterRecipes(e.target.value)}
+                    className="me-3 mb-md-0" // Adds margin-bottom on smaller screens
+                    value={filterText}
+                    onChange={(e) => {filterRecipes(e.target.value); setFilterText(e.target.value);}}
                   />
                 </Col>
-                <Col md={2}>
+                <Col xs="auto">
                   <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                       Sort: {isSortedMostRecent ? "Newest" : "Oldest"}
@@ -332,15 +337,11 @@ export default function recipes() {
                       <Pagination>
                         <Pagination.First onClick={() => paginate(1)} disabled={currentPage === 1} />
                         <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
-                        <Pagination.Ellipsis disabled />
-          
                         {pageNumbers.map(number => (
                           <Pagination.Item key={number} active={number === currentPage} onClick={() => paginate(number)}>
                             {number}
                           </Pagination.Item>
                         ))}
-          
-                        <Pagination.Ellipsis disabled />
                         <Pagination.Next onClick={() => paginate(currentPage + 1)} disabled={currentPage === pageNumbers.length} />
                         <Pagination.Last onClick={() => paginate(pageNumbers.length)} disabled={currentPage === pageNumbers.length} />
                       </Pagination>
@@ -353,8 +354,13 @@ export default function recipes() {
           </Container>
           {selectedRecipes.length > 0 && (
               <div className="action-buttons-container bg-primary bg-opacity-25">
-                <Button variant="secondary" onClick={() => setSelectedRecipes([])} className="me-2">Deselect All</Button>
-                <Button variant="success" onClick={handleGenerateSimilarRecipes} className="me-2">Generate Similar Recipes</Button>
+                <Button 
+                  variant="success" 
+                  onClick={handleGenerateSimilarRecipes} 
+                  disabled={selectedRecipes.length > 9 ? true : false} 
+                  className="me-2">
+                    {selectedRecipes.length > 9 ? <>Can't Generate! 9 Recipes Max.</> : <>Generate Similar Recipes</>}
+                </Button>
                 <Button variant="danger" onClick={handleShowDeleteRecipesModal}>Delete Recipes</Button>
               </div>
           )}
@@ -364,8 +370,8 @@ export default function recipes() {
             onHide={handleCloseDeleteRecipesModal}
             recipes={selectedRecipes}
             onDeleteSuccess={() => {
-              setSelectedRecipes([]); // Unselect selected recipes
               getRecipes(); // Update the recipes list
+              setFilterText("");
             }}
           />
         </>

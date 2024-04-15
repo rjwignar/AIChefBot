@@ -5,6 +5,7 @@ import Select from "react-dropdown-select";
 import { useSession } from "next-auth/react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { setCache, getCache } from "@/pages/api/sessionStorage";
+import { requestImageGeneration } from "@/pages/api/generateImageUtils";
 
 // List of all diets
 const diets = [
@@ -33,7 +34,8 @@ const IngredientsAndDietPage = () => {
   const [ingredientsList, setIngredientsList] = useState([]);
   // Check if the user wants to only use the ingredients list
   const [limitIngredients, setLimitIngredients] = useState(false);
-
+  // Sets image awaiting state
+  const [awaitingImages, setAwaitingImages] = useState(false); 
   // For Diets
   // The string format of the selected diet
   const [selectedDiet, setSelectedDiet] = useState("");
@@ -103,6 +105,8 @@ const IngredientsAndDietPage = () => {
       
       if (recipes && messageHistory && selectedIngredients == true && selectedDiet == true) {
         setRecipes(recipes);
+        setSelectedDiet(selectedDiet);
+        setIngredients(selectedIngredients);
         setMessageHistory(messageHistory);
         setGeneratePressed(true);
       }
@@ -171,13 +175,17 @@ const IngredientsAndDietPage = () => {
     setIngredients("");
     setLimitIngredients(false);
     setIngredientsList([]);
+    sessionStorage.clear();
   };
 
   const handleGenerateClick = async () => {
     setGeneratePressed(true);
+    if (messageHistory.length > 0) {
+      setRecipes(null);
+    }
     try {
-      console.log("Selected Diet: " + selectedDiet);
-      console.log("Selected Ingredients: " + selectedIngredients);
+      console.log("Fetching recipes from API by ingredient and diet...");
+      setAwaitingImages(false);
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
         method: "POST",
@@ -199,6 +207,15 @@ const IngredientsAndDietPage = () => {
       /* --- Get Data From Response --- */
       const data = await res.json();
       console.log("Data was returned: ", data);
+
+      // If image generation turned on, set awaitingImages to True
+      setAwaitingImages(true);
+
+      // Generate Recipe Images and update data.recipes with images for caching purposes
+      data.recipes = await requestImageGeneration(data.recipes);
+      console.log("recipes with images in UI", data.recipes);
+
+      // Set recipes to updated recipes with images
       setRecipes(data.recipes);
       setMessageHistory(data.messageHistory);
 
@@ -215,52 +232,6 @@ const IngredientsAndDietPage = () => {
       /* ---------------------------- */
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  const handleGenerateMoreClick = async () => {
-    // Resetting recipes
-    // This is for display purpose only
-    setRecipes(null);
-    try {
-      console.log(messageHistory);
-      const response = await fetch("/api/generateRecipe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ messageHistory }),
-      });
-      /* --- Check if "res" is ok and content type is valid --- */
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("Oops, we haven't got JSON!");
-      }
-      /* ------------------------------------------------------ */
-      /* --- Get Data From Response --- */
-      const data = await response.json();
-      console.log(data);
-      console.log("message history", data.messageHistory);
-      setRecipes(data.recipes);
-      setMessageHistory(data.messageHistory);
-      console.log("new message history", messageHistory);
-      console.log("recipes below in UI", recipes);
-
-      // Clear old, set new cached data
-      sessionStorage.clear();
-      setCache(data);
-      /* ------------------------------- */
-      /* Updating database */
-      if (session) {
-        updateDatabase(data.recipes.length);
-      }
-      /* ----------------- */
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
     }
   };
 
@@ -305,7 +276,7 @@ const IngredientsAndDietPage = () => {
           <Container className="mb-4">
             <Row>
               <Button
-                onClick={handleGenerateMoreClick}
+                onClick={handleGenerateClick}
                 className="generate-recipe-btn"
                 variant="success"
                 size="lg"
@@ -314,7 +285,7 @@ const IngredientsAndDietPage = () => {
                 Generate New Recipes
               </Button>
             </Row>
-            {!recipes && <LoadingScreen />}
+            {!recipes && <LoadingScreen awaitingImages={awaitingImages}/>}
           </Container>
         ) : (
           <Container>
