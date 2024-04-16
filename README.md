@@ -19,4 +19,4 @@ However, to access the full range of features, including saving recipes and gene
 
 #### [Installation Process and Instructions](./Installation.md)
 
-#### [Contributing and Development](./Contributing.md)
+#### [Contributing and Development](./CONTRIBUTING.md)
