@@ -22,47 +22,35 @@ const diets = [
   { value: 11, name: "Whole30", displayName: "📆 Whole30" },
 ];
 
-const DietPage = () => {
+const IngredientsAndDietPage = () => {
   const { data: session, status } = useSession();
-
+  // Check if the generate button is pressed
   const [generatePressed, setGeneratePressed] = useState(false);
-
-  // The diets that the user has saved
-  const [savedDiets, setSavedDiets] = useState([]);
-  // The recipes that are show on screen. Get's reset on refresh, user stops generating, etc...
+  // The recipes that are shown on screen. Get's reset on refresh, user stops generating etc...
   const [recipes, setRecipes] = useState(null);
   // The message history
   const [messageHistory, setMessageHistory] = useState([]);
+  // Holds how much ingredients is in the list
+  const [ingredientsList, setIngredientsList] = useState([]);
+  // Check if the user wants to only use the ingredients list
+  const [limitIngredients, setLimitIngredients] = useState(false);
+  // Sets image awaiting state
+  const [awaitingImages, setAwaitingImages] = useState(false); 
+  // For Diets
   // The string format of the selected diet
   const [selectedDiet, setSelectedDiet] = useState("");
+  // The diets that the user has saved
+  const [savedDiets, setSavedDiets] = useState([]);
   // State to check if user wants to use saved diets from database
   const [useSavedDiets, setUseSavedDiets] = useState(false);
   // Sets the multi-select list
   const [selectList, setSelectList] = useState([]);
-  // Sets image awaiting state
-  const [awaitingImages, setAwaitingImages] = useState(false); 
 
-  const handleSelectDiet = (selectedDiets) => {
-    // Map over the selected diet objects to get their names and join them into a string
-    const dietNames = selectedDiets.map((diet) => diet.name).join(", ");
-    setSelectedDiet(dietNames);
-    // --------------------------------
-    // Update the select list
-    setSelectList(selectedDiets);
-    // ----------------------
-    // Check if the names of the selected diets match the userSavedDiets
-    const isSelectedDietsMatchSaved =
-      selectedDiets.every((selectedDiet) =>
-        savedDiets.includes(selectedDiet.name)
-      ) && selectedDiets.length === savedDiets.length;
+  // For Ingredients
+  // The string format of the ingredients
+  const [selectedIngredients, setIngredients] = useState("");
 
-    // If not, turn off the useSavedDiets switch
-    if (!isSelectedDietsMatchSaved) {
-      setUseSavedDiets(false);
-    }
-  };
-
-  //
+  // Use effects:
   // Get user on page mount, store dietary restrictions into
   // 'savedDiets' array
   useEffect(() => {
@@ -87,19 +75,6 @@ const DietPage = () => {
         }
       };
       getUser();
-      
-      /*
-        Check cache
-          - Destructure relevant JSON data
-          - Set application state
-      */
-      let {recipes, messageHistory, selectedDiet} = getCache();
-      if (recipes && messageHistory && selectedDiet == true) {
-        setRecipes(recipes);
-        setSelectedDiet(selectedDiet);
-        setMessageHistory(messageHistory);
-        setGeneratePressed(true);
-      }
     }
   }, []);
 
@@ -114,27 +89,31 @@ const DietPage = () => {
       // Fill the select list with saved diets
       setSelectList(savedDietObjects);
     }
+
+    if (session) {
+      /*
+      Check cache
+        - Destructure relevant JSON data
+        - Set application state
+      */
+      let { 
+        recipes, 
+        messageHistory,
+        selectedDiet,
+        selectedIngredients
+      } = getCache();
+      
+      if (recipes && messageHistory && selectedIngredients == true && selectedDiet == true) {
+        setRecipes(recipes);
+        setSelectedDiet(selectedDiet);
+        setIngredients(selectedIngredients);
+        setMessageHistory(messageHistory);
+        setGeneratePressed(true);
+      }
+    }
   }, [useSavedDiets]);
 
-  // When the user presses the stop generating button reset everything back to their initial state
-  const handleStopGenerating = () => {
-    console.log("Stopped generating from previous diet list");
-    console.log("Resetting all values");
-    setGeneratePressed(false);
-    setRecipes(null);
-    setSelectedDiet("");
-    setUseSavedDiets(false);
-    setSelectList([]);
-    setMessageHistory([]);
-    sessionStorage.clear();
-  };
-
-  // Simple toggle switch to use saved diets
-  const toggleUseSavedDiets = () => {
-    setUseSavedDiets(!useSavedDiets);
-  };
-
-  // Update generated recipe count MongoDB
+  // Functions:
   const updateDatabase = async (recipeCount) => {
     console.log(`Adding ${recipeCount} to recipe count in database...`);
     try {
@@ -155,15 +134,57 @@ const DietPage = () => {
     }
   };
 
-  // Generates the recipes:
+  const handleSelectDiet = (selectedDiets) => {
+    // Map over the selected diet objects to get their names and join them into a string
+    const dietNames = selectedDiets.map((diet) => diet.name).join(", ");
+    setSelectedDiet(dietNames);
+    // --------------------------------
+    // Update the select list
+    setSelectList(selectedDiets);
+    // ----------------------
+    // Check if the names of the selected diets match the userSavedDiets
+    const isSelectedDietsMatchSaved =
+      selectedDiets.every((selectedDiet) =>
+        savedDiets.includes(selectedDiet.name)
+      ) && selectedDiets.length === savedDiets.length;
+
+    // If not, turn off the useSavedDiets switch
+    if (!isSelectedDietsMatchSaved) {
+      setUseSavedDiets(false);
+    }
+  };
+
+  // Handle whenever an ingredient is entered
+  const handleEnteredIngredients = (selectedIngredients) => {
+    const ingredients = selectedIngredients
+      .map((ingredients) => ingredients.value)
+      .join(", ");
+    setIngredientsList(selectedIngredients);
+    setIngredients(ingredients);
+  };
+
+  const handleStopGenerating = () => {
+    console.log("Stopped generating from previous diet list and ingredients");
+    console.log("Resetting all values");
+    setGeneratePressed(false);
+    setRecipes(null);
+    setMessageHistory([]);
+    setSelectedDiet("");
+    setUseSavedDiets(false);
+    setSelectList([]);
+    setIngredients("");
+    setLimitIngredients(false);
+    setIngredientsList([]);
+    sessionStorage.clear();
+  };
+
   const handleGenerateClick = async () => {
     setGeneratePressed(true);
-    // If there is a message history, we are generating new recipes
     if (messageHistory.length > 0) {
       setRecipes(null);
     }
     try {
-      console.log("Fetching recipes from API by diet...");
+      console.log("Fetching recipes from API by ingredient and diet...");
       setAwaitingImages(false);
       /* --- Fetch API to get recipes ---  */
       const res = await fetch("/api/generateRecipe", {
@@ -171,7 +192,7 @@ const DietPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedDiet, messageHistory }),
+        body: JSON.stringify({ selectedDiet, selectedIngredients, limitIngredients, messageHistory }),
       });
       /* ------------------------------------------------------ */
       /* --- Check if "res" is ok and content type is valid --- */
@@ -196,45 +217,58 @@ const DietPage = () => {
 
       // Set recipes to updated recipes with images
       setRecipes(data.recipes);
-      // Store in session storage
+      setMessageHistory(data.messageHistory);
+
+      // Clear old, set new cached data
       sessionStorage.clear();
       data.selectedDiet = selectedDiet;
+      data.selectedIngredients = selectedIngredients;
       setCache(data);
-      // Update message history
-      setMessageHistory(data.messageHistory);
       /* ------------------------------ */
       /* Updating database stuff: */
       if (session) {
         updateDatabase(data.recipes.length);
       }
       /* ---------------------------- */
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  // Simple toggle switch to use saved diets
+  const toggleUseSavedDiets = () => {
+    setUseSavedDiets(!useSavedDiets);
+  };
+
+  // Simple toggle switch to include ingredients that aren't listed
+  const toggleUseIngredientsList = () => {
+    setLimitIngredients(!limitIngredients);
   };
 
   return (
     <>
-      {generatePressed && 
-      (
-      <Button
-        onClick={handleStopGenerating}
-        className="generate-recipe-btn"
-        variant="secondary"
-        size="md"
-        disabled={!recipes ? true : false}
-      >  
-        &laquo; Select Diet
-      </Button>
+      {/* Creates the Back Button */}
+      {generatePressed && (
+        <Button
+          onClick={handleStopGenerating}
+          className="generate-recipe-btn"
+          variant="secondary"
+          size="md"
+          disabled={!recipes ? true : false}
+        >
+          &laquo; Select Diet and Ingredients
+        </Button>
       )}
       <Container className="mt-5">
         <Row className="justify-content-md-center">
           <Col md={12} className="text-center">
-            <h1 className="hero-title">Discover Diet-Based Recipes</h1>
+            <h1 className="hero-title">
+              Discover Ingredient And Diet Based Recipes
+            </h1>
             <p className="text-muted">
-              Generate recipes based on a particular diet or dietary
-              restriction. Select a diet or dietary restriction and we'll do the
-              rest.
+              Generate recipes based on a particular diet and ingredients you
+              have available. Select a diet or dietary restriction, then type
+              ingredients you have and we'll do the rest.
             </p>
           </Col>
         </Row>
@@ -256,7 +290,42 @@ const DietPage = () => {
         ) : (
           <Container>
             <Row className="justify-content-center mb-4">
-              <Col className="flex-column align-items-center" md={9}>
+              <Col className="flex-column align-items-center" md={6}>
+                <h5 className="diet-select-label">
+                  Type an ingredient, then press enter.
+                </h5>
+                <Select
+                  multi
+                  clearable={selectedIngredients.length > 0}
+                  create
+                  onCreateNew={(item) => console.log(item)}
+                  values={[]}
+                  separator
+                  noDataLabel="Hit 'Enter' to add."
+                  dropdownHandle
+                  //closeOnSelect
+                  closeOnClickInput
+                  placeholder="Type any ingredient"
+                  onChange={(ingredients) =>
+                    handleEnteredIngredients(ingredients)
+                  }
+                  className="p-2"
+                />
+                <div className="d-flex justify-content-center w-100 mt-2">
+                  <Form>
+                    <Form.Check
+                        type="switch"
+                        id="ingredients-switch"
+                        label="Limit unlisted ingredients (Need +5 Ingredients)"
+                        checked={limitIngredients}
+                        disabled={ingredientsList.length < 5}
+                        onChange={toggleUseIngredientsList}
+                        className="saved-diet-switch text-muted"
+                    />
+                  </Form>
+                </div>
+              </Col>
+              <Col className="flex-column align-items-center" md={6}>
                 <h5 className="diet-select-label">
                   Select a diet or dietary restriction.
                 </h5>
@@ -282,7 +351,7 @@ const DietPage = () => {
                     <Form>
                       <Form.Check
                         type="switch"
-                        id="custom-switch"
+                        id="diets-switch"
                         label="Use Saved Diets"
                         checked={useSavedDiets}
                         onChange={toggleUseSavedDiets}
@@ -300,7 +369,9 @@ const DietPage = () => {
                   variant="success"
                   size="lg"
                   onClick={handleGenerateClick}
-                  disabled={selectedDiet == "" ? true : false}
+                  disabled={
+                    (selectedIngredients && selectedDiet) == "" ? true : false
+                  }
                 >
                   Generate Recipes
                 </Button>
@@ -309,12 +380,10 @@ const DietPage = () => {
           </Container>
         )}
         {/* Render recipes if available */}
-        {recipes && (
-          <RecipeCardList recipes={recipes}/>
-        )}
+        {recipes && <RecipeCardList recipes={recipes} />}
       </Container>
     </>
   );
 };
 
-export default DietPage;
+export default IngredientsAndDietPage;

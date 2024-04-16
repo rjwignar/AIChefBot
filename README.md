@@ -1,25 +1,22 @@
 # AIChefBot
 
-AIChefBot is your recipe guide.
+### Your recipe assistant.
 
 Use this tool to find recipes that accomodate your dietary restrictions. Revisit the recipes you plan to make in the future, and find new recipes based on the ones you've tried, and enjoyed.
 
-## Installation
+### [Start Generating Recipes Today!](https://ai-chef-bot.vercel.app/)
 
-#### Clone this repository, then:
+AIChefbot is deployed using [Vercel](https://vercel.com/).
+To access the website, navigate to https://ai-chef-bot.vercel.app/.
 
-```bash
-cd AIChefBot/
-```
+As a guest user, you will have access to recipe generation, and can download recipes to your device as a PDF.
+However, to access the full range of features, including saving recipes and generating similar recipes, please register and login to your account.
+<hr>
 
-```bash
-npm install
-```
+### Project Artifacts and Guides
 
-```bash
-npm run dev
-```
+#### [Project Technical Documentation](./Technical-Document.md)
 
-<br>
+#### [Installation Process and Instructions](./Installation.md)
 
-Navigate to `http://localhost:3000` in your chosen browser to experience the development version.
+#### [Contributing and Development](./CONTRIBUTING.md)

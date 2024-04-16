@@ -46,11 +46,14 @@ export async function addRecipe(data) {
     try {
         // assign a unique identifier
         data.recipe._id = new ObjectId();
+        // assign a creation date
+        data.recipe.created = new Date().toISOString();
         // Push recipe to user's recipe list
         const res = await collection.updateOne(
             {_id: data.userId}, 
             { $push: { recipes: data.recipe }}
         );
+        console.log("Added recipe: ", data.recipe);
         // Return with _id of added recipe.
         // Needed so this action can be undone in UI.
         return data.recipe._id;
@@ -61,14 +64,17 @@ export async function addRecipe(data) {
     }
 }
 
-// Delete a recipe from user's recipe list
-export async function deleteRecipe(data) {
+// Delete recipe(s) from user's recipe list
+export async function deleteRecipes(data) {
+    const ids = data.recipeIds.map(id => new ObjectId(id));
     try {
-        // Update user by userId, delete recipe by recipeId.
-        return await collection.updateOne(
+        // Update user by userId, delete recipes by recipeIds.
+        const res = await collection.updateMany(
             { _id: data.userId },
-            { $pull: { recipes: { _id: new ObjectId(data.recipeId) } } }
+            { $pull: { recipes: { _id: { $in: ids } } } }
         );
+        console.log(res);
+        return res;
     }
     catch(err) {
         console.error(err);
