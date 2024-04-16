@@ -13,9 +13,10 @@ As a guest user, you will have access to recipe generation, and can download rec
 However, to access the full range of features, including saving recipes and generating similar recipes, please register and login to your account.
 <hr>
 
-### Guides
+### Project Artifacts and Guides
 
-#### [Installation Process](./Installation.md)
+#### [Project Technical Documentation](./Technical-Document.md)
 
+#### [Installation Process and Instructions](./Installation.md)
 
 #### [Contributing and Development](./Contributing.md)
