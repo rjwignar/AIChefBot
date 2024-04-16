@@ -10,7 +10,7 @@ AIChefbot is deployed using [Vercel](https://vercel.com/).
 To access the website, navigate to https://ai-chef-bot.vercel.app/.
 
 As a guest user, you will have access to recipe generation, and can download recipes to your device as a PDF.
-However, to access the full range of features, including saving recipes and generating similar recipes, please register and login to your account.
+However, to access the **full range of features**, including saving recipes and generating similar recipes, please **register** and **login** to your account.
 <hr>
 
 ### Project Artifacts and Guides
