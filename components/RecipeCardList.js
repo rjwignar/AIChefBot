@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
   When recipe list can be selected
     <RecipeCardList recipes={recipe} isSelectable={true} setSelectedRecipes={setSelectedRecipes}, onUpdateAfterDelete/>
 */
-const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], setSelectedRecipes, onUpdateAfterDelete }) => {
+const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], setSelectedRecipes, onUpdateAfterDelete, onDelete }) => {
     const [savedRecipes, setSavedRecipes] = useState(recipes);
     // Watch the recipes list for changes
     useEffect(() => setSavedRecipes(recipes), [recipes]);
@@ -53,7 +53,7 @@ const RecipeCardList = ({ recipes, isSelectable = false, selectedRecipes = [], s
                   <Col key={index} sm={12} md={6} lg={4} className="mb-4">
                     <RecipeCard
                         recipe={recipe}
-                        onDelete={handleOnDelete}
+                        onDelete={onDelete || handleOnDelete}
                         onSelect={(isSelected) => handleSelect(recipe, isSelected)}
                         isSelected={selectedRecipes.some((r) => r._id === recipe._id)}
                         isSelectable={isSelectable}
