@@ -1,8 +1,8 @@
 # AIChefBot
 
 ### Your recipe assistant.
-
 Use this tool to find recipes that accomodate your dietary restrictions. Revisit the recipes you plan to make in the future, and find new recipes based on the ones you've tried, and enjoyed.
+![AIChefBotDemo](https://github.com/user-attachments/assets/18985bb9-bd1c-49f3-8bce-71ce4b93c2ba)
 
 ### [Start Generating Recipes Today!](https://ai-chef-bot.vercel.app/) 
 
